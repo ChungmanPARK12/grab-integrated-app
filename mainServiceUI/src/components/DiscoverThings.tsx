@@ -25,7 +25,7 @@ const discoverItems = [
   },
 ];
 
-export default function DiscoverSection() {
+const DiscoverSection = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Discover things you’d love</Text>
@@ -45,7 +45,9 @@ export default function DiscoverSection() {
       />
     </View>
   );
-}
+};
+
+export default DiscoverSection;
 
 const styles = StyleSheet.create({
   container: {

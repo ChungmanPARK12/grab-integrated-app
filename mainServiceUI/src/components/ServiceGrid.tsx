@@ -25,7 +25,7 @@ const services: ServiceItem[] = [
   { name: 'All', icon: require('../assets/icons/all.png') },
 ];
 
-export default function ServiceGrid() {
+const ServiceGrid = () => {
   const [loadedIcons, setLoadedIcons] = useState<{ [key: string]: boolean }>({});
   const [allLoaded, setAllLoaded] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0.3)).current;
@@ -92,7 +92,9 @@ export default function ServiceGrid() {
       renderItem={renderItem}
     />
   );
-}
+};
+
+export default ServiceGrid;
 
 const styles = StyleSheet.create({
   grid: {
@@ -108,7 +110,6 @@ const styles = StyleSheet.create({
     position: 'relative',
     marginRight: 5,
     marginLeft: 25, 
-
   },
   tag: {
     position: 'absolute',
@@ -148,3 +149,5 @@ const styles = StyleSheet.create({
     opacity: 0,
   },
 });
+
+

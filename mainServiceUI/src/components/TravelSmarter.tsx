@@ -38,7 +38,7 @@ const travelSmarterItems: TravelItem[] = [
   },
 ];
 
-export default function TravelSmarterSection() {
+const TravelSmarterSection = () => {
   const renderItem = ({ item }: { item: TravelItem }) => (
     <View style={styles.card}>
       <Image source={item.image} style={styles.image} />
@@ -61,7 +61,9 @@ export default function TravelSmarterSection() {
       />
     </View>
   );
-}
+};
+
+export default TravelSmarterSection;
 
 const styles = StyleSheet.create({
   container: {

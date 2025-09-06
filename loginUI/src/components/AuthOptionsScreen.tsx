@@ -11,7 +11,7 @@ import {
 import { FontAwesome, AntDesign, Entypo } from '@expo/vector-icons';
 import {  useFacebookAuthRequest  } from '../services/facebookAuth'; // ✅ Import the login logic
 
-export default function AuthOptionsScreen() {
+const AuthOptionsScreen = () => {
   const { promptAsync } = useFacebookAuthRequest();
 
   const handleFacebookLogin = async () => {
@@ -27,7 +27,7 @@ export default function AuthOptionsScreen() {
     } catch (error) {
       console.error(error);
       Alert.alert('Login Error', 'Something went wrong during Facebook login.');
-    }
+    };
   };
 
   return (
@@ -72,7 +72,9 @@ export default function AuthOptionsScreen() {
       </View>
     </SafeAreaView>
   );
-}
+};
+
+export default AuthOptionsScreen;
 
 const styles = StyleSheet.create({
   container: {

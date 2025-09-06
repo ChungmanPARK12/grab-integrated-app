@@ -50,6 +50,7 @@ const PromoBanner = () => {
   const banner = banners[currentIndex];
   const totalIcons = banner.cards.length;
 
+  // Showing the different banner with id, one by one
   useEffect(() => {
     const getNextBannerIndex = async () => {
       try {
@@ -153,6 +154,8 @@ const PromoBanner = () => {
   );
 };
 
+export default PromoBanner;
+
 const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
@@ -251,4 +254,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PromoBanner;
+

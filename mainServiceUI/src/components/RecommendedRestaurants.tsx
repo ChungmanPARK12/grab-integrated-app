@@ -60,7 +60,7 @@ const restaurants = [
   },
 ];
 
-export default function RecommendedRestaurants() {
+const RecommendedRestaurants = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Restaurants you may like</Text>
@@ -97,7 +97,9 @@ export default function RecommendedRestaurants() {
       />
     </View>
   );
-}
+};
+
+export default RecommendedRestaurants;
 
 const styles = StyleSheet.create({
   container: {
@@ -173,3 +175,5 @@ const styles = StyleSheet.create({
     marginLeft: 5,  
   },
 });
+
+

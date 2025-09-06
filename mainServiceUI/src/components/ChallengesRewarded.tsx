@@ -26,7 +26,7 @@ const challenges = [
   },
 ];
 
-export default function ChallengeSection() {
+const ChallengeSection = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Get rewarded with Challenges</Text>
@@ -53,7 +53,9 @@ export default function ChallengeSection() {
       />
     </View>
   );
-}
+};
+
+export default ChallengeSection;
 
 const styles = StyleSheet.create({
   container: {

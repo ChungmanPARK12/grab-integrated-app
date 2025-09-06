@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, Image, Animated } from 'react-native';
 const walletIcon = require('../assets/icons/wallet-icon.png');
 const crownIcon = require('../assets/icons/crown-icon.png');
 
-export default function PaymentPointsSection() {
+const PaymentPointsSection = () => {
   const blinkAnim = useRef(new Animated.Value(1)).current;
   const [isBlinkDone, setBlinkDone] = useState(false);
 
@@ -81,7 +81,9 @@ export default function PaymentPointsSection() {
       {renderBox('Points', '0', crownIcon)}
     </View>
   );
-}
+};
+
+export default PaymentPointsSection;
 
 const styles = StyleSheet.create({
   container: {
@@ -131,3 +133,5 @@ const styles = StyleSheet.create({
     marginTop:20,
   },
 });
+
+

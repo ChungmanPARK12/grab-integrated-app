@@ -10,7 +10,6 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-
 type RootStackParamList = {
   Login: undefined;
   AuthOptions: undefined;
@@ -18,7 +17,7 @@ type RootStackParamList = {
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
-export default function LoginScreen() {
+const LoginScreen = () => {
   const [bgLoaded, setBgLoaded] = useState(false);
   const navigation = useNavigation<NavigationProp>();
   const backgroundImage = require('../../assets/grab-background.png');
@@ -29,7 +28,7 @@ export default function LoginScreen() {
         <View style={styles.loader}>
           <ActivityIndicator size="large" color="#ffffff" />
         </View>
-      )}
+      )};
 
       <ImageBackground
         source={backgroundImage}
@@ -42,7 +41,8 @@ export default function LoginScreen() {
             <View style={styles.buttonArea}>
               <TouchableOpacity
                 style={styles.loginButton}
-                onPress={() => navigation.navigate('AuthOptions')} // ✅ navigate here
+                onPress={() => navigation.navigate('AuthOptions')} //navigate here
+                accessibilityRole="button"
               >
                 <Text style={styles.loginText}>Log In</Text>
               </TouchableOpacity>
@@ -56,8 +56,9 @@ export default function LoginScreen() {
       </ImageBackground>
     </>
   );
-}
+};
 
+export default LoginScreen;
 
 const styles = StyleSheet.create({
   loader: {
@@ -76,6 +77,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
+
   title: {
     fontSize: 48,
     color: 'white',
@@ -89,6 +91,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 40,
   },
+
   buttonArea: {
     marginTop: 'auto',
     marginBottom: 50,

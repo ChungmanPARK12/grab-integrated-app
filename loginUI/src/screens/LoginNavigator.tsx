@@ -3,12 +3,13 @@ import { View, Image, StyleSheet, StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import LoginScreen from './src/screens/LoginScreen';
-import AuthOptionsScreen from './src/screens/AuthOptionsScreen';
+import LoginScreen from '../components/LoginScreen';
+import AuthOptionsScreen from '../components/AuthOptionsScreen';
 
 const Stack = createNativeStackNavigator();
 
-export default function App() {
+// Splash screen(Showing loading image, grab logo)
+const LoginNavigator = () => {
   const [isAppReady, setIsAppReady] = useState(false);
 
   useEffect(() => {
@@ -21,13 +22,13 @@ export default function App() {
       <View style={styles.splashContainer}>
         <StatusBar hidden />
         <Image
-          source={require('./assets/loading.jpg')}
+          source={require('../assets/loading.jpg')}
           style={styles.splashImage}
           resizeMode="cover"
         />
       </View>
     );
-  }
+  };
 
   return (
     <NavigationContainer>
@@ -38,7 +39,9 @@ export default function App() {
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
+
+export default LoginNavigator;
 
 const styles = StyleSheet.create({
   splashContainer: {

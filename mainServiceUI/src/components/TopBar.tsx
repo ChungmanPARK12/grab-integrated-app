@@ -2,7 +2,7 @@ import React from 'react';
 import { View, TextInput, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function TopBar() {
+const TopBar = () => {
   return (
     <LinearGradient
       colors={['#6decb9', '#39c4a0']} // mimicking the Grab gradient
@@ -27,7 +27,9 @@ export default function TopBar() {
       </View>
     </LinearGradient>
   );
-}
+};
+
+export default TopBar;
 
 const styles = StyleSheet.create({
   container: {
@@ -58,3 +60,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
+
+
