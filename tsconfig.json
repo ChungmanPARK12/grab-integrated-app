@@ -2,10 +2,11 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
+    "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"],
+      "@login/*": ["loginUI/src/*"],
+      "@main/*": ["mainServiceUI/src/*"]
     }
   },
   "include": [
