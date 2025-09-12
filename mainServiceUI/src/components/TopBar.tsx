@@ -12,7 +12,7 @@ const TopBar = () => {
     >
       <View style={styles.innerContainer}>
         <TouchableOpacity>
-          <Image source={require('../assets/icons/qr2.png')} style={styles.icon} />
+          <Image source={require('../../assets/icons/qr2.png')} style={styles.icon} />
         </TouchableOpacity>
 
         <TextInput
@@ -22,7 +22,7 @@ const TopBar = () => {
         />
 
         <TouchableOpacity>
-          <Image source={require('../assets/icons/profile2.png')} style={styles.icon} />
+          <Image source={require('../../assets/icons/profile2.png')} style={styles.icon} />
         </TouchableOpacity>
       </View>
     </LinearGradient>

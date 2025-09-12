@@ -9,11 +9,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
-type RootStackParamList = {
-  Login: undefined;
-  AuthOptions: undefined;
-};
+import { RootStackParamList } from '@login/navigation/types';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 

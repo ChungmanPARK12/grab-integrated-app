@@ -15,14 +15,14 @@ type ServiceItem = {
 };
 
 const services: ServiceItem[] = [
-  { name: 'Transport', icon: require('../assets/icons/transport.png') },
-  { name: 'Food', icon: require('../assets/icons/food.png'), tag: 'SALE' },
-  { name: 'Mart', icon: require('../assets/icons/mart.png'), tag: 'SALE' },
-  { name: 'Dine Out', icon: require('../assets/icons/dineout.png'), tag: 'SALE' },
-  { name: 'Express', icon: require('../assets/icons/express.png') },
-  { name: 'Chope', icon: require('../assets/icons/chope.png') },
-  { name: 'Shopping', icon: require('../assets/icons/shopping.png') },
-  { name: 'All', icon: require('../assets/icons/all.png') },
+  { name: 'Transport', icon: require('../../assets/icons/transport.png') },
+  { name: 'Food', icon: require('../../assets/icons/food.png'), tag: 'SALE' },
+  { name: 'Mart', icon: require('../../assets/icons/mart.png'), tag: 'SALE' },
+  { name: 'Dine Out', icon: require('../../assets/icons/dineout.png'), tag: 'SALE' },
+  { name: 'Express', icon: require('../../assets/icons/express.png') },
+  { name: 'Chope', icon: require('../../assets/icons/chope.png') },
+  { name: 'Shopping', icon: require('../../assets/icons/shopping.png') },
+  { name: 'All', icon: require('../../assets/icons/all.png') },
 ];
 
 const ServiceGrid = () => {

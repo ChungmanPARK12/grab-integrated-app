@@ -16,7 +16,7 @@ const restaurants = [
     distance: '7.7 km',
     rating: 4.3,
     discount: '10% off',
-    image: require('../assets/icons/restaurants/burgerking.png'),
+    image: require('../../assets/icons/restaurants/burgerking.png'),
   },
   {
     id: '2',
@@ -24,7 +24,7 @@ const restaurants = [
     distance: '7.8 km',
     rating: 4.3,
     discount: '20% off',
-    image: require('../assets/icons/restaurants/mcdonald.png'),
+    image: require('../../assets/icons/restaurants/mcdonald.png'),
   },
   {
     id: '3',
@@ -32,7 +32,7 @@ const restaurants = [
     distance: '5.7 km',
     rating: 4.2,
     discount: '10% off',
-    image: require('../assets/icons/restaurants/cafeo.png'),
+    image: require('../../assets/icons/restaurants/cafeo.png'),
   },
   {
     id: '4',
@@ -40,7 +40,7 @@ const restaurants = [
     distance: '6.2 km',
     rating: 4.1,
     discount: '15% off',
-    image: require('../assets/icons/restaurants/wokeramen.png'),
+    image: require('../../assets/icons/restaurants/wokeramen.png'),
   },
   {
     id: '5',
@@ -48,7 +48,7 @@ const restaurants = [
     distance: '7.1 km',
     rating: 4.0,
     discount: '5% off',
-    image: require('../assets/icons/restaurants/texaschicken.png'),
+    image: require('../../assets/icons/restaurants/texaschicken.png'),
   },
   {
     id: '6',
@@ -56,7 +56,7 @@ const restaurants = [
     distance: '8.0 km',
     rating: 4.4,
     discount: '12% off',
-    image: require('../assets/icons/restaurants/kfc.png'),
+    image: require('../../assets/icons/restaurants/kfc.png'),
   },
 ];
 

@@ -27,14 +27,14 @@ const travelSmarterItems: TravelItem[] = [
     title: 'Book your very own food trip',
     description: 'Chat with us',
     button: '',
-    image: require('../assets/icons/travel/culinary.png'),
+    image: require('../../assets/icons/travel/culinary.png'),
   },
   {
     id: '2',
     title: 'Pre-book your ride now',
     description: 'Learn more',
     button: '',
-    image: require('../assets/icons/travel/advance-booking.png'),
+    image: require('../../assets/icons/travel/advance-booking.png'),
   },
 ];
 

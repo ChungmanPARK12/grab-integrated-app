@@ -16,13 +16,13 @@ const challenges = [
     id: '1',
     title: 'Win 2 x Golden Village Movie Vouchers',
     endDate: 'Ends on 31 Aug 2025',
-    image: require('../assets/icons/challenges/drinkies.png'),
+    image: require('../../assets/icons/challenges/drinkies.png'),
   },
   {
     id: '2',
     title: 'Win $15 off TikTok Shop!',
     endDate: 'Ends on 15 Sep 2025',
-    image: require('../assets/icons/challenges/tiktok.png'),
+    image: require('../../assets/icons/challenges/tiktok.png'),
   },
 ];
 

@@ -3,8 +3,9 @@ import { View, Image, StyleSheet, StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import LoginScreen from '../components/LoginScreen';
-import AuthOptionsScreen from '../components/AuthOptionsScreen';
+import LoginScreen from '@login/components/LoginScreen';
+import AuthOptionsScreen from '@login/components/AuthOptionsScreen';
+import MainServiceScreen from '@main/screens/MainServiceScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,7 +23,7 @@ const LoginNavigator = () => {
       <View style={styles.splashContainer}>
         <StatusBar hidden />
         <Image
-          source={require('../assets/loading.jpg')}
+          source={require('../../assets/loading.jpg')}
           style={styles.splashImage}
           resizeMode="cover"
         />
@@ -36,6 +37,7 @@ const LoginNavigator = () => {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="AuthOptions" component={AuthOptionsScreen} />
+         <Stack.Screen name="MainService" component={MainServiceScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

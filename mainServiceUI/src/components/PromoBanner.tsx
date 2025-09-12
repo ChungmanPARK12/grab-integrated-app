@@ -9,11 +9,11 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const travelImage = require('../assets/icons/promos/travel-pass.png');
-const carIcon = require('../assets/icons/promos/car-icon.png');
-const airportIcon = require('../assets/icons/promos/airport-icon.png');
-const calendarIcon = require('../assets/icons/promos/calendar-icon.png');
-const FoodIcon = require('../assets/icons/promos/food-icon.png');
+const travelImage = require('../../assets/icons/promos/travel-pass.png');
+const carIcon = require('../../assets/icons/promos/car-icon.png');
+const airportIcon = require('../../assets/icons/promos/airport-icon.png');
+const calendarIcon = require('../../assets/icons/promos/calendar-icon.png');
+const FoodIcon = require('../../assets/icons/promos/food-icon.png');
 
 const banners = [
   {

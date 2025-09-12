@@ -13,15 +13,15 @@ const { width } = Dimensions.get('window');
 const discoverItems = [
   {
     id: '1',
-    image: require('../assets/icons/discover/dineout.png'),
+    image: require('../../assets/icons/discover/dineout.png'),
   },
   {
     id: '2',
-    image: require('../assets/icons/discover/groceries.png'),
+    image: require('../../assets/icons/discover/groceries.png'),
   },
   {
     id: '3',
-    image: require('../assets/icons/discover/grouporder.png'),
+    image: require('../../assets/icons/discover/grouporder.png'),
   },
 ];
 

@@ -10,8 +10,15 @@ import {
 } from 'react-native';
 import { FontAwesome, AntDesign, Entypo } from '@expo/vector-icons';
 import {  useFacebookAuthRequest  } from '../services/facebookAuth'; // ✅ Import the login logic
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '@login/navigation/types';
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'AuthOptions'>;
+
 
 const AuthOptionsScreen = () => {
+  const navigation = useNavigation<NavigationProp>();
   const { promptAsync } = useFacebookAuthRequest();
 
   const handleFacebookLogin = async () => {
@@ -20,6 +27,7 @@ const AuthOptionsScreen = () => {
 
       if (result.type === 'success') {
         Alert.alert('Login Success', `Access Token: ${result.params.access_token}`);
+        navigation.navigate('MainService');
         // You can navigate to another screen or store token here
       } else {
         Alert.alert('Login Cancelled');

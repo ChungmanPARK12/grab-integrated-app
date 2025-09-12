@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, Image, Animated } from 'react-native';
 
-const walletIcon = require('../assets/icons/wallet-icon.png');
-const crownIcon = require('../assets/icons/crown-icon.png');
+const walletIcon = require('../../assets/icons/wallet-icon.png');
+const crownIcon = require('../../assets/icons/crown-icon.png');
 
 const PaymentPointsSection = () => {
   const blinkAnim = useRef(new Animated.Value(1)).current;
