@@ -24,7 +24,7 @@ const LoginScreen = () => {
         <View style={styles.loader}>
           <ActivityIndicator size="large" color="#ffffff" />
         </View>
-      )};
+      )}
 
       <ImageBackground
         source={backgroundImage}

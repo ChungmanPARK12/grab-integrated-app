@@ -1,60 +1,67 @@
+// src/loginUI/components/AuthOptionsScreen.tsx
 import React from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
-  Image,
   SafeAreaView,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { FontAwesome, AntDesign, Entypo } from '@expo/vector-icons';
-import {  useFacebookAuthRequest  } from '../services/facebookAuth'; // ✅ Import the login logic
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@login/navigation/types';
+import { useFacebookAuthRequest } from '../services/facebookAuth';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'AuthOptions'>;
 
-
-const AuthOptionsScreen = () => {
+const AuthOptionsScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
-  const { promptAsync } = useFacebookAuthRequest();
+
+  // ✅ From your hook (Option A already sets useProxy in the hook)
+  const { request, response, promptAsync } = useFacebookAuthRequest();
 
   const handleFacebookLogin = async () => {
     try {
-      const result = await promptAsync();
+      const result = await promptAsync(); // ✅ No useProxy here
 
-      if (result.type === 'success') {
+      if (result.type === 'success' && result.params?.access_token) {
         Alert.alert('Login Success', `Access Token: ${result.params.access_token}`);
         navigation.navigate('MainService');
-        // You can navigate to another screen or store token here
       } else {
         Alert.alert('Login Cancelled');
       }
     } catch (error) {
       console.error(error);
       Alert.alert('Login Error', 'Something went wrong during Facebook login.');
-    };
+    }
   };
 
   return (
     <SafeAreaView style={styles.container}>
       {/* Logo + Tagline at Top */}
       <View style={styles.topArea}>
-        <Image
-          source={require('../../assets/newlogo.png')}
-          style={styles.logoImage}
-          resizeMode="contain"
-        />
+        <Text style={styles.logoline}>Grab</Text>
         <Text style={styles.tagline}>Your everyday everything app</Text>
       </View>
 
       {/* Buttons at Bottom */}
       <View style={styles.buttonArea}>
-        <TouchableOpacity style={styles.authButton} onPress={handleFacebookLogin}>
-          <FontAwesome name="facebook" size={20} color="#1877F2" style={styles.icon} />
-          <Text style={styles.authText}>Continue With Facebook</Text>
+        <TouchableOpacity
+          style={[styles.authButton, !request && styles.authButtonDisabled]}
+          onPress={handleFacebookLogin}
+          disabled={!request}
+        >
+          {!request ? (
+            <ActivityIndicator />
+          ) : (
+            <>
+              <FontAwesome name="facebook" size={20} color="#1877F2" style={styles.icon} />
+              <Text style={styles.authText}>Continue With Facebook</Text>
+            </>
+          )}
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.authButton}>
@@ -95,10 +102,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 50,
   },
-  logoImage: {
-    width: 120,
-    height: 150,
-    marginBottom: -40,
+  logoline: {
+    fontSize: 48,
+    fontWeight: 'bold',
+    color: 'white',
+    marginBottom: 0,
   },
   tagline: {
     color: 'white',
@@ -119,6 +127,9 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     paddingHorizontal: 20,
     marginBottom: 15,
+  },
+  authButtonDisabled: {
+    opacity: 0.6,
   },
   icon: {
     marginRight: 12,

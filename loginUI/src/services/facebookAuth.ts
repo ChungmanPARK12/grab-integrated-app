@@ -1,43 +1,35 @@
-// services/facebookAuth.ts
+// src/loginUI/services/facebookAuth.ts
 import * as WebBrowser from 'expo-web-browser';
-import {
-  makeRedirectUri,
-  useAuthRequest,
-  ResponseType,
-} from 'expo-auth-session';
-import { useEffect } from 'react';
-
-// Facebook App ID
-const FB_APP_ID = '1473232010661308'; // Replace with your real Facebook App ID
+import { makeRedirectUri, useAuthRequest, ResponseType } from 'expo-auth-session';
 
 WebBrowser.maybeCompleteAuthSession();
+
+const FB_APP_ID = '1473232010661308';
+
+// Toggle this when you move to a dev/production build
+const USE_PROXY = true; // ✅ true for Expo Go; false for dev build (custom scheme)
 
 const discovery = {
   authorizationEndpoint: 'https://www.facebook.com/v10.0/dialog/oauth',
 };
 
 export const useFacebookAuthRequest = () => {
-  const redirectUri = makeRedirectUri({
-    scheme: 'grabloginui',
-  });
+  // ✅ In your SDK, do NOT pass `useProxy`. Let defaults handle proxy in Expo Go.
+  const redirectUri = USE_PROXY
+    ? makeRedirectUri() // Expo Go → proxy URL (https://auth.expo.io/…)
+    : makeRedirectUri({ scheme: 'grabintegratedapp' }); // dev build / standalone
+
+  console.log('🔗 Redirect URI:', redirectUri);
 
   const [request, response, promptAsync] = useAuthRequest(
     {
       clientId: FB_APP_ID,
-      scopes: ['public_profile', 'email'],
       redirectUri,
       responseType: ResponseType.Token,
+      scopes: ['public_profile', 'email'],
     },
     discovery
   );
 
-  useEffect(() => {
-    if (response?.type === 'success') {
-      const { access_token } = response.params;
-      console.log('Facebook access token:', access_token);
-      // TODO: handle backend login or token storage
-    }
-  }, [response]);
-
-  return { request, promptAsync };
+  return { request, response, promptAsync };
 };
