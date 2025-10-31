@@ -1,35 +1,45 @@
-// src/loginUI/services/facebookAuth.ts
+// src/loginUI/src/services/facebookAuth.ts
 import * as WebBrowser from 'expo-web-browser';
-import { makeRedirectUri, useAuthRequest, ResponseType } from 'expo-auth-session';
+import { useAuthRequest, ResponseType, AuthRequestConfig } from 'expo-auth-session';
 
 WebBrowser.maybeCompleteAuthSession();
 
 const FB_APP_ID = '1473232010661308';
+const EXPO_USERNAME = 'chungmanpark';
+const EXPO_SLUG = 'grab-integrated-app';
 
-// Toggle this when you move to a dev/production build
-const USE_PROXY = true; // ✅ true for Expo Go; false for dev build (custom scheme)
-
-const discovery = {
-  authorizationEndpoint: 'https://www.facebook.com/v10.0/dialog/oauth',
+export const fbDiscovery = {
+  authorizationEndpoint: 'https://www.facebook.com/v19.0/dialog/oauth',
 };
 
+function getRedirectUri() {
+  return `https://auth.expo.io/@${EXPO_USERNAME}/${EXPO_SLUG}`;
+}
+
 export const useFacebookAuthRequest = () => {
-  // ✅ In your SDK, do NOT pass `useProxy`. Let defaults handle proxy in Expo Go.
-  const redirectUri = USE_PROXY
-    ? makeRedirectUri() // Expo Go → proxy URL (https://auth.expo.io/…)
-    : makeRedirectUri({ scheme: 'grabintegratedapp' }); // dev build / standalone
+  const redirectUri = getRedirectUri();
 
-  console.log('🔗 Redirect URI:', redirectUri);
+  const config: AuthRequestConfig = {
+    clientId: FB_APP_ID,
+    redirectUri,
+    responseType: ResponseType.Token,
+    usePKCE: false, // important
+    scopes: ['public_profile', 'email'],
+    extraParams: { display: 'touch', auth_type: 'rerequest' },
+  };
 
-  const [request, response, promptAsync] = useAuthRequest(
-    {
-      clientId: FB_APP_ID,
-      redirectUri,
-      responseType: ResponseType.Token,
-      scopes: ['public_profile', 'email'],
-    },
-    discovery
-  );
+  const [request, response, promptAsync] = useAuthRequest(config, fbDiscovery);
 
-  return { request, response, promptAsync };
+  // ✅ log BEFORE returning
+  console.log('🧪 usePKCE from hook =', config.usePKCE);
+  console.log('🧪 request.codeChallengeMethod =', (request as any)?.codeChallengeMethod);
+
+  return {
+    request,
+    response,
+    promptAsync,
+    redirectUri,
+    discovery: fbDiscovery,
+    usePKCE: config.usePKCE,
+  };
 };

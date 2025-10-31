@@ -218,10 +218,28 @@
 - Error because using URL from loginUI but it should be the URL from grab-integrated-app which is root project.
 - Currently the app using the local dev Uri(expo go) so it need the https which restrict from factbook and I got the option to use `useProxy` again.
 - Concern using `useProxy` is mismatched with the SDK.
+
 # [2025-10-22] - Option A
 - Keep using Expo Go and Add `Valid OAuth Redirect URIs`.
 - No `useProxy` in `promptAsync` which occur error becuase of the mismatch SDK.
 - Put `useProxy:true` into `makeRedirectUri`.
+
+# [2025-10-23] - Successful output the http link by force the useproxy URL.
+- Need to complete the test user(diagnosis so far), Review -> Testing, Test Complete and then Publish, go to app Live.
+
+# [2025-10-24] - Graph API Explorer
+- Generated user access token, permisions adding email and public_profile, GET id and name. 
+- Ready to add facebook account as a Tester to app Live.
+- Reset history safari and then loged in again clickling facebook login button, continue as chungman but error, something went wrong.
+
+### [2025-10-30] – [2025-11-01] - Diagnosis that Auth URL issue for facebook login
+
+## Debugging
+- Clear for heck print `client_id=1473232010661308`, `redirect_uri=https://auth.expo.io/@chungmanpark/grab-integrated-app`.
+- It times out(never returns to the app), `promptAsync` is an Expo account mismatch somereason.
+
+
+
 
 
 

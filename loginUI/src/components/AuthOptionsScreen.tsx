@@ -1,5 +1,5 @@
 // src/loginUI/components/AuthOptionsScreen.tsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,35 +8,86 @@ import {
   SafeAreaView,
   Alert,
   ActivityIndicator,
+  LogBox,
 } from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
 import { FontAwesome, AntDesign, Entypo } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@login/navigation/types';
 import { useFacebookAuthRequest } from '../services/facebookAuth';
 
+LogBox.ignoreAllLogs(false); // show warnings/errors while testing
+
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'AuthOptions'>;
+
+// safe JSON pretty-print for alerts
+const j = (v: any) => {
+  try { return JSON.stringify(v, null, 2); } catch { return String(v); }
+};
 
 const AuthOptionsScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
 
-  // ✅ From your hook (Option A already sets useProxy in the hook)
-  const { request, response, promptAsync } = useFacebookAuthRequest();
+  // NOTE: hook must return discovery for makeAuthUrlAsync()
+  const { request, response, promptAsync, redirectUri, discovery } = useFacebookAuthRequest();
+
+  useEffect(() => {
+    console.log('🔐 redirectUri at runtime =', redirectUri);
+
+    if (!response) return;
+
+    console.log('🛰️ response object:', response);
+
+    if (response.type === 'success') {
+      const token = (response as any).params?.access_token;
+      console.log('✅ FB success. token =', token);
+      Alert.alert('FB Success', token ? `token:\n${token}` : 'No access_token in params');
+      if (token) navigation.navigate('MainService');
+    } else if (response.type === 'error') {
+      console.log('❌ FB error object:', (response as any).error || response);
+      Alert.alert('FB Error (response)', j((response as any).error || response));
+    } else {
+      console.log('ℹ️ FB flow result type:', response.type);
+      Alert.alert('FB Result', response.type);
+    }
+  }, [response, redirectUri, navigation]);
 
   const handleFacebookLogin = async () => {
     try {
-      const result = await promptAsync(); // ✅ No useProxy here
-
-      if (result.type === 'success' && result.params?.access_token) {
-        Alert.alert('Login Success', `Access Token: ${result.params.access_token}`);
-        navigation.navigate('MainService');
-      } else {
-        Alert.alert('Login Cancelled');
+      if (!request) {
+        Alert.alert('DEBUG', 'Request is not ready');
+        return;
       }
-    } catch (error) {
-      console.error(error);
-      Alert.alert('Login Error', 'Something went wrong during Facebook login.');
+
+      console.log('▶️ calling promptAsync…');
+
+      // Show the EXACT URL (includes client_id & redirect_uri) for verification
+      const authUrl = await request.makeAuthUrlAsync(discovery);
+      console.log('🔗 authUrl =', authUrl);
+      Alert.alert('Auth URL', authUrl);
+
+      // Safety timeout so we know if FB never returns
+      const timeout = new Promise((_, rej) =>
+        setTimeout(() => rej(new Error('FB did not return within 20s')), 20000)
+      );
+
+      const result = await Promise.race([
+        promptAsync({ preferEphemeralSession: true }),
+        timeout,
+      ]);
+
+      console.log('🔎 promptAsync result:', result);
+      Alert.alert('promptAsync result', j(result));
+    } catch (err: any) {
+      console.error('💥 FB login exception:', err);
+      Alert.alert('FB Exception (catch)', j(err));
     }
+  };
+
+  const handleResetFacebookSession = async () => {
+    await WebBrowser.openBrowserAsync('https://m.facebook.com/logout.php');
+    Alert.alert('Session Reset', 'Facebook session cleared. Try logging in again.');
   };
 
   return (
@@ -83,6 +134,13 @@ const AuthOptionsScreen: React.FC = () => {
         <TouchableOpacity style={styles.authButton}>
           <Entypo name="phone" size={20} color="black" style={styles.icon} />
           <Text style={styles.authText2}>Continue With Mobile Number</Text>
+        </TouchableOpacity>
+
+        {/* Testing helper: clear FB session */}
+        <TouchableOpacity onPress={handleResetFacebookSession} style={{ alignSelf: 'center', marginTop: 8 }}>
+          <Text style={{ color: 'white', textDecorationLine: 'underline' }}>
+            Having trouble? Reset Facebook session
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
