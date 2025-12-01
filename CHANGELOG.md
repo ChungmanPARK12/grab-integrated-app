@@ -232,11 +232,133 @@
 - Ready to add facebook account as a Tester to app Live.
 - Reset history safari and then loged in again clickling facebook login button, continue as chungman but error, something went wrong.
 
-### [2025-10-30] – [2025-11-01] - Diagnosis that Auth URL issue for facebook login
+### [2025-10-30] – [2025-11-01] - Diagnosis that Auth URL issue for facebook login.
 
 ## Debugging
 - Clear for heck print `client_id=1473232010661308`, `redirect_uri=https://auth.expo.io/@chungmanpark/grab-integrated-app`.
 - It times out(never returns to the app), `promptAsync` is an Expo account mismatch somereason.
+
+# Why error for using `useProxy` in this case(Facebook login)?
+- `makeRedirectUri` belongs to `expo-auth-session` packge itself, not the `expo-auth-session/providers/facebook` module, so when you import it from facebook, TypeSctipt complains it doesn't exist there. 
+
+## So far...
+- Expo proxy redirect `https:` link clear
+- Same link address in the Facebook setting clear
+- Total setting and structure is done but still need to find things what I missing, Facebook still doesn't allow me to login somereason, request URI but not call back. 
+
+### [2025-11-03] – [2025-11-08] - Authorize request(query string) is not exactly what Facebook expects.
+
+## Manually creates redirect URL in factbookAuth.
+- Remove the method of owner and slug which manually creating redirect.
+- Replaced with `useProxy` and removed `preferEmphemeralSession` which is temporaly link in AuthOptionsScreens.
+
+# Progress Summary
+- HTTPS Redirect Flow(clear)
+- Proxy Usage(clear)
+- Session Handling(clear)
+- Facebook Config, redirect param still not parsed.
+
+## Summarize Facebook issue
+# Initial Setup
+- The app integrated Expo AuthSession + Facebook Provider(`expo-auth-session/providers/facebook`).
+- Attempted use useProxy: `Facebook.makeRedirectUri({ useProxy: true });`, Error: Proerpty does not exist and it must come from `expo-auth-session`, not the Facebook provider. 
+
+# Redirect Confusion(exp:// vs https://)
+- Facebook reject local expo link, only accept HTTPS redirect URIs.
+
+# Sucessfully Switching HTTPS redirect by makeRedirectUri();
+- console log conformed `https://auth.expo.io/@chungmanpark/grab-integrated-app`.
+- Double check Facebook app acount settings(
+  Valid OAuth Redirect URI, 
+  Website URL, App Domain: 
+  auth.expo.io, Enforce HTTPS, 
+  Embedded Browser Login)
+
+# New Error: "No redirect URI in the params"
+- Facebook OAuth(My URI) now loads but fails before `auth.expo.io`.
+- Meaning: the Facebook authorization URL is missing. 
+- Debugging: FB authorize URL => `https://www.facebook.com/v19.0/dialog/oauth?redirect_uri=https%3A%2F%2Fauth.expo.io%2F@chungmanpark%2Fgrab-integrated-app...`
+- So the param exists, Facebook might be rejecting due to encoding or domain mismatch. 
+
+# Conclusion
+- Still have redirectURL issue, it can't send HTTPs somereason. 
+- npx expo start --tunnel, expo go can't send HTTPs link not providing the function. 
+- Need to try dev-client?. 
+
+## [2025-11-06] - Check List 
+
+# Expo Proxy state mismatch
+- Reloading(`hot refresh or JS bundle refresh`) during browser opening in Safari.
+- `useAuthRequest`, created another request on rendering. 
+- Calling `promptAsync` multiple times in a row.
+
+# What We Learned
+- URI mismatch = fixed by forcing Expo proxy.
+- Final longterm solution: switch to EAS Dev Client + custom URI scheme
+
+## Why EAS Dev Client? and what is the difference with Expo Go?
+# Expo Go
+- General container app.
+- Installation -> scan QR code and open the project.
+- Limited module within Expo Go.
+
+# EAS Dev Client
+- Development container.
+- Manage all modules. 
+- The team memeber can share the environemt after installed Dev Client App.
+
+## Deep Link and OAuth Redirect
+
+# Expo Go
+- Proxty(https://auth.expo.io) -> makeRedirectUri({ useProxy: true}) -> Call back.
+- It can cause state mismatch, failure calling back Safari in Proxy, Facebook or Google login.
+
+# EAS Dev Client
+- Dev Client `standalone`.
+- Call back through custom skim directly -> None use Proxy.
+- Implement deep link and OAuth in a real production, stability.
+
+# Setting Native Module
+- Expo Go: Not compatible for some third party module.
+- EAS Dev Client: Custom native in Config Plugin, enable all of authority, entitlements etc.
+
+# Debugging
+- Expo Go: Simple setting and optimized quick test.
+- EAS Dev Client: With a real bundle ID/Package, skim, authroity so optimized test close to a real production(Push/Deep link/OAuth/InAppPayment).
+
+# Conclusion
+- Expo Go: A general container for simple test UI. Demo verion
+- EAS Dev Client: A development container replicates the app environment exactly, essential for the stability of OAuth or Deep link.  
+
+### [2025-11-10] – [2025-11-15] - Dev Client Installation
+
+## Setting
+- Check `scheme` in `app.json` to control custom skim for Dev Client mode.
+- Fixed code to integrate the version separates the Expo Go, Dev Client, and Production environments in `facebookAuth.ts`. 
+
+## Build Dev Client
+- Need to install some materials in WLS, logging in with my Apple acount and then register my iPhone to Apple Developer Program to install Dev Client on my iPhone. 
+
+## [2025-11-25] – [2025-11-30] — Re-structure and integration the methods.
+
+# facebookAuth.ts
+- Reading `FB APP ID`.
+- Create redirectUri.
+- Setting `useAuthReqest`.
+- Check `STATE` + access_token.
+- Return `FacebookLoginResult` in login() method.
+
+# AuthOptionsScreen.ts
+- Call `useFacbookLogin`, handle every methods related to facebook logtin in `facebookAuth`.
+
+
+
+
+
+
+
+
+
 
 
 
