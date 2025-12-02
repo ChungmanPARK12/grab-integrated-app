@@ -351,6 +351,8 @@
 # AuthOptionsScreen.ts
 - Call `useFacbookLogin`, handle every methods related to facebook logtin in `facebookAuth`.
 
+## [2025-12-01] – [2025-12-02] — .
+
 
 
 
