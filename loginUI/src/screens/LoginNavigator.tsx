@@ -32,14 +32,11 @@ const LoginNavigator = () => {
   };
 
   return (
-    <NavigationContainer>
-      <StatusBar barStyle="light-content" backgroundColor="#00B14F" />
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="AuthOptions" component={AuthOptionsScreen} />
-         <Stack.Screen name="MainService" component={MainServiceScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="AuthOptions" component={AuthOptionsScreen} />
+      <Stack.Screen name="MainService" component={MainServiceScreen} />
+    </Stack.Navigator>
   );
 };
 

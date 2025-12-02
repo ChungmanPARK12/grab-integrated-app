@@ -9,7 +9,14 @@ import { FlatList, StyleSheet, View } from 'react-native';
 import ServiceGrid from '../components/ServiceGrid';
 import TopBar from '../components/TopBar';
 
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '@login/navigation/types';
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'MainService'>;
+
 const MainServiceScreen = () => {
+  const navigation = useNavigation<NavigationProp>();
   return (
     <FlatList
       data={[]}

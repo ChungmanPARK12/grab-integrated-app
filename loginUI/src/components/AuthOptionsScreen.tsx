@@ -1,68 +1,57 @@
-import React from 'react';
+// src/loginUI/components/AuthOptionsScreen.tsx
+import React, { useCallback } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
-  Image,
   SafeAreaView,
-  Alert,
 } from 'react-native';
 import { FontAwesome, AntDesign, Entypo } from '@expo/vector-icons';
-import {  useFacebookAuthRequest  } from '../services/facebookAuth'; // ✅ Import the login logic
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@login/navigation/types';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'AuthOptions'>;
 
-
-const AuthOptionsScreen = () => {
+const AuthOptionsScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
-  const { promptAsync } = useFacebookAuthRequest();
 
-  const handleFacebookLogin = async () => {
-    try {
-      const result = await promptAsync();
-
-      if (result.type === 'success') {
-        Alert.alert('Login Success', `Access Token: ${result.params.access_token}`);
-        navigation.navigate('MainService');
-        // You can navigate to another screen or store token here
-      } else {
-        Alert.alert('Login Cancelled');
-      }
-    } catch (error) {
-      console.error(error);
-      Alert.alert('Login Error', 'Something went wrong during Facebook login.');
-    };
-  };
+  /**
+   * ✅ Temporary Facebook login bypass for portfolio v1
+   * - No real OAuth flow
+   * - Just navigate to the main service screen when the button is pressed
+   */
+  const handleFacebookBypass = useCallback(() => {
+    // You can also use navigation.reset(...) if you don't want to go back
+    navigation.navigate('MainService');
+  }, [navigation]);
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Logo + Tagline at Top */}
       <View style={styles.topArea}>
-        <Image
-          source={require('../../assets/newlogo.png')}
-          style={styles.logoImage}
-          resizeMode="contain"
-        />
+        <Text style={styles.logoline}>Grab</Text>
         <Text style={styles.tagline}>Your everyday everything app</Text>
       </View>
 
-      {/* Buttons at Bottom */}
       <View style={styles.buttonArea}>
-        <TouchableOpacity style={styles.authButton} onPress={handleFacebookLogin}>
-          <FontAwesome name="facebook" size={20} color="#1877F2" style={styles.icon} />
+        {/* Facebook (bypass) */}
+        <TouchableOpacity
+          style={styles.authButton}
+          onPress={handleFacebookBypass}
+        >
+          <FontAwesome name="facebook" size={20} style={styles.icon} color="#1877F2" />
           <Text style={styles.authText}>Continue With Facebook</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.authButton}>
+        {/* Google (placeholder) */}
+        <TouchableOpacity style={styles.authButton} disabled>
           <AntDesign name="google" size={20} color="#DB4437" style={styles.icon} />
           <Text style={styles.authText}>Continue With Google</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.authButton}>
+        {/* Apple (placeholder) */}
+        <TouchableOpacity style={styles.authButton} disabled>
           <AntDesign name="apple1" size={20} color="black" style={styles.icon} />
           <Text style={styles.authText}>Continue With Apple</Text>
         </TouchableOpacity>
@@ -73,7 +62,8 @@ const AuthOptionsScreen = () => {
           <View style={styles.divider} />
         </View>
 
-        <TouchableOpacity style={styles.authButton}>
+        {/* Phone number (placeholder) */}
+        <TouchableOpacity style={styles.authButton} disabled>
           <Entypo name="phone" size={20} color="black" style={styles.icon} />
           <Text style={styles.authText2}>Continue With Mobile Number</Text>
         </TouchableOpacity>
@@ -91,24 +81,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     justifyContent: 'space-between',
   },
-  topArea: {
-    alignItems: 'center',
-    marginTop: 50,
-  },
-  logoImage: {
-    width: 120,
-    height: 150,
-    marginBottom: -40,
-  },
-  tagline: {
-    color: 'white',
-    fontSize: 20,
-    textAlign: 'center',
-    marginBottom: 10,
-  },
-  buttonArea: {
-    marginBottom: 20,
-  },
+  topArea: { alignItems: 'center', marginTop: 50 },
+  logoline: { fontSize: 48, fontWeight: 'bold', color: 'white', marginBottom: 0 },
+  tagline: { color: 'white', fontSize: 20, textAlign: 'center', marginBottom: 10 },
+  buttonArea: { marginBottom: 20 },
   authButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -120,33 +96,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginBottom: 15,
   },
-  icon: {
-    marginRight: 12,
-  },
-  authText: {
-    marginLeft: 35,
-    fontWeight: 'bold',
-    color: 'black',
-    fontSize: 14,
-  },
-  authText2: {
-    marginLeft: 13,
-    fontWeight: 'bold',
-    color: 'black',
-    fontSize: 14,
-  },
-  dividerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 15,
-  },
-  divider: {
-    flex: 1,
-    height: 1,
-    backgroundColor: 'white',
-  },
-  orText: {
-    marginHorizontal: 8,
-    color: 'white',
-  },
+  icon: { marginRight: 12 },
+  authText: { marginLeft: 35, fontWeight: 'bold', color: 'black', fontSize: 14 },
+  authText2: { marginLeft: 13, fontWeight: 'bold', color: 'black', fontSize: 14 },
+  dividerRow: { flexDirection: 'row', alignItems: 'center', marginVertical: 15 },
+  divider: { flex: 1, height: 1, backgroundColor: 'white' },
+  orText: { marginHorizontal: 8, color: 'white' },
 });
