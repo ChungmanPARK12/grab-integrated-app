@@ -32,7 +32,8 @@
 - Implements the hook-based login using `expo-auth-session`
 - Handles `response` using `useEffect`
 
-## [2025-11-25] – [2025-11-30] — feature/fb-login-bypass
+## [2025-12-01] – [2025-12-02] — feature/fb-login-bypass
 - Created `experiment/fb-login-implicit` and keep this code until I can convert to `dev-client` mode later.
-- Working `feature/fb-login-bypass`, integrate the system that Facebook login button click and then navigate the screen, temporary system for the first portfolio v1. 
+- Working `feature/fb-login-bypass`, integrate the system that Facebook login button click and then navigate the screen, temporary system for the first portfolio v1(clear). 
+
 
