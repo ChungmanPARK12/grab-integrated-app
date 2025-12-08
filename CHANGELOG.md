@@ -351,7 +351,9 @@
 # AuthOptionsScreen.ts
 - Call `useFacbookLogin`, handle every methods related to facebook logtin in `facebookAuth`.
 
-## [2025-12-01] – [2025-12-02] — .
+## [2025-12-01] – [2025-12-10] - Button Navigation
+- Just click the four of buttons to navigate to the service screen directly, temporary system to make the first portfolio v1.
+ 
 
 
 
