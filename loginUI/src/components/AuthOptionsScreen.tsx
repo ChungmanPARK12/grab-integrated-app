@@ -18,12 +18,12 @@ const AuthOptionsScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
 
   /**
-   * ✅ Temporary Facebook login bypass for portfolio v1
-   * - No real OAuth flow
-   * - Just navigate to the main service screen when the button is pressed
+   * ✅ Temporary auth bypass for portfolio v1
+   * - No real OAuth / phone auth
+   * - All auth buttons just navigate to the main service screen
    */
-  const handleFacebookBypass = useCallback(() => {
-    // You can also use navigation.reset(...) if you don't want to go back
+  const handleAuthBypass = useCallback(() => {
+    // 필요하면 나중에 navigation.reset(...) 으로 교체 가능
     navigation.navigate('MainService');
   }, [navigation]);
 
@@ -38,20 +38,26 @@ const AuthOptionsScreen: React.FC = () => {
         {/* Facebook (bypass) */}
         <TouchableOpacity
           style={styles.authButton}
-          onPress={handleFacebookBypass}
+          onPress={handleAuthBypass}
         >
           <FontAwesome name="facebook" size={20} style={styles.icon} color="#1877F2" />
           <Text style={styles.authText}>Continue With Facebook</Text>
         </TouchableOpacity>
 
-        {/* Google (placeholder) */}
-        <TouchableOpacity style={styles.authButton} disabled>
+        {/* Google (bypass) */}
+        <TouchableOpacity
+          style={styles.authButton}
+          onPress={handleAuthBypass}
+        >
           <AntDesign name="google" size={20} color="#DB4437" style={styles.icon} />
           <Text style={styles.authText}>Continue With Google</Text>
         </TouchableOpacity>
 
-        {/* Apple (placeholder) */}
-        <TouchableOpacity style={styles.authButton} disabled>
+        {/* Apple (bypass) */}
+        <TouchableOpacity
+          style={styles.authButton}
+          onPress={handleAuthBypass}
+        >
           <AntDesign name="apple1" size={20} color="black" style={styles.icon} />
           <Text style={styles.authText}>Continue With Apple</Text>
         </TouchableOpacity>
@@ -62,8 +68,11 @@ const AuthOptionsScreen: React.FC = () => {
           <View style={styles.divider} />
         </View>
 
-        {/* Phone number (placeholder) */}
-        <TouchableOpacity style={styles.authButton} disabled>
+        {/* Phone number (bypass) */}
+        <TouchableOpacity
+          style={styles.authButton}
+          onPress={handleAuthBypass}
+        >
           <Entypo name="phone" size={20} color="black" style={styles.icon} />
           <Text style={styles.authText2}>Continue With Mobile Number</Text>
         </TouchableOpacity>
