@@ -104,12 +104,13 @@ Below is the complete user journey implemented in Portfolio v1.
 
 ---
 
-### 6. Main Service –  Cards
+### 6. Main Service –  Restaurents & Dicovery Cards
 
+<div align="center">
 <table>
   <tr>
-    <td align="center"><strong>Restaurent1</strong></td>
-    <td align="center"><strong>2</strong></td>
+    <td align="center"><strong>Variation 1</strong></td>
+    <td align="center"><strong>Variation 2</strong></td>
   </tr>
   <tr>
     <td align="center">
@@ -120,7 +121,11 @@ Below is the complete user journey implemented in Portfolio v1.
     </td>
   </tr>
 </table>
+</div>
 
+- This screen contains two content sections displayed together:  
+- **(1) Restaurants you may like** – six recommendation cards that vary based on the selected layout.  
+- **(2) Discover things you’d love** – three promotional cards shown below the restaurant section.  
 
 ---
 
