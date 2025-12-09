@@ -43,6 +43,9 @@ Below is the complete user journey implemented in Portfolio v1.
   <img src="https://github.com/user-attachments/assets/61c3a4be-9c42-4804-a47c-ff333579e562" width="280"/>
 </p>
 
+> Shows a brief loading animation before moving to the intro screen.
+
+
 ---
 
 ### 3. Intro Login Screen
