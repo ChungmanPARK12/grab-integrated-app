@@ -62,12 +62,19 @@ Below is the complete user journey implemented in Portfolio v1.
   <img src="https://github.com/user-attachments/assets/171ba020-f8df-4b9d-a234-44652003d98c" width="280"/>
 </p>
 
+- Provides multiple login options **Facebook**, **Google**, **Apple**, and **mobile number**.  
+- For Portfolio v1, all login buttons use a temporary bypass and navigate directly to the main service UI.  
+- **Facebook OAuth** integration is currently under development and will be fully tested in Expo **dev-client** mode in upcoming versions.
+
 ---
 
 ### 5. Main Service – Blinking UI
 <p align="center">
   <img src="https://github.com/user-attachments/assets/7b918b34-0db6-49d2-b523-7d2288d0d039" width="280"/>
 </p>
+
+- Displays a blinking skeleton UI while all service icons and images are loading.  
+- The main service layout is shown only after every asset has fully loaded, ensuring a smooth and consistent user experience.
 
 ---
 
@@ -85,17 +92,25 @@ Below is the complete user journey implemented in Portfolio v1.
 
 ---
 
-### 6. Main Service – Res1
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/aadf139e-056c-4d0e-9378-b4dbfb015d96" width="280"/>
-</p>
+### 6. Main Service – Dynamic Promotion Cards
 
----
+<table>
+  <tr>
+    <td align="center"><strong>Travel Pass</strong></td>
+    <td align="center"><strong>Food Deals</strong></td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/aa4e1fe9-1f92-4565-8945-43c97c9590a3" width="250"/>
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/5400606e-8308-4118-86a6-c69596399cbc" width="250"/>
+    </td>
+  </tr>
+</table>
 
-### 6. Main Service – Res2
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/8871acf0-602e-4f75-800c-42e474c8788d" width="280"/>
-</p>
+- These promotional cards alternate each time the app launches, switching between **Travel Pass** and **Food Deals** to mimic dynamic Grab app promotions.
+
 
 ---
 
