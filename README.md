@@ -30,6 +30,9 @@ This repository is part of my developer portfolio, showcasing:
 Below is the complete user journey implemented in Portfolio v1.
 
 ### 1. Splash Screen
+
+**Source:** `loginUI/src/screens/LoginNavigator.tsx`  
+
 <p align="center">
   <img src="https://github.com/user-attachments/assets/a55f5a7f-db0b-49c8-aa44-8009acaacae0" width="280"/>
 </p>
