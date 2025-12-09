@@ -31,7 +31,7 @@ Below is the complete user journey implemented in Portfolio v1.
 
 ### 1. Splash Screen
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/a55f5a7f-db0b-49c8-aa44-8009acaacae0" width="280"/>
+  <img src="https://github.com/user-attachments/assets/a55f5a7f-db0b-49c8-aa44-8009acaacae0" width="280" height="500"/>
 </p>
 
 ### 2. Loader Screen
