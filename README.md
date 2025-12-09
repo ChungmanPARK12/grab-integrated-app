@@ -34,7 +34,7 @@ Below is the complete user journey implemented in Portfolio v1.
   <img src="https://github.com/user-attachments/assets/a55f5a7f-db0b-49c8-aa44-8009acaacae0" width="280"/>
 </p>
 
- Displays the Grab brand as the app initializes.
+- Displays the Grab brand as the app initializes.
 
 ---
 
@@ -43,8 +43,7 @@ Below is the complete user journey implemented in Portfolio v1.
   <img src="https://github.com/user-attachments/assets/61c3a4be-9c42-4804-a47c-ff333579e562" width="280"/>
 </p>
 
-> Shows a brief loading animation before moving to the intro screen.
-
+- Shows a brief loading animation before moving to the intro screen.
 
 ---
 
@@ -52,6 +51,9 @@ Below is the complete user journey implemented in Portfolio v1.
 <p align="center">
   <img src="https://github.com/user-attachments/assets/5f2077d8-e341-4942-ac44-943cab8169fb" width="280"/>
 </p>
+
+- Introduces the Grab brand and guides the user into the login flow.  
+- In Portfolio v1, only the **Log In** button is active and proceeds to the authentication options screen.
 
 ---
 
