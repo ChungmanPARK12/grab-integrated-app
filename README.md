@@ -114,10 +114,10 @@ Below is the complete user journey implemented in Portfolio v1.
   </tr>
   <tr>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/aadf139e-056c-4d0e-9378-b4dbfb015d96" width="250"/>
+      <img src="https://github.com/user-attachments/assets/aadf139e-056c-4d0e-9378-b4dbfb015d96" width="280"/>
     </td>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/8871acf0-602e-4f75-800c-42e474c8788d" width="250"/>
+      <img src="https://github.com/user-attachments/assets/8871acf0-602e-4f75-800c-42e474c8788d" width="280"/>
     </td>
   </tr>
 </table>
@@ -129,17 +129,25 @@ Below is the complete user journey implemented in Portfolio v1.
 
 ---
 
-### 6. Main Service – Reward1
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/6709b968-4bcc-4fac-9031-2e95107c4693" width="280"/>
-</p>
+### 6. Main Service –  Travel & Reward
 
----
+<div align="center">
+<table>
+  <tr>
+    <td align="center"><strong>Variation 1</strong></td>
+    <td align="center"><strong>Variation 2</strong></td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/6709b968-4bcc-4fac-9031-2e95107c4693" width="280"/>
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/2e780c31-4243-49c0-bb46-e3fcc6d89043" width="280"/>
+    </td>
+  </tr>
+</table>
+</div>
 
-### 6. Main Service – Reward2
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/2e780c31-4243-49c0-bb46-e3fcc6d89043" width="280"/>
-</p>
 
 ---
 
