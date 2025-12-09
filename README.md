@@ -78,20 +78,6 @@ Below is the complete user journey implemented in Portfolio v1.
 
 ---
 
-### 6. Main Service – Buy Travel Pass now
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/11514474-3277-43ff-b353-84c1f5986a30" width="280"/>
-</p>
-
----
-
-### 6. Main Service – Get Food Deals now
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/ce4930c7-f0d7-47e4-961c-1dfb99144565" width="280"/>
-</p>
-
----
-
 ### 6. Main Service – Dynamic Promotion Cards
 
 <table>
@@ -101,16 +87,30 @@ Below is the complete user journey implemented in Portfolio v1.
   </tr>
   <tr>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/aa4e1fe9-1f92-4565-8945-43c97c9590a3" width="250"/>
+      <img src="https://github.com/user-attachments/assets/11514474-3277-43ff-b353-84c1f5986a30" width="280"/>
     </td>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/5400606e-8308-4118-86a6-c69596399cbc" width="250"/>
+      <img src="https://github.com/user-attachments/assets/ce4930c7-f0d7-47e4-961c-1dfb99144565" width="280"/>
     </td>
   </tr>
 </table>
 
 - These promotional cards alternate each time the app launches, switching between **Travel Pass** and **Food Deals** to mimic dynamic Grab app promotions.
 
+
+---
+
+### 6. Main Service – Res1
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/aadf139e-056c-4d0e-9378-b4dbfb015d96" width="280"/>
+</p>
+
+---
+
+### 6. Main Service – Res2
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/8871acf0-602e-4f75-800c-42e474c8788d" width="280"/>
+</p>
 
 ---
 
