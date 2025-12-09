@@ -80,6 +80,7 @@ Below is the complete user journey implemented in Portfolio v1.
 
 ### 6. Main Service – Dynamic Promotion Cards
 
+<div align="center">
 <table>
   <tr>
     <td align="center"><strong>Travel Pass</strong></td>
@@ -94,8 +95,11 @@ Below is the complete user journey implemented in Portfolio v1.
     </td>
   </tr>
 </table>
+</div>
 
-- These promotional cards alternate each time the app launches, switching between **Travel Pass** and **Food Deals** to mimic dynamic Grab app promotions.
+- The app alternates between **Travel Pass** and **Food Deals** on each launch, creating a more dynamic main service experience.
+
+
 
 
 ---
