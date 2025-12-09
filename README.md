@@ -63,7 +63,7 @@ Below is the complete user journey implemented in Portfolio v1.
 </p>
 
 - Provides multiple login options **Facebook**, **Google**, **Apple**, and **mobile number**.  
-- For Portfolio v1, all login buttons use a temporary bypass and navigate directly to the main service UI.  
+- For **Portfolio v1**, all login buttons use a temporary bypass and navigate directly to the main service UI.  
 - **Facebook OAuth** integration is currently under development and will be fully tested in Expo **dev-client** mode in upcoming versions.
 
 ---
@@ -104,17 +104,23 @@ Below is the complete user journey implemented in Portfolio v1.
 
 ---
 
-### 6. Main Service – Res1
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/aadf139e-056c-4d0e-9378-b4dbfb015d96" width="280"/>
-</p>
+### 6. Main Service –  Cards
 
----
+<table>
+  <tr>
+    <td align="center"><strong>Restaurent1</strong></td>
+    <td align="center"><strong>2</strong></td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/aadf139e-056c-4d0e-9378-b4dbfb015d96" width="250"/>
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/8871acf0-602e-4f75-800c-42e474c8788d" width="250"/>
+    </td>
+  </tr>
+</table>
 
-### 6. Main Service – Res2
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/8871acf0-602e-4f75-800c-42e474c8788d" width="280"/>
-</p>
 
 ---
 
