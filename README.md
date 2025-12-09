@@ -31,16 +31,18 @@ Below is the complete user journey implemented in Portfolio v1.
 
 ### 1. Splash Screen
 
-**Source:** `loginUI/src/screens/LoginNavigator.tsx`  
-
-- Uses a 3-second loading state (`isAppReady`) to display the splash screen before the app becomes interactive.
-- Once ready, the navigator renders three main screens (`Login`, `AuthOptions`, `MainService`) inside `Stack.Navigator`, enabling screen navigation.
-
 <p align="center">
   <img src="https://github.com/user-attachments/assets/a55f5a7f-db0b-49c8-aa44-8009acaacae0" width="280"/>
 </p>
 
 - Displays the Grab brand as the app initializes.
+
+---
+
+**Source:** `loginUI/src/screens/LoginNavigator.tsx`  
+
+- Uses a 3-second loading state (`isAppReady`) to display the splash screen before the app becomes interactive.
+- Once ready, the navigator renders three main screens (`Login`, `AuthOptions`, `MainService`) inside `Stack.Navigator`, enabling screen navigation.
 
 ---
 
