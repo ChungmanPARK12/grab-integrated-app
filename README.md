@@ -129,7 +129,7 @@ Below is the complete user journey implemented in Portfolio v1.
 
 ---
 
-### 6. Main Service –  Travel & Reward
+### 6. Main Service – Travel Promotions & Reward Challenges
 
 <div align="center">
 <table>
@@ -148,6 +148,9 @@ Below is the complete user journey implemented in Portfolio v1.
 </table>
 </div>
 
+- This screen contains two content sections shown together:  
+- **(1) Travel smarter with Grab** – two promotional travel cards.  
+- **(2) Reward Challenges** – two different challenge cards displayed.  
 
 ---
 
