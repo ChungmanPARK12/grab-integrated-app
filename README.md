@@ -47,6 +47,7 @@ Below is the complete user journey implemented in Portfolio v1.
 ---
 
 ### 2. Loader Screen
+
 <p align="center">
   <img src="https://github.com/user-attachments/assets/61c3a4be-9c42-4804-a47c-ff333579e562" width="280"/>
 </p>
@@ -55,7 +56,15 @@ Below is the complete user journey implemented in Portfolio v1.
 
 ---
 
+**Source:** `loginUI/src/components/LoginScreen.tsx`
+
+- Uses the `bgLoaded` state to show an ActivityIndicator until the image has fully loaded.
+- Ensures that users see a clean transitional loading state before the Intro Login screen appears.
+
+---
+
 ### 3. Intro Login Screen
+
 <p align="center">
   <img src="https://github.com/user-attachments/assets/5f2077d8-e341-4942-ac44-943cab8169fb" width="280"/>
 </p>
@@ -65,14 +74,31 @@ Below is the complete user journey implemented in Portfolio v1.
 
 ---
 
+**Source:** `loginUI/src/components/LoginScreen.tsx`
+
+- The login UI becomes visible only after the background image has fully loaded (`bgLoaded === true`).
+
+---
+
 ### 4. Auth Options Screen
+
 <p align="center">
   <img src="https://github.com/user-attachments/assets/171ba020-f8df-4b9d-a234-44652003d98c" width="280"/>
 </p>
 
 - Provides multiple login options **Facebook**, **Google**, **Apple**, and **mobile number**.  
 - For **Portfolio v1**, all login buttons use a temporary bypass and navigate directly to the main service UI.  
-- **Facebook OAuth** integration is currently under development and will be fully tested in Expo **dev-client** mode in upcoming versions.
+- Provides multiple login options: **Facebook**, **Google**, **Apple**, and **mobile number**.  
+- For **Portfolio v1**, all login buttons temporarily bypass authentication and navigate directly to the main service screen.  
+- Facebook OAuth will be implemented in a later version; due to identification requirements, real testing in Expo **dev-client** mode is expected to begin in about six months.  
+- An `experiment/fb-login-implicit` branch will be maintained for future OAuth testing and integration work.
+
+---
+
+**Source:** `loginUI/src/components/AuthOptionsScreen.tsx`
+
+- Registers navigation using `useNavigation<NavigationProp>()`.  
+- `handleAuthBypass` is a temporary handler that routes all login buttons to `MainService` until real OAuth logic is added.  
 
 ---
 
@@ -83,6 +109,14 @@ Below is the complete user journey implemented in Portfolio v1.
 
 - Displays a blinking skeleton UI while all service icons and images are loading.  
 - The main service layout is shown only after every asset has fully loaded, ensuring a smooth and consistent user experience.
+
+---
+
+**Source:** `@main/screens/MainServiceScreen.tsx`
+
+- Uses a `FlatList` with an empty `data` array and a `ListHeaderComponent` to render the entire home screen as a single scrollable layout.  
+- Composes the main sections with `<TopBar />`, `<ServiceGrid />`, `<PaymentPointsSection />`, `<PromoBanner />`, `<RecommendedRestaurants />`, `<DiscoverSection />`, `<TravelSmarterSection />`, and `<ChallengeSection />`.  
+- The blinking skeleton states are implemented inside child components (e.g. `ServiceGrid`, `PaymentPointsSection`, `PromoBanner`), which switch from placeholder UI to the final content once their assets have finished loading.
 
 ---
 
