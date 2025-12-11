@@ -4,8 +4,7 @@
 ![Image](https://github.com/user-attachments/assets/5408f9e6-c53f-4aa6-9cf0-20af59ffb9e9)
 
 A React Native + Expo mobile app inspired by the Grab super app.  
-This project integrates the LoginUI and MainServiceUI into a single user flow — from splash screen to the main service UI — built as a clean, portfolio-ready mobile app.
-
+Built through direct app experience and AI-assisted iteration, this project reconstructs Grab’s end-to-end user flow in a polished, portfolio-ready format — not through cloning, but through analysis and redesign.
 
 ## Project Overview
 
@@ -26,8 +25,6 @@ This repository is part of my developer portfolio, showcasing:
 - Practical app structure that can be extended with real OAuth and backend integration in future versions
 
 ## Full App Flow
-
-Below is the complete user journey implemented in Portfolio v1.
 
 ### 1. Splash Screen
 
@@ -87,7 +84,6 @@ Below is the complete user journey implemented in Portfolio v1.
 </p>
 
 - Provides multiple login options **Facebook**, **Google**, **Apple**, and **mobile number**.   
-- For **Portfolio v1**, all login buttons temporarily bypass authentication and navigate directly to the main service screen.  
 - Facebook OAuth will be implemented in a later version; due to identification requirements, real testing in Expo **dev-client** mode is expected to begin in about six months.  
 - An `experiment/fb-login-implicit` branch will be maintained for future OAuth testing and integration work.
 
