@@ -86,9 +86,7 @@ Below is the complete user journey implemented in Portfolio v1.
   <img src="https://github.com/user-attachments/assets/171ba020-f8df-4b9d-a234-44652003d98c" width="280"/>
 </p>
 
-- Provides multiple login options **Facebook**, **Google**, **Apple**, and **mobile number**.  
-- For **Portfolio v1**, all login buttons use a temporary bypass and navigate directly to the main service UI.  
-- Provides multiple login options: **Facebook**, **Google**, **Apple**, and **mobile number**.  
+- Provides multiple login options **Facebook**, **Google**, **Apple**, and **mobile number**.   
 - For **Portfolio v1**, all login buttons temporarily bypass authentication and navigate directly to the main service screen.  
 - Facebook OAuth will be implemented in a later version; due to identification requirements, real testing in Expo **dev-client** mode is expected to begin in about six months.  
 - An `experiment/fb-login-implicit` branch will be maintained for future OAuth testing and integration work.
@@ -116,7 +114,7 @@ Below is the complete user journey implemented in Portfolio v1.
 
 - Uses a `FlatList` with an empty `data` array and a `ListHeaderComponent` to render the entire home screen as a single scrollable layout.  
 - Composes the main sections with `<TopBar />`, `<ServiceGrid />`, `<PaymentPointsSection />`, `<PromoBanner />`, `<RecommendedRestaurants />`, `<DiscoverSection />`, `<TravelSmarterSection />`, and `<ChallengeSection />`.  
-- The blinking skeleton states are implemented inside child components (e.g. `ServiceGrid`, `PaymentPointsSection`, `PromoBanner`), which switch from placeholder UI to the final content once their assets have finished loading.
+- Each service component (e.g., `ServiceGrid`, `PaymentPointsSection`, `PromoBanner`) manages its own blinking state internally, showing a placeholder layout first and switching to real content once its assets finish loading.
 
 ---
 
