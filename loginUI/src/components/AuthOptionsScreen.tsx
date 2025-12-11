@@ -23,7 +23,7 @@ const AuthOptionsScreen: React.FC = () => {
    * - All auth buttons just navigate to the main service screen
    */
   const handleAuthBypass = useCallback(() => {
-    // 필요하면 나중에 navigation.reset(...) 으로 교체 가능
+    // Temporary until implemented Facebook login
     navigation.navigate('MainService');
   }, [navigation]);
 
