@@ -18,9 +18,8 @@ The goal of this project is to demonstrate how I design and build a real-world m
 - **Apple**
 - **Mobile Number**
 
-- **Portfolio v1**: all four login buttons currently use a temporary bypass to enter the main service screen (no real OAuth yet)
-
 This repository is part of my developer portfolio, showcasing:
+- **Portfolio v1**: all four login buttons currently use a temporary bypass to enter the main service screen (no real OAuth yet)
 - Mobile UI/UX implementation with React Native and Expo
 - Practical app structure that can be extended with real OAuth and backend integration in future versions
 
