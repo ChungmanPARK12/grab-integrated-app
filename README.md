@@ -8,20 +8,19 @@ Built through direct app experience and AI-assisted iteration, this project reco
 
 ## Project Overview
 
-The goal of this project is to demonstrate how I design and build a real-world mobile app flow:
+This project demonstrates how I structure and implement a real-world mobile service flow in React Native.
 
-- Splash → Loader → Intro Login → Auth Options → Main Service UI
-- Clean navigation structure using React Navigation
-- Login options:
-- **Facebook**
-- **Google**
-- **Apple**
-- **Mobile Number**
+It covers the complete onboarding experience:
+**Splash → Loader → Intro Login → Auth Options → Main Service UI**
 
-This repository is part of my developer portfolio, showcasing:
-- **Portfolio v1**: all four login buttons currently use a temporary bypass to enter the main service screen (no real OAuth yet)
-- Mobile UI/UX implementation with React Native and Expo
-- Practical app structure that can be extended with real OAuth and backend integration in future versions
+The focus is on:
+- Clean navigation architecture  
+- Accurate loading behaviors  
+- UX patterns inspired by the real Grab app  
+
+This repository is part of my portfolio, showing:
+- Temporary login bypass for Portfolio v1  
+- A practical UI/UX foundation for future OAuth, backend integration, and dev-client testing
 
 ## Full App Flow
 
