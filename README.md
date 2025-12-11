@@ -76,7 +76,7 @@ Below is the complete user journey implemented in Portfolio v1.
 
 **Source:** `loginUI/src/components/LoginScreen.tsx`
 
-- The login UI becomes visible only after the background image has fully loaded (`bgLoaded === true`).
+- The intro login UI becomes visible only after the background image has fully loaded (`bgLoaded === true`).
 
 ---
 
@@ -110,11 +110,11 @@ Below is the complete user journey implemented in Portfolio v1.
 
 ---
 
-**Source:** `@main/screens/MainServiceScreen.tsx`
+**Source:** `mainServiceUI/src/screens/MainServiceScreen.tsx`
 
-- Uses a `FlatList` with an empty `data` array and a `ListHeaderComponent` to render the entire home screen as a single scrollable layout.  
-- Composes the main sections with `<TopBar />`, `<ServiceGrid />`, `<PaymentPointsSection />`, `<PromoBanner />`, `<RecommendedRestaurants />`, `<DiscoverSection />`, `<TravelSmarterSection />`, and `<ChallengeSection />`.  
-- Each service component (e.g., `ServiceGrid`, `PaymentPointsSection`, `PromoBanner`) manages its own blinking state internally, showing a placeholder layout first and switching to real content once its assets finish loading.
+- Uses a `FlatList` header to render the entire screen as one scrollable layout.  
+- Combines all major UI sections (e.g., TopBar, ServiceGrid, PromoBanner) inside a single structured container.  
+- Each section handles its own blinking placeholder and switches to real content after loading its assets.
 
 ---
 
@@ -139,8 +139,13 @@ Below is the complete user journey implemented in Portfolio v1.
 
 - The app alternates between **Travel Pass** and **Food Deals** on each launch, creating a more dynamic main service experience.
 
+---
 
+**Source:** `mainServiceUI/src/components/PromoBanner.tsx`
 
+- Inspired by the real Grab app experience, alternating banner types using `AsyncStorage` on each launch. 
+- Uses `Animated.Value` to show a blinking placeholder while assets load.  
+- Renders the full banner only after the main image and all icons have finished loading.
 
 ---
 
@@ -169,6 +174,15 @@ Below is the complete user journey implemented in Portfolio v1.
 
 ---
 
+**Source:** `mainServiceUI/src/components/RecommendedRestaurants.tsx`  
+**Source:** `mainServiceUI/src/components/DiscoverThings.tsx`
+
+- `RecommendedRestaurants` renders six horizontal recommendation cards using a simple `FlatList`.  
+- `DiscoverSection` displays three promotional cards in a second horizontal list beneath the restaurant section.  
+- Both components use local image assets and minimal styling to mirror Grab’s real home feed layout.
+
+---
+
 ### 6. Main Service – Travel Promotions & Reward Challenges
 
 <div align="center">
@@ -193,6 +207,14 @@ Below is the complete user journey implemented in Portfolio v1.
 - **(2) Reward Challenges** – two different challenge cards displayed.  
 
 ---
+
+**Source:** `mainServiceUI/src/components/TravelSmarter.tsx`  
+**Source:** `mainServiceUI/src/components/ChallengesRewarded.tsx`
+
+- `TravelSmarterSection` renders two promotional travel cards in a horizontal list.  
+- `ChallengeSection` displays two reward challenge cards with images, dates, and action links.  
+- Both sections reuse simple FlatList layouts to mirror Grab’s promotional content structure.
+
 
 
 
