@@ -118,7 +118,7 @@ Below is the complete user journey implemented in Portfolio v1.
 
 ---
 
-### 6. Main Service – Dynamic Promotion Cards
+### 6. Main Service – Home Header & Dynamic Promotion Cards
 
 <div align="center">
 <table>
@@ -141,7 +141,11 @@ Below is the complete user journey implemented in Portfolio v1.
 
 ---
 
-**Source:** `mainServiceUI/src/components/PromoBanner.tsx`
+**Sources:**  
+`mainServiceUI/src/components/TopBar.tsx`  
+`mainServiceUI/src/components/ServiceGrid.tsx`  
+`mainServiceUI/src/components/PaymentPointsSection.tsx`  
+`mainServiceUI/src/components/PromoBanner.tsx`
 
 - Inspired by the real Grab app experience, alternating banner types using `AsyncStorage` on each launch. 
 - Uses `Animated.Value` to show a blinking placeholder while assets load.  
@@ -174,8 +178,9 @@ Below is the complete user journey implemented in Portfolio v1.
 
 ---
 
-**Source:** `mainServiceUI/src/components/RecommendedRestaurants.tsx`  
-**Source:** `mainServiceUI/src/components/DiscoverThings.tsx`
+**Source:** 
+`mainServiceUI/src/components/RecommendedRestaurants.tsx`  
+`mainServiceUI/src/components/DiscoverThings.tsx`
 
 - `RecommendedRestaurants` renders six horizontal recommendation cards using a simple `FlatList`.  
 - `DiscoverSection` displays three promotional cards in a second horizontal list beneath the restaurant section.  
@@ -208,8 +213,9 @@ Below is the complete user journey implemented in Portfolio v1.
 
 ---
 
-**Source:** `mainServiceUI/src/components/TravelSmarter.tsx`  
-**Source:** `mainServiceUI/src/components/ChallengesRewarded.tsx`
+**Source:** 
+`mainServiceUI/src/components/TravelSmarter.tsx`  
+`mainServiceUI/src/components/ChallengesRewarded.tsx`
 
 - `TravelSmarterSection` renders two promotional travel cards in a horizontal list.  
 - `ChallengeSection` displays two reward challenge cards with images, dates, and action links.  
