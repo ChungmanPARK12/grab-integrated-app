@@ -238,16 +238,18 @@ This repository is part of my portfolio, showing:
   Use any preferred editor. Visual Studio Code is recommended for JavaScript/TypeScript development.  
   Download: https://code.visualstudio.com/
 
-- **Node.js**:  
-  Required to run React Native and Expo development tools.  
-  Check your version:
-  ```bash
-  node -v
-  npm -v
-  ```
 - **Clone the Repository**:
    ```bash
    https://github.com/ChungmanPARK12/grab-integrated-app.git
+   ```
+- **Node.js**:  
+  Required for React Native and Expo development tools.
+  Install from the official website:  
+  https://nodejs.org
+
+- **Install Dependencies**:
+   ```bash
+   npm install
    ```
 
 
