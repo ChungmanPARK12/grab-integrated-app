@@ -232,6 +232,23 @@ This repository is part of my portfolio, showing:
 - `ChallengeSection` displays two reward challenge cards with images, dates, and action links.  
 - Both sections reuse simple FlatList layouts to mirror Grab’s promotional content structure.
 
+## Installation
+
+- **IDE**:  
+  Use any preferred editor. Visual Studio Code is recommended for JavaScript/TypeScript development.  
+  Download: https://code.visualstudio.com/
+
+- **Node.js**:  
+  Required to run React Native and Expo development tools.  
+  Check your version:
+  ```bash
+  node -v
+  npm -v
+  ```
+  - **Clone the Repository**:
+   ```bash
+   https://github.com/ChungmanPARK12/grab-integrated-app.git
+   ```
 
 
 
