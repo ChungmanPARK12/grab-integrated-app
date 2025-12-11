@@ -11,6 +11,7 @@ Built through direct app experience and AI-assisted iteration, this project reco
 This project demonstrates how I structure and implement a real-world mobile service flow in React Native.
 
 It covers the complete onboarding experience:
+
 **Splash → Loader → Intro Login → Auth Options → Main Service UI**
 
 The focus is on:
