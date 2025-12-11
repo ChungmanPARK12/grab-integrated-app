@@ -20,8 +20,8 @@ The focus is on:
 - UX patterns inspired by the real Grab app  
 
 This repository is part of my portfolio, showing:
-- Temporary login bypass for Portfolio v1  
-- A practical UI/UX foundation for future OAuth, backend integration, and dev-client testing
+- Temporary login bypass for Portfolio v1
+- A UI/UX foundation prepared for Facebook OAuth, to be tested in **dev-client mode** in the future once verification is approved.
 
 ## Full App Flow
 
