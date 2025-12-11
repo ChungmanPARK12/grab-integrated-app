@@ -20,8 +20,24 @@ The focus is on:
 - UX patterns inspired by the real Grab app  
 
 This repository is part of my portfolio, showing:
-- Temporary login bypass for Portfolio v1
+- Temporary login bypass for **Portfolio v1**
 - A UI/UX foundation prepared for Facebook OAuth, to be tested in **dev-client mode** in the future once verification is approved.
+
+## Features
+
+### Onboarding Flow
+- Full onboarding sequence from splash to main service screen  
+- Smooth transitions with controlled loading states (splash delay, background image loading)
+
+### Authentication Options
+- Four entry points: Facebook, Google, Apple, Mobile Number  
+- All temporarily bypass to Main Service UI in Portfolio v1  
+- Facebook OAuth planned for future dev-client testing once verification is approved
+
+### Loading & Rendering Behavior
+- Blinking skeleton placeholders across key UI components  
+- Asset-ready rendering pattern: components display only after images and icons fully load  
+- PromoBanner uses independent loading control for both banner image and card icons
 
 ## Full App Flow
 
