@@ -4,7 +4,7 @@
 ![Image](https://github.com/user-attachments/assets/5408f9e6-c53f-4aa6-9cf0-20af59ffb9e9)
 
 A React Native + Expo mobile app inspired by the Grab super app.  
-Built through direct app experience and AI-assisted iteration, this project reconstructs Grab’s end-to-end user flow in a polished, portfolio-ready format — not through cloning, but through analysis and redesign.
+Built through direct app experience and AI-assisted iteration, portfolio-ready format — not through cloning, but through analysis and redesign.
 
 ## Project Overview
 
@@ -15,29 +15,29 @@ It covers the complete onboarding experience:
 **Splash → Loader → Intro Login → Auth Options → Main Service UI**
 
 The focus is on:
-- Clean navigation architecture  
-- Accurate loading behaviors  
-- UX patterns inspired by the real Grab app  
+- Clean navigation architecture.  
+- Accurate loading behaviors.  
+- UX patterns inspired by the real Grab app.  
 
 This repository is part of my portfolio, showing:
-- Temporary login bypass for **Portfolio v1**
+- Temporary login bypass for **Portfolio v1**.
 - A UI/UX foundation prepared for Facebook OAuth, to be tested in **dev-client mode** in the future once verification is approved.
 
 ## Features
 
 ### Onboarding Flow
-- Full onboarding sequence from splash to main service screen  
-- Smooth transitions with controlled loading states (splash delay, background image loading)
+- Full onboarding sequence from splash to main service screen.  
+- Smooth transitions with controlled loading states (splash delay, background image loading).
 
 ### Authentication Options
-- Four entry points: Facebook, Google, Apple, Mobile Number  
-- All temporarily bypass to Main Service UI in Portfolio v1  
-- Facebook OAuth planned for future dev-client testing once verification is approved
+- Four entry points: Facebook, Google, Apple, Mobile Number.  
+- All temporarily bypass to Main Service UI in Portfolio v1.  
+- Facebook OAuth planned for future dev-client testing once verification is approved.
 
 ### Loading & Rendering Behavior
-- Blinking skeleton placeholders across key UI components  
-- Asset-ready rendering pattern: components display only after images and icons fully load  
-- PromoBanner uses independent loading control for both banner image and card icons
+- Blinking skeleton placeholders across key UI components.  
+- Asset-ready rendering pattern: components display only after images and icons fully load.  
+- PromoBanner uses independent loading control for both banner image and card icons.
 
 ## Full App Flow
 
