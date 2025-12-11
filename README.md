@@ -245,7 +245,7 @@ This repository is part of my portfolio, showing:
   node -v
   npm -v
   ```
-  - **Clone the Repository**:
+- **Clone the Repository**:
    ```bash
    https://github.com/ChungmanPARK12/grab-integrated-app.git
    ```
