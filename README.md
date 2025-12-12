@@ -43,7 +43,8 @@ This repository is part of my portfolio, showing:
 
 This section outlines the full application flow, from launch to the main service screen.
 
-* ### Full app flow details: [Click here](docs/full-app-flow.md)
+Full app flow details are documented here:  
+[docs/full-app-flow.md](docs/full-app-flow.md)
 
 ## Installation
 
