@@ -296,6 +296,15 @@ During debugging, I confirmed through logs that Facebook automatically converted
 Expo Go forces `useProxy: true`, meaning the OAuth redirect goes through Expo’s proxy server instead of a native URI.  
 Facebook does not support this flow, so the app cannot receive the callback — confirming that a custom **dev-client** is required for proper Facebook login support.
 
+### Main Service UI (Asset Loading) Debugging
+
+**Source:** `mainServiceUI/src/components/PaymentPanel.tsx`
+
+During the blinking skeleton implementation, I ran into cases where the UI got stuck in the loading state, and later cases where the boxes appeared but the icons loaded out of sync.  
+To stabilize the experience, the component preloads the icons invisibly during the skeleton phase so the final content appears all at once after the loading state ends.
+
+
+
 
 
 
