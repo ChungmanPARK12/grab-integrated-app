@@ -49,7 +49,7 @@ Full app flow details are documented here:
 ## Installation
 
 - **IDE**  
-  Use any preferred editor. Visual Studio Code is recommended for JavaScript/TypeScript development.  
+  Use any preferred editor. **Visual Studio** Code is recommended for JavaScript/TypeScript development.  
   https://code.visualstudio.com/
 
 - **Node.js**  
