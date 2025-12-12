@@ -240,7 +240,8 @@ This repository is part of my portfolio, showing:
 
 - **Clone the Repository**:
    ```bash
-   https://github.com/ChungmanPARK12/grab-integrated-app.git
+   git clone https://github.com/ChungmanPARK12/grab-integrated-app.git
+   cd grab-integrated-app
    ```
 - **Node.js**:  
   Required for React Native and Expo development tools.
@@ -250,6 +251,10 @@ This repository is part of my portfolio, showing:
 - **Install Dependencies**:
    ```bash
    npm install
+   ```
+   or
+   ```bash
+   yarn install
    ```
 
 
