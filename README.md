@@ -269,12 +269,12 @@ npx expo start --tunnel
 ```
 
 ### Run the App
-Use **Expo Go** on your mobile device to open the app and 
+Use **Expo Go** on your Android or iOS device to run the app.
 
-Scan the QR code displayed in the terminal,
+Scan the QR code shown in the terminal, and Expo Go will automatically open and load the project.
 
 ### Troubleshooting
-if the Expo server does not start, try cleaning the cache:
+If the Expo server does not start, try cleaning the cache:
 ```bash
 npx expo start -c
 ```
