@@ -48,13 +48,12 @@ Full app flow details are documented here:
 
 ## Installation
 
-- **IDE**:  
-  Use any preferred editor. **Visual Studio Code** is recommended for JavaScript/TypeScript development.  
-  Download: https://code.visualstudio.com/
+- **IDE**  
+  Use any preferred editor. Visual Studio Code is recommended for JavaScript/TypeScript development.  
+  https://code.visualstudio.com/
 
-- **Node.js**:  
-  Required for React Native and Expo development tools.
-  Install from the official website:  
+- **Node.js**  
+  Required for React Native and Expo development tools.  
   https://nodejs.org
 
 - **Clone the Repository**:
