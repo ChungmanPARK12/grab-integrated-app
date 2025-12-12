@@ -41,7 +41,7 @@ This repository is part of my portfolio, showing:
 
 ## Full App Flow
 
-This project implements a complete end-to-end user flow, from the initial launch to the main service screen.
+This section outlines the full application flow, from launch to the main service screen.
 
 * ### Full app flow details: [Click here](docs/full-app-flow.md)
 
