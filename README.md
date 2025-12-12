@@ -283,17 +283,19 @@ npx expo start -c
 
 ### Facebook Login (AuthSession) Debugging
 
+**Source:** `loginUI/src/services/facebookAuth.ts`
+
 While implementing Facebook OAuth, the login flow consistently ended with a **“Something went wrong”** message after entering credentials.  
-The debugging focused on redirect handling and Expo Go limitations.
+The debugging focused on understanding how Expo Go handles redirects and why the final callback never returned to the app.
 
 #### HTTPS Redirect Requirement
-Expo Go uses a local redirect URI, but Facebook only accepts HTTPS.  
-During debugging, I confirmed that Facebook automatically converted the redirect to HTTPS, 
-which caused a mismatch and broke the login flow.
+Expo Go generates a local redirect URI, but Facebook only accepts HTTPS.  
+During debugging, I confirmed through logs that Facebook automatically converted the redirect to HTTPS, which resulted in a mismatch and caused the login flow to fail.
 
 #### Expo Go Redirect Limitation
 Expo Go forces `useProxy: true`, meaning the OAuth redirect goes through Expo’s proxy server instead of a native URI.  
-Facebook does not support this flow, so the app cannot receive the callback, confirming that a custom **dev-client** is required.
+Facebook does not support this flow, so the app cannot receive the callback — confirming that a custom **dev-client** is required for proper Facebook login support.
+
 
 
 
