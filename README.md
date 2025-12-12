@@ -21,7 +21,7 @@ The focus is on:
 
 This repository is part of my portfolio, showing:
 - Temporary login bypass for **Portfolio v1**.
-- A UI/UX foundation prepared for Facebook OAuth, to be tested in **dev-client mode** in the future once verification is approved.
+- A UI/UX foundation prepared for Facebook OAuth, to be tested in **dev-client** mode in the future once verification is approved.
 
 ## Features
 
@@ -31,8 +31,8 @@ This repository is part of my portfolio, showing:
 
 ### Authentication Options
 - Four entry points: Facebook, Google, Apple, Mobile Number.  
-- All temporarily bypass to Main Service UI in Portfolio v1.  
-- Facebook OAuth planned for future dev-client testing once verification is approved.
+- All temporarily bypass to Main Service UI in **Portfolio v1**.  
+- Facebook OAuth planned for future **dev-client** mode testing once verification is approved.
 
 ### Loading & Rendering Behavior
 - Blinking skeleton placeholders across key UI components.  
@@ -82,7 +82,7 @@ This repository is part of my portfolio, showing:
 </p>
 
 - Introduces the Grab brand and guides the user into the login flow.  
-- In Portfolio v1, only the **Log In** button is active and proceeds to the authentication options screen.
+- In **Portfolio v1**, only the **Log In** button is active and proceeds to the authentication options screen.
 
 ---
 
