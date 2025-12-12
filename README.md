@@ -235,18 +235,19 @@ This repository is part of my portfolio, showing:
 ## Installation
 
 - **IDE**:  
-  Use any preferred editor. Visual Studio Code is recommended for JavaScript/TypeScript development.  
+  Use any preferred editor. **Visual Studio Code** is recommended for JavaScript/TypeScript development.  
   Download: https://code.visualstudio.com/
+
+- **Node.js**:  
+  Required for React Native and Expo development tools.
+  Install from the official website:  
+  https://nodejs.org
 
 - **Clone the Repository**:
    ```bash
    git clone https://github.com/ChungmanPARK12/grab-integrated-app.git
    cd grab-integrated-app
    ```
-- **Node.js**:  
-  Required for React Native and Expo development tools.
-  Install from the official website:  
-  https://nodejs.org
 
 - **Install Dependencies**:
    ```bash
@@ -256,6 +257,30 @@ This repository is part of my portfolio, showing:
    ```bash
    yarn install
    ```
+
+## Getting Started
+
+This project uses the modern Expo workflow.  
+Once dependencies are installed, you can start the development server and run the app on a device or emulator.
+
+### Start the Development Server
+```bash
+npx expo start --tunnel
+```
+
+### Run the App
+Use **Expo Go** on your mobile device to open the app.
+Scan the QP code displayed in the terminal of the Expo web inerface. 
+
+### Troubleshooting
+if the Expo server does not start, try cleaning the cache:
+```bash
+npx expo start -c
+```
+
+
+
+
 
 
 
