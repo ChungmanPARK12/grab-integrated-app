@@ -45,6 +45,8 @@ This project implements a complete end-to-end user flow, from the initial launch
 
 - Full app flow details: [Click here](docs/full-app-flow.md)
 
+* ### Example of Code [Click here](docs/full-app-flow.md)
+
 ## Installation
 
 - **IDE**:  
