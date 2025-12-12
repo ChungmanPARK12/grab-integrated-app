@@ -270,6 +270,7 @@ npx expo start --tunnel
 
 ### Run the App
 Use **Expo Go** on your mobile device to open the app.
+
 Scan the QP code displayed in the terminal of the Expo web inerface. 
 
 ### Troubleshooting
