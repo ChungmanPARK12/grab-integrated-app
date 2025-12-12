@@ -261,7 +261,7 @@ This repository is part of my portfolio, showing:
 ## Getting Started
 
 This project uses the modern Expo workflow.  
-Once dependencies are installed, you can start the development server and run the app on a device or emulator.
+Once dependencies are installed, you can start the development server and run the app on a mobile device.
 
 ### Start the Development Server
 ```bash
@@ -269,9 +269,9 @@ npx expo start --tunnel
 ```
 
 ### Run the App
-Use **Expo Go** on your mobile device to open the app.
+Use **Expo Go** on your mobile device to open the app and 
 
-Scan the QP code displayed in the terminal of the Expo web inerface. 
+Scan the QR code displayed in the terminal,
 
 ### Troubleshooting
 if the Expo server does not start, try cleaning the cache:
