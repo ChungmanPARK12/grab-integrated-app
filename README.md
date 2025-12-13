@@ -94,27 +94,23 @@ npx expo start -c
 
 ## Debugging
 
-### Facebook Login (AuthSession) Debugging
+### Facebook Login Issue
 
 **Source:** `loginUI/src/services/facebookAuth.ts`
 
-While implementing Facebook OAuth, the login flow consistently ended with a **“Something went wrong”** message after entering credentials.  
-The debugging focused on understanding how Expo Go handles redirects and why the final callback never returned to the app.
-
-#### HTTPS Redirect Requirement
-Expo Go generates a local redirect URI, but Facebook only accepts HTTPS.  
-During debugging, I confirmed through logs that Facebook automatically converted the **redirect to HTTPS**, which resulted in a mismatch and caused the login flow to fail.
-
 #### Expo Go Redirect Limitation
 Expo Go forces `useProxy: true`, meaning the OAuth redirect goes through Expo’s proxy server instead of a native URI.  
-Facebook does not support this flow, so the app cannot receive the callback — confirming that a custom **dev-client** is required for proper Facebook login support.
+Since Facebook does not support this flow, the app cannot receive the callback — confirming that a custom **dev-client** is required for proper Facebook login support.
 
-### Main Service UI (Asset Loading) Debugging
+### Main Service UI (Asset Loading)
 
 **Source:** `mainServiceUI/src/components/PaymentPanel.tsx`
 
-During the blinking skeleton implementation, I ran into cases where the UI got stuck in the loading state, and later cases where the boxes appeared but the icons loaded out of sync.  
-To stabilize the experience, the component preloads the icons invisibly during the skeleton phase so the final content appears all at once after the loading state ends.
+During the **skeleton blinking** implementation, the UI occasionally became stuck in the loading state, or rendered icons out of sync.  
+To stabilize the experience, the component preloads icons invisibly during the skeleton phase so the final content appears all at once after loading completes.
+The blinking logic requires further refactoring and will be improved in **Portfolio v2**.
+
+- Detailed debugging notes and iteration history are documented in `CHANGELOG.md`.
 
 ## Expo Workflow & Environment
 
