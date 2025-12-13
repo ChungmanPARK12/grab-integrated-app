@@ -4,7 +4,8 @@
 ![Image](https://github.com/user-attachments/assets/5408f9e6-c53f-4aa6-9cf0-20af59ffb9e9)
 
 A React Native + Expo mobile app inspired by the Grab super app.  
-Built through direct app experience and AI-assisted iteration, portfolio-ready format — not through cloning, but through analysis and redesign.
+Built through direct app experience and AI-assisted iteration, this project presents a portfolio-ready format — not through cloning, but through analysis and redesign.
+
 
 ## Project Overview
 
@@ -37,7 +38,7 @@ This repository is part of my portfolio, showing:
 ### Loading & Rendering Behavior
 - Blinking skeleton placeholders across key UI components.  
 - Asset-ready rendering pattern: components display only after images and icons fully load.  
-- PromoBanner uses independent loading control for both banner image and card icons.
+- PromoBanner applies independent loading control to ensure banner images and card icons appear together.
 
 ## Full App Flow
 
@@ -45,6 +46,8 @@ This section outlines the full application flow, from launch to the main service
 
 Full app flow details are documented here:  
 [docs/full-app-flow.md](docs/full-app-flow.md)
+
+Full app flow details are documented in `docs/full-app-flow.md`.
 
 ## Installation
 
