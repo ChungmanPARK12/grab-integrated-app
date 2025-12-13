@@ -136,9 +136,16 @@ The project was developed and tested with the following environment:
 - **Expo SDK**: SDK 50
 - **Tested on**:
   - iOS (Expo Go)
-  - Android (not tested yet)
+  - Android **(not tested yet)**
 
 Exact SDK and dependency versions are defined in `package.json` and `app.json`.
+
+## Next Steps (Portfolio v2)
+
+- Align **Expo Go** updates with project SDK versions.
+- Test the app on an **Android** physical device.
+- Refactor the **skeleton blinking** logic for better stability and consistency across main service components.
+
 
 
 
