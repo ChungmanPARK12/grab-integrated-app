@@ -108,7 +108,8 @@ Since Facebook does not support this flow, the app cannot receive the callback â
 
 During the **skeleton blinking** implementation, the UI occasionally became stuck in the loading state, or rendered icons out of sync.  
 To stabilize the experience, the component preloads icons invisibly during the skeleton phase so the final content appears all at once after loading completes.
-The blinking logic requires further refactoring and will be improved in **Portfolio v2**.
+This is a temporary solution and will be refactored in **Portfolio v2**.
+
 
 - Detailed debugging notes and iteration history are documented in `CHANGELOG.md`.
 
@@ -138,7 +139,7 @@ Exact SDK and dependency versions are defined in `package.json` and `app.json`.
 
 ## Next Steps (Portfolio v2)
 
-- Align **Expo Go** updates with project SDK versions.
+- Align **Expo Go** app updates with project SDK versions.
 - Test the app on an **Android** physical device.
 - Refactor the **skeleton blinking** logic for better stability and consistency across main service components.
 
