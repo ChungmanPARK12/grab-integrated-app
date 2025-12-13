@@ -115,8 +115,6 @@ This is a temporary solution and will be refactored in **Portfolio v2**.
 
 ## Expo Workflow & Environment
 
-This project uses the modern Expo workflow to simplify development and testing during the early stages.
-
 ### Expo Go
 **Expo Go** is used to preview and test UI/UX directly on a real mobile device.
 
@@ -142,6 +140,10 @@ Exact SDK and dependency versions are defined in `package.json` and `app.json`.
 - Align **Expo Go** app updates with project SDK versions.
 - Test the app on an **Android** physical device.
 - Refactor the **skeleton blinking** logic for better stability and consistency across main service components.
+
+## License
+
+This project is licensed under the MIT License.
 
 
 
