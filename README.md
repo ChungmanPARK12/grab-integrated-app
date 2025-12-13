@@ -116,6 +116,30 @@ Facebook does not support this flow, so the app cannot receive the callback — 
 During the blinking skeleton implementation, I ran into cases where the UI got stuck in the loading state, and later cases where the boxes appeared but the icons loaded out of sync.  
 To stabilize the experience, the component preloads the icons invisibly during the skeleton phase so the final content appears all at once after the loading state ends.
 
+## Expo Workflow & Environment
+
+This project uses the modern Expo workflow to simplify development and testing during the early stages.
+
+### Expo Go
+**Expo Go** is used to preview and test UI/UX directly on a real mobile device.
+
+### npx expo
+`npx expo` runs the Expo CLI without a global installation.
+It is used to start the development server, manage the Metro bundler, and generate the **QR code** for Expo Go.
+
+### Environment Versions
+The project was developed and tested with the following environment:
+
+- **Node.js**: v20.x
+- **Expo CLI**: via `npx expo`
+- **React Native**: 0.79.5 (Expo-managed)
+- **Expo SDK**: SDK 50
+- **Tested on**:
+  - iOS (Expo Go)
+  - Android (not tested yet)
+
+Exact SDK and dependency versions are defined in `package.json` and `app.json`.
+
 
 
 
