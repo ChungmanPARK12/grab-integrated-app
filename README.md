@@ -84,7 +84,7 @@ npx expo start --tunnel
 ### Run the App
 Use **Expo Go** on your Android or iOS device to run the app.
 
-Scan the QR code shown in the terminal, and Expo Go will automatically open and load the project.
+Scan the **QR code** shown in the terminal, and Expo Go will automatically open and load the project.
 
 ### Troubleshooting
 If the Expo server does not start, try cleaning the cache:
@@ -103,7 +103,7 @@ The debugging focused on understanding how Expo Go handles redirects and why the
 
 #### HTTPS Redirect Requirement
 Expo Go generates a local redirect URI, but Facebook only accepts HTTPS.  
-During debugging, I confirmed through logs that Facebook automatically converted the redirect to HTTPS, which resulted in a mismatch and caused the login flow to fail.
+During debugging, I confirmed through logs that Facebook automatically converted the **redirect to HTTPS**, which resulted in a mismatch and caused the login flow to fail.
 
 #### Expo Go Redirect Limitation
 Expo Go forces `useProxy: true`, meaning the OAuth redirect goes through Expo’s proxy server instead of a native URI.  
