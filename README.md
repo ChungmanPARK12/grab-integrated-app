@@ -4,48 +4,38 @@
 ![Image](https://github.com/user-attachments/assets/5408f9e6-c53f-4aa6-9cf0-20af59ffb9e9)
 
 A React Native + Expo mobile app inspired by the Grab super app.  
-Built through direct app experience and AI-assisted iteration, this project presents a portfolio-ready format — not through cloning, but through analysis and redesign.
+Built through direct app experience with AI supporting, this project presents a portfolio-ready format — not through cloning, but through analysis and redesign.
 
 
 ## Project Overview
 
 This project demonstrates how I structure and implement a real-world mobile service flow in React Native.
+It covers the full onboarding and authentication flow, from initial app launch through login and into the main service experience.
 
-It covers the complete onboarding experience:
-
-**Splash → Loader → Intro Login → Auth Options → Main Service UI**
-
-The focus is on:
 - Clean navigation architecture.  
 - Accurate loading behaviors.  
 - UX patterns inspired by the real Grab app.  
 
-This repository is part of my portfolio, showing:
-- Temporary login bypass for **Portfolio v1**.
-- A UI/UX foundation prepared for Facebook OAuth, to be tested in **dev-client** mode in the future once verification is approved.
-
 ## Features
 
-### Onboarding Flow
-- Full onboarding sequence from splash to main service screen.  
-- Smooth transitions with controlled loading states (splash delay, background image loading).
+- **Startup flow**: Splash → loading status (spinner) → login screen
+- **Multiple authentication entry points** (Facebook, Google, Apple, Mobile)
+- **Portfolio v1 login bypass** to enter the Main Service UI for demo purposes
+- **Main Service UI skeleton placeholders** for smoother perceived loading while assets render
+- **PromoBanner synchronized loading** so banner image and card icons appear together
 
-### Authentication Options
-- Four entry points: Facebook, Google, Apple, Mobile Number.  
-- All temporarily bypass to Main Service UI in **Portfolio v1**.  
-- Facebook OAuth planned for future **dev-client** mode testing once verification is approved.
+## Implementation Notes
 
-### Loading & Rendering Behavior
-- Blinking skeleton placeholders across key UI components.  
-- Asset-ready rendering pattern: components display only after images and icons fully load.  
-- PromoBanner applies independent loading control to ensure banner images and card icons appear together.
+- Temporary login bypass applied for **Portfolio v1**
+- - Authentication and Facebook OAuth flow planned for future **dev-client** mode testing once verification is approved.
 
 ## Full App Flow
 
 This section outlines the full application flow, from launch to the main service screen.
 
-Full app flow details are documented here:  
-[docs/full-app-flow.md](docs/full-app-flow.md)
+Full app flow details are documented here:
+
+- [Full App Flow Documentation](docs/full-app-flow.md)
 
 ## Installation
 
@@ -79,8 +69,9 @@ Once dependencies are installed, you can start the development server and run th
 
 ### Start the Development Server
 ```bash
-npx expo start --tunnel
+npx expo start 
 ```
+If the app does not open with the default Expo start command, using `--tunnel` can improve connectivity in some network environments.
 
 ### Run the App
 Use **Expo Go** on your Android or iOS device to run the app.
@@ -111,7 +102,6 @@ During the **skeleton blinking** implementation, the UI occasionally became stuc
 To stabilize the experience, the component preloads icons invisibly during the skeleton phase so the final content appears all at once after loading completes.
 This is a temporary solution and will be refactored in **Portfolio v2**.
 
-
 - Detailed debugging notes and iteration history are documented in `CHANGELOG.md`.
 
 ## Expo Workflow & Environment
@@ -128,8 +118,8 @@ The project was developed and tested with the following environment:
 
 - **Node.js**: v20.x
 - **Expo CLI**: via `npx expo`
-- **React Native**: 0.79.5 (Expo-managed)
-- **Expo SDK**: SDK 50
+- **React Native**: 0.79.x (Expo-managed)
+- **Expo SDK**: SDK 53
 - **Tested on**:
   - iOS (Expo Go)
   - Android **(not tested yet)**
@@ -138,7 +128,7 @@ Exact SDK and dependency versions are defined in `package.json` and `app.json`.
 
 ## Next Steps (Portfolio v2)
 
-- Align **Expo Go** app updates with project SDK versions.
+- Update the **Expo Go** app on test devices before starting Portfolio v2 development
 - Test the app on an **Android** physical device.
 - Refactor the **skeleton blinking** logic for better stability and consistency across main service components.
 
