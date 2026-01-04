@@ -27,7 +27,7 @@ It covers the full onboarding and authentication flow, from initial app launch t
 ## Implementation Notes
 
 - Temporary login bypass applied for **Portfolio v1**
-- - Authentication and Facebook OAuth flow planned for future **dev-client** mode testing once verification is approved.
+- Authentication and Facebook OAuth flow planned for future **dev-client** mode testing once verification is approved.
 
 ## Full App Flow
 
