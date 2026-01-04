@@ -112,13 +112,13 @@
 ---
 
 **Sources:**  
+
 `mainServiceUI/src/components/TopBar.tsx`  
 `mainServiceUI/src/components/ServiceGrid.tsx`  
 `mainServiceUI/src/components/PaymentPointsSection.tsx`  
 `mainServiceUI/src/components/PromoBanner.tsx`
 
 - Inspired by the real Grab app experience, alternating banner types using `AsyncStorage` on each launch. 
-- Uses `Animated.Value` to show a blinking placeholder while assets load.  
 - Renders the full banner only after the main image and all icons have finished loading.
 
 ---
@@ -149,12 +149,9 @@
 ---
 
 **Source:** 
+
 `mainServiceUI/src/components/RecommendedRestaurants.tsx`  
 `mainServiceUI/src/components/DiscoverThings.tsx`
-
-- `RecommendedRestaurants` renders six horizontal recommendation cards using a simple `FlatList`.  
-- `DiscoverSection` displays three promotional cards in a second horizontal list beneath the restaurant section.  
-- Both components use local image assets and minimal styling to mirror Grab’s real home feed layout.
 
 ---
 
@@ -184,9 +181,8 @@
 ---
 
 **Source:** 
+
 `mainServiceUI/src/components/TravelSmarter.tsx`  
 `mainServiceUI/src/components/ChallengesRewarded.tsx`
 
-- `TravelSmarterSection` renders two promotional travel cards in a horizontal list.  
-- `ChallengeSection` displays two reward challenge cards with images, dates, and action links.  
-- Both sections reuse simple FlatList layouts to mirror Grab’s promotional content structure.
+---
