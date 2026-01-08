@@ -354,6 +354,15 @@
 ## [2025-12-01] – [2025-12-10] - Button Navigation
 - Just click the four of buttons to navigate to the service screen directly, temporary system to make the first portfolio v1.
  
+ ### 2026 changelog
+
+ ## [2026-01-08]
+ - Upgrated Expo SDK from 53 to 54
+ - Aligned React Native and related dependencies
+ - Fixed compatibility issues after the SDK upgrade
+
+ ## Tested on Anroid with Expo go app
+ - Successfuly tested on Adriod devide but some css issue appeared
 
 
 
