@@ -354,15 +354,32 @@
 ## [2025-12-01] – [2025-12-10] - Button Navigation
 - Just click the four of buttons to navigate to the service screen directly, temporary system to make the first portfolio v1.
  
- ### 2026 changelog
+ # 2026 changelog
 
  ## [2026-01-08]
  - Upgrated Expo SDK from 53 to 54
  - Aligned React Native and related dependencies
  - Fixed compatibility issues after the SDK upgrade
 
- ## Tested on Anroid with Expo go app
+ ### Tested on Anroid with Expo go app
  - Successfuly tested on Adriod devide but some css issue appeared
+
+## [2026-01-12]
+
+### Android UI alignment issue
+- Minor alignment differences were identified on Android.
+- Shared layout calculations for iOS and Android caused increasing layout complexity.
+
+### Updated approach
+- Applied platform-specific **design tokens** while keeping a shared layout structure.
+- Maintained the iOS-aligned layout as the baseline.
+
+### Resolution
+- Android alignment issues were resolved through **token-based styling** instead of structural changes.
+
+
+
+
 
 
 
