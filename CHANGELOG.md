@@ -379,9 +379,22 @@
 
 ## [2026-01-13]
 
+## Adroid UI issue
+
 ### Android PaymentPanel loading appears blurry
 - Reset the animation value after stopping the blinking loop to prevent Android rendering artifacts.
 - No changes were made to the existing blinking, preload, or layout logic.
+
+## Improve code plan
+
+### Improve skeleton UI method(clear)
+- Reset loading state when the banner changes.
+- Ensure all promo card icons are fully loaded before rendering content.
+- Stop the blinking animation once loading is complete.
+- Add a fallback to prevent infinite skeleton loading.
+
+
+
 
 
 
