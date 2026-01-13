@@ -28,10 +28,19 @@ const PaymentPointsSection = () => {
 
     const timeout = setTimeout(() => {
       animation.stop();
-      setBlinkDone(true);
+
+      // Android prevent shodow: animation reset
+      blinkAnim.stopAnimation(() => {
+        blinkAnim.setValue(1);
+        setBlinkDone(true); 
+      });
     }, 2000);
 
-    return () => clearTimeout(timeout);
+    return () => {
+      animation.stop();
+      clearTimeout(timeout);
+    };
+
   }, []);
 
   const renderBox = (title: string, subtitle: string, iconSource: any) => {
@@ -130,7 +139,7 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     resizeMode: 'contain',
-    marginTop:20,
+    marginTop: 20,
   },
 });
 

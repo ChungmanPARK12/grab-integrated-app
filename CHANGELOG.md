@@ -377,6 +377,15 @@
 ### Resolution
 - Android alignment issues were resolved through **token-based styling** instead of structural changes.
 
+## [2026-01-13]
+
+### Android PaymentPanel loading appears blurry
+- Reset the animation value after stopping the blinking loop to prevent Android rendering artifacts.
+- No changes were made to the existing blinking, preload, or layout logic.
+
+
+
+
 
 
 
