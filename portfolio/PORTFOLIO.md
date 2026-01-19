@@ -35,7 +35,7 @@ This section outlines the full application flow, from launch to the main service
 
 Full app flow details are documented here:
 
-- [Full App Flow Documentation](docs/full-app-flow.md)
+- [Full App Flow Documentation](portfolio/fullappflow/full-app-flow.md)
 
 ## Installation
 
