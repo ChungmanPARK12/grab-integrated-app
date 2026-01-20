@@ -10,7 +10,7 @@ export const PromoT = Platform.select({
     promoCardsMarginTop: 12,
   },
   android: {
-    overlayPaddingTop: 120,     // ✅ 카드 전체를 위로
+    overlayPaddingTop: 200,     // ✅ 카드 전체를 위로
     textSectionMarginTop: 70,   // ✅ 텍스트 블록 때문에 내려가는 값 줄이기
     titleMarginTop: -18,
     subtitleMarginTop: 12,

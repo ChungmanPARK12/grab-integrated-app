@@ -366,7 +366,7 @@
 
 ## [2026-01-12]
 
-### Android UI alignment issue
+### Android UI alignment issue(layout tunning)
 - Minor alignment differences were identified on Android.
 - Shared layout calculations for iOS and Android caused increasing layout complexity.
 
@@ -392,6 +392,13 @@
 - Ensure all promo card icons are fully loaded before rendering content.
 - Stop the blinking animation once loading is complete.
 - Add a fallback to prevent infinite skeleton loading.
+
+## [2026-01-20]
+
+### Platform-specific layout tuning (MainService UI)
+- Adjusted **PromoBanner** layout using platform-specific tokens  
+- Fine-tuned `overlayPaddingTop` and promo card positioning for iOS and Android
+
 
 
 

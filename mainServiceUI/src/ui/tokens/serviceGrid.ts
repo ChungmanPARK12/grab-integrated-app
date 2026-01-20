@@ -34,11 +34,11 @@ export const SERVICE_GRID_TOKENS = Platform.select({
   },
 
   android: {
-    gridPaddingTop: 20,
+    gridPaddingTop: 10,
     gridPaddingHorizontal: 0,
     gridAlignItems: "center" as const,
 
-    itemWidth: 63,
+    itemWidth: 64,
     itemMarginTop: 10,
     itemMarginBottom: 15,
     itemMarginRight: 5,
