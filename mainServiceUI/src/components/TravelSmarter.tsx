@@ -10,6 +10,8 @@ import {
   ImageSourcePropType,
 } from 'react-native';
 
+import { TravelSmarterT as T } from '../ui/tokens/travelSmarter';
+
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = width * 0.44; // 2 items visible with tight spacing
 
@@ -70,7 +72,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   header: {
-    fontSize: 18,
+    fontSize: 18 * (T.headerFontScale ?? 1),
     fontWeight: 'bold',
     paddingHorizontal: 16,
     marginBottom: 12,
@@ -88,14 +90,15 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     marginBottom: 12,
   },
-  title: {
-    fontSize: 15,
+ title: {
+    fontSize: 15 * (T.titleFontScale ?? 1),
     fontWeight: '600',
     color: '#000',
     marginBottom: 4,
   },
+
   description: {
-    fontSize: 14,
+    fontSize: 14 * (T.descriptionFontScale ?? 1),
     color: '#00b14f',
     fontWeight: '600',
   },

@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
+import { RRT as T } from '../ui/tokens/recommendedRestaurents';
+
 const restaurants = [
   {
     id: '1',
@@ -106,11 +108,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingHorizontal: 16,
   },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 15,
-  },
   card: {
     width: 130,
     marginRight: 12,
@@ -124,21 +121,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
   },
-  name: {
-    fontSize: 14,
-    fontWeight: '600',
-    marginTop: 8,
-    paddingHorizontal: 6,
-    minHeight: 36,
-    marginBottom: 5,
-  },
-  info: {
-    fontSize: 12,
-    color: '#666',
-    paddingHorizontal: 6,
-    marginTop: 2,
-    marginBottom: 2,
-  },
   discountBox: {
     marginTop: 6,
     backgroundColor: '#fff2e6',
@@ -148,11 +130,6 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     marginLeft: 6,
     marginBottom: 10,
-  },
-  discount: {
-    fontSize: 12,
-    color: '#ff6600',
-    fontWeight: 'bold',
   },
   arrowWrapper: {
     justifyContent: 'center',
@@ -173,6 +150,34 @@ const styles = StyleSheet.create({
     elevation: 3,
     marginTop: 50,
     marginLeft: 5,  
+  },
+   title: {
+    fontSize: 18 * (T.titleFontScale ?? 1),
+    fontWeight: 'bold',
+    marginBottom: 15,
+  },
+
+  name: {
+    fontSize: 14 * (T.nameFontScale ?? 1),
+    fontWeight: '600',
+    marginTop: 8,
+    paddingHorizontal: 6,
+    minHeight: 36,
+    marginBottom: 5,
+  },
+
+  info: {
+    fontSize: 12 * (T.infoFontScale ?? 1),
+    color: '#666',
+    paddingHorizontal: 6,
+    marginTop: 2,
+    marginBottom: 2,
+  },
+
+  discount: {
+    fontSize: 12 * (T.discountFontScale ?? 1),
+    color: '#ff6600',
+    fontWeight: 'bold',
   },
 });
 

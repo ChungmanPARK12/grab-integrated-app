@@ -11,6 +11,8 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@login/navigation/types';
 
+import { LoginT as T } from '../ui/tokens/loginScreen';
+
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 const LoginScreen = () => {
@@ -87,10 +89,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 40,
   },
-
   buttonArea: {
     marginTop: 'auto',
     marginBottom: 50,
+    transform: [{ translateY: T.buttonsOffsetY ?? 0 }],
   },
   loginButton: {
     backgroundColor: 'white',
@@ -99,17 +101,19 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   loginText: {
-    color: '#00B14F',
-    textAlign: 'center',
-    fontWeight: '600',
-  },
+  color: '#00B14F',
+  textAlign: 'center',
+  fontWeight: '600',
+  fontSize: 16 * (T.loginTextFontScale ?? 1),
+},
   signupButton: {
     backgroundColor: '#f2f2f2',
     paddingVertical: 15,
     borderRadius: 50,
   },
   signupText: {
-    textAlign: 'center',
-    color: '#222',
-  },
+  textAlign: 'center',
+  color: '#222',
+  fontSize: 14 * (T.signupTextFontScale ?? 1),
+},
 });

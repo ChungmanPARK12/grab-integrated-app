@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, Image, Animated } from 'react-native';
 
+import { PaymentPointsT as T } from '../ui/tokens/paymentPanel';
+
 const walletIcon = require('../../assets/icons/wallet-icon.png');
 const crownIcon = require('../../assets/icons/crown-icon.png');
 
@@ -116,28 +118,31 @@ const styles = StyleSheet.create({
     borderColor: '#e0e0e0',
     height: 72,
   },
+    textGroup: {
+    justifyContent: 'center',
+  },
   title: {
-    fontSize: 13,
+    fontSize: 13 * (T.titleFontScale ?? 1),
     color: '#6b6b6b',
   },
+
   subtitle: {
-    fontSize: 15,
+    fontSize: 15 * (T.subtitleFontScale ?? 1),
     fontWeight: '600',
     marginTop: 4,
     color: '#000000',
   },
-  textGroup: {
-    justifyContent: 'center',
-  },
+
   iconWrapper: {
-    width: 28,
-    height: 28,
+    width: 28 + (T.iconWrapperSizeDelta ?? 0),
+    height: 28 + (T.iconWrapperSizeDelta ?? 0),
     justifyContent: 'center',
     alignItems: 'center',
   },
+
   icon: {
-    width: 38,
-    height: 38,
+    width: 38 + (T.iconSizeDelta ?? 0),
+    height: 38 + (T.iconSizeDelta ?? 0),
     resizeMode: 'contain',
     marginTop: 20,
   },

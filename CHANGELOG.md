@@ -399,8 +399,14 @@
 - Adjusted **PromoBanner** layout using platform-specific tokens  
 - Fine-tuned `overlayPaddingTop` and promo card positioning for iOS and Android
 
+## [2026-01-20]
+- Finished styling font sizes, container spacing, and 3 promo card positions
+- Resolved all Android-specific styling issues
 
-
+### icon loading issue on AuthOptionsScreen
+- Fixed delayed icon rendering during screen transitions
+- Preloaded icon fonts in App.tsx using expo-font: `Font.loadAsync`
+- Ensured icons are loaded before navigation renders, preventing late or missing icons on auth buttons
 
 
 
