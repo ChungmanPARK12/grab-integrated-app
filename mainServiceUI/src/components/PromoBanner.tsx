@@ -249,7 +249,6 @@ const styles = StyleSheet.create({
     opacity: 0,
     position: 'absolute',
   },
-
   overlayContent: {
     paddingTop: T.overlayPaddingTop,
     paddingHorizontal: 16,
@@ -259,13 +258,13 @@ const styles = StyleSheet.create({
     marginTop: T.textSectionMarginTop,
   },
   title: {
-    fontSize: 18,
+    fontSize: 18 * (T.titleFontScale ?? 1),
     fontWeight: 'bold',
     color: '#000',
     marginTop: T.titleMarginTop,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 16 * (T.subtitleFontScale ?? 1),
     color: '#444',
     marginTop: T.subtitleMarginTop,
     marginBottom: 7,
@@ -276,14 +275,13 @@ const styles = StyleSheet.create({
     gap: 8,
     marginTop: T.promoCardsMarginTop,
   },
-
   card: {
     backgroundColor: '#FFE57F',
-    width: (screenWidth - 30) / 3,
+    width: (screenWidth - 30) / 3 + (T.promoCardWidthDelta ?? 0),
     paddingVertical: 18,
     paddingHorizontal: 15,
     borderRadius: 10,
-    minHeight: 100,
+    minHeight: 100 + (T.promoCardHeightDelta ?? 0),
   },
   cardIcon: {
     width: 80,
@@ -305,12 +303,13 @@ const styles = StyleSheet.create({
     marginRight: -15,
   },
   hiddenIcon: {
-    opacity: 0, // ✅ 한 장씩 뜨는 현상 차단
+    opacity: 0,
   },
   cardText: {
-    fontSize: 15,
+    fontSize: 15 * (T.cardTextFontScale ?? 1),
+    lineHeight: 16 * (T.cardTextFontScale ?? 1),
     color: '#000',
-    lineHeight: 16,
     fontWeight: 'bold',
   },
+
 });
