@@ -1,13 +1,38 @@
-// App.tsx
-import React from 'react';
-import * as WebBrowser from 'expo-web-browser';  // ✅ Add this
+import React, { useEffect, useState } from 'react';
+import * as SplashScreen from 'expo-splash-screen';
 import { NavigationContainer } from '@react-navigation/native';
-import  LoginNavigator from '@login/screens/LoginNavigator';
+import { Ionicons, FontAwesome, AntDesign, Entypo } from '@expo/vector-icons';
+import * as Font from 'expo-font';
 
-// ✅ Must be called once, before rendering anything
-WebBrowser.maybeCompleteAuthSession();
+import LoginNavigator from '@login/screens/LoginNavigator';
+
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const prepare = async () => {
+      try {
+        await Font.loadAsync({
+          ...Ionicons.font,
+          ...FontAwesome.font,
+          ...AntDesign.font,
+          ...Entypo.font,
+        });
+      } catch (e) {
+        console.warn('Icon preload failed', e);
+      } finally {
+        setReady(true);
+        await SplashScreen.hideAsync();
+      }
+    };
+
+    prepare();
+  }, []);
+
+  if (!ready) return null;
+
   return (
     <NavigationContainer>
       <LoginNavigator />
