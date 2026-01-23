@@ -354,15 +354,67 @@
 ## [2025-12-01] – [2025-12-10] - Button Navigation
 - Just click the four of buttons to navigate to the service screen directly, temporary system to make the first portfolio v1.
  
- ### 2026 changelog
+ # 2026 changelog
 
  ## [2026-01-08]
  - Upgrated Expo SDK from 53 to 54
  - Aligned React Native and related dependencies
  - Fixed compatibility issues after the SDK upgrade
 
- ## Tested on Anroid with Expo go app
+ ### Tested on Anroid with Expo go app
  - Successfuly tested on Adriod devide but some css issue appeared
+
+## [2026-01-12]
+
+### Android UI alignment issue(layout tunning)
+- Minor alignment differences were identified on Android.
+- Shared layout calculations for iOS and Android caused increasing layout complexity.
+
+### Updated approach
+- Applied platform-specific **design tokens** while keeping a shared layout structure.
+- Maintained the iOS-aligned layout as the baseline.
+
+### Resolution
+- Android alignment issues were resolved through **token-based styling** instead of structural changes.
+
+## [2026-01-13]
+
+## Adroid UI issue
+
+### Android PaymentPanel loading appears blurry
+- Reset the animation value after stopping the blinking loop to prevent Android rendering artifacts.
+- No changes were made to the existing blinking, preload, or layout logic.
+
+## Improve code plan
+
+### Improve skeleton UI method(clear)
+- Reset loading state when the banner changes.
+- Ensure all promo card icons are fully loaded before rendering content.
+- Stop the blinking animation once loading is complete.
+- Add a fallback to prevent infinite skeleton loading.
+
+## [2026-01-20]
+
+### Platform-specific layout tuning (MainService UI)
+- Adjusted **PromoBanner** layout using platform-specific tokens  
+- Fine-tuned `overlayPaddingTop` and promo card positioning for iOS and Android
+
+## [2026-01-20]
+- Finished styling font sizes, container spacing, and 3 promo card positions
+- Resolved all Android-specific styling issues
+
+### icon loading issue on AuthOptionsScreen
+- Fixed delayed icon rendering during screen transitions
+- Preloaded icon fonts in App.tsx using expo-font: `Font.loadAsync`
+- Ensured icons are loaded before navigation renders, preventing late or missing icons on auth buttons
+
+
+
+
+
+
+
+
 
 
 

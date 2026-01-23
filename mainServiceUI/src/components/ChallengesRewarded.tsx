@@ -9,6 +9,8 @@ import {
   Dimensions,
 } from 'react-native';
 
+import { ChallengeT as T } from '../ui/tokens/challengesRewarded';
+
 const { width } = Dimensions.get('window');
 
 const challenges = [
@@ -63,7 +65,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   heading: {
-    fontSize: 18,
+    fontSize: 18 * (T.headingFontScale ?? 1),
     fontWeight: 'bold',
     marginBottom: 12,
   },
@@ -92,18 +94,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
+    fontSize: 15 * (T.titleFontScale ?? 1),
     fontWeight: '600',
-    fontSize: 15,
     marginBottom: 4,
   },
+
   date: {
+    fontSize: 13 * (T.dateFontScale ?? 1),
     color: '#666',
-    fontSize: 13,
     marginTop: 5,
     marginBottom: 10,
   },
+
   link: {
+    fontSize: 13 * (T.linkFontScale ?? 1),
     color: '#007bff',
     fontWeight: '500',
   },
+
 });

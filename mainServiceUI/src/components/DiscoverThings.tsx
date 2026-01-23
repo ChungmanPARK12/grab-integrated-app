@@ -8,6 +8,8 @@ import {
   Dimensions,
 } from 'react-native';
 
+import { DiscoverT as T } from '../ui/tokens/discoverThings';
+
 const { width } = Dimensions.get('window');
 
 const discoverItems = [
@@ -55,13 +57,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   title: {
-    fontSize: 18,
+    fontSize: 18 * (T.titleFontScale ?? 1),
     fontWeight: 'bold',
     paddingHorizontal: 16,
     marginBottom: 10,
   },
   subText: {
-    fontSize: 13,
+    fontSize: 13 * (T.subTextFontScale ?? 1),
     color: 'gray',
     paddingHorizontal: 16,
     marginBottom: 15,
