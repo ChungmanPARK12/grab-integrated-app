@@ -135,13 +135,13 @@ Exact SDK and dependency versions are defined in `package.json` and `app.json`.
 
 ## Next Steps (Preparing for Portfolio v2)
 
-- Update the **Expo Go** app on test devices before starting Portfolio v2 development**(Clear)**
-- Test the app on an **Android** physical device**(Clear)**
-- Refactor the **skeleton blinking** logic for better stability and consistency across main service components**(Clear)**
+- Update the **Expo Go** app on test devices before starting Portfolio v2 development **(Clear)**
+- Test the app on an **Android** physical device **(Clear)**
+- Refactor the **skeleton blinking** logic for better stability and consistency across main service components **(Clear)**
 
 ## Recently Completed Improvements (Portfolio v1 Stabilization)
-- Applied platform-aware styling tokens to resolve Android UI inconsistencies**(Clear)**  
-- Balanced font sizes, icon sizes, buttons, and spacing across iOS and Android**(Clear)**  
+- Applied platform-aware styling tokens to resolve Android UI inconsistencies **(Clear)**  
+- Balanced font sizes, icon sizes, buttons, and spacing across iOS and Android **(Clear)**  
 
 ## License
 
