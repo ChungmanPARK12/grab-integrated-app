@@ -6,7 +6,9 @@
     "paths": {
       "@/*": ["./*"],
       "@login/*": ["loginUI/src/*"],
-      "@main/*": ["mainServiceUI/src/*"]
+      "@main/*": ["mainServiceUI/src/*"],
+      "@assets/*": ["loginUI/assets/*"],
+      "@ui/*": ["loginUI/src/ui/*"]
     }
   },
   "include": [

@@ -408,6 +408,27 @@
 - Preloaded icon fonts in App.tsx using expo-font: `Font.loadAsync`
 - Ensured icons are loaded before navigation renders, preventing late or missing icons on auth buttons
 
+## [2026-01-28]
+
+### Sign-up Screen
+- Added new navigation screen `GetStartedPhone` as the first step of the sign-up flow
+- Integrated `react-native-country-picker-modal` for global country code support
+- Enabled screen transition using `navigation.navigate` in Login Screen
+- Configured native header dynamically via `navigation.setOptions` in GetStartedPhoneScreen
+
+### Verify OTP Screen
+- Introduced `VerifyOtpScreen` as part of the sign-up flow
+- Implemented a mock OTP verification flow using local state
+- Generated a random 6-digit code on demand for portfolio demonstration 
+
+### Developer Experience
+- Added path aliases for cleaner and more maintainable imports
+- Included global image module declarations to support alias-based asset imports
+
+
+
+
+
 
 
 

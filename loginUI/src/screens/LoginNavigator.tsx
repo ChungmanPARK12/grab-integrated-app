@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { View, Image, StyleSheet, StatusBar } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+// src/screens/LoginNavigator
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React, { useEffect, useState } from 'react';
+import { Image, StatusBar, StyleSheet, View } from 'react-native';
 
-import LoginScreen from '@login/components/LoginScreen';
-import AuthOptionsScreen from '@login/components/AuthOptionsScreen';
+import AuthOptionsScreen from '@/loginUI/src/components/auth/login/AuthOptionsScreen';
+import LoginScreen from '@/loginUI/src/components/auth/login/LoginScreen';
 import MainServiceScreen from '@main/screens/MainServiceScreen';
+import GetStartedPhoneScreen from '@/loginUI/src/components/auth/signup/GetStartedPhoneScreen';
+import VerifyOtpScreen from '../components/auth/signup/VerifyOtpScreen';
 
 const Stack = createNativeStackNavigator();
 
-// Splash screen(Showing loading image, grab logo)
+// Splash screen (showing loading image / Grab logo)
 const LoginNavigator = () => {
   const [isAppReady, setIsAppReady] = useState(false);
 
   useEffect(() => {
+    // Simulate splash loading time
     const timer = setTimeout(() => setIsAppReady(true), 3000);
     return () => clearTimeout(timer);
   }, []);
@@ -29,11 +32,14 @@ const LoginNavigator = () => {
         />
       </View>
     );
-  };
+  }
 
   return (
+    // Default: hide headers. Each screen can enable/set header options dynamically via navigation.setOptions.
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="GetStartedSignup" component={GetStartedPhoneScreen} />
+      <Stack.Screen name="VerifyOtp" component={VerifyOtpScreen} />
       <Stack.Screen name="AuthOptions" component={AuthOptionsScreen} />
       <Stack.Screen name="MainService" component={MainServiceScreen} />
     </Stack.Navigator>

@@ -1,18 +1,18 @@
 // src/loginUI/components/AuthOptionsScreen.tsx
-import React, { useCallback } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  SafeAreaView,
-} from 'react-native';
-import { FontAwesome, AntDesign, Entypo } from '@expo/vector-icons';
+import { AntDesign, Entypo, FontAwesome } from '@expo/vector-icons';
+import { RootStackParamList } from '@login/navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '@login/navigation/types';
+import React, { useCallback } from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
-import { AuthOptionsT as T } from '../ui/tokens/authOptions';
+import { AuthOptionsT as T } from '@ui/tokens/authOptions';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'AuthOptions'>;
 

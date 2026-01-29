@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ImageBackground,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
+import { RootStackParamList } from '@login/navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '@login/navigation/types';
+import React, { useState } from 'react';
+import {
+  ActivityIndicator,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
-import { LoginT as T } from '../ui/tokens/loginScreen';
+import { LoginT as T } from '@ui/tokens/loginScreen';
+import backgroundImage from '@assets/grab-background.png';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 const LoginScreen = () => {
   const [bgLoaded, setBgLoaded] = useState(false);
   const navigation = useNavigation<NavigationProp>();
-  const backgroundImage = require('../../assets/grab-background.png');
-
+  
   return (
     <>
       {!bgLoaded && (
@@ -45,7 +45,9 @@ const LoginScreen = () => {
                 <Text style={styles.loginText}>Log In</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.signupButton}>
+              <TouchableOpacity style={styles.signupButton}
+                onPress={() => navigation.navigate('GetStartedSignup')} // navigate to phone sign-up screen
+                accessibilityRole="button">
                 <Text style={styles.signupText}>New to Grab? Sign up!</Text>
               </TouchableOpacity>
             </View>
@@ -101,19 +103,19 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   loginText: {
-  color: '#00B14F',
-  textAlign: 'center',
-  fontWeight: '600',
-  fontSize: 16 * (T.loginTextFontScale ?? 1),
-},
+    color: '#00B14F',
+    textAlign: 'center',
+    fontWeight: '600',
+    fontSize: 16 * (T.loginTextFontScale ?? 1),
+  },
   signupButton: {
     backgroundColor: '#f2f2f2',
     paddingVertical: 15,
     borderRadius: 50,
   },
   signupText: {
-  textAlign: 'center',
-  color: '#222',
-  fontSize: 14 * (T.signupTextFontScale ?? 1),
-},
+    textAlign: 'center',
+    color: '#222',
+    fontSize: 14 * (T.signupTextFontScale ?? 1),
+  },
 });
