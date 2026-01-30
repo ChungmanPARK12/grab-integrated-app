@@ -8,6 +8,7 @@ import LoginScreen from '@/loginUI/src/components/auth/login/LoginScreen';
 import MainServiceScreen from '@main/screens/MainServiceScreen';
 import GetStartedPhoneScreen from '@/loginUI/src/components/auth/signup/GetStartedPhoneScreen';
 import VerifyOtpScreen from '../components/auth/signup/VerifyOtpScreen';
+import GetUsername from '../components/auth/signup/GetUsernameScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,6 +41,7 @@ const LoginNavigator = () => {
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="GetStartedSignup" component={GetStartedPhoneScreen} />
       <Stack.Screen name="VerifyOtp" component={VerifyOtpScreen} />
+      <Stack.Screen name="GetUsername" component={GetUsername} />
       <Stack.Screen name="AuthOptions" component={AuthOptionsScreen} />
       <Stack.Screen name="MainService" component={MainServiceScreen} />
     </Stack.Navigator>

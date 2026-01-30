@@ -1,5 +1,5 @@
 // src/login/components/VerifyOtpScreen.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   View,
   Text,
@@ -12,7 +12,8 @@ import {
 const VerifyOtpScreen = ({ navigation, route }: any) => {
   const { phoneNumber, countryCode } = route.params || {};
 
-  const [otp, setOtp] = useState('000000');
+  const [otp, setOtp] = useState('');
+  const [isOtpSent, setIsOtpSent] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({
@@ -22,15 +23,24 @@ const VerifyOtpScreen = ({ navigation, route }: any) => {
     });
   }, [navigation]);
 
-  // Generate random 6-digit code
+  // Generates a 6-digit OTP by forcing the range 100000–999999 (demo only)
   const generateOtp = () => {
     const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
     setOtp(randomCode);
+    setIsOtpSent(true);
   };
 
+  const isNextEnabled = useMemo(() => {
+    return isOtpSent && otp.length === 6;
+  }, [isOtpSent, otp]);
+
   const onNext = () => {
-    // Next step will be connected later (Name screen / Main service)
-    // navigation.navigate('GetStartedName');
+    if (!isNextEnabled) return;
+
+    navigation.navigate('GetUsername', {
+      phoneNumber,
+      countryCode,
+    });
   };
 
   return (
@@ -44,7 +54,9 @@ const VerifyOtpScreen = ({ navigation, route }: any) => {
         </Text>
 
         {/* OTP display */}
-        <Text style={styles.otpText}>{otp}</Text>
+        <Text style={[styles.otpText, isOtpSent && styles.otpTextActive]}>
+          {otp || '------'}
+        </Text>
 
         {/* Send button */}
         <Pressable style={styles.sendBtn} onPress={generateOtp}>
@@ -53,16 +65,20 @@ const VerifyOtpScreen = ({ navigation, route }: any) => {
 
         <View style={styles.helper}>
           <Text style={styles.helperTitle}>Didn't receive it?</Text>
-          <Text style={styles.helperSub}>
-            Get new code or send by WhatsApp in 00:21
-          </Text>
+          <Text style={styles.helperSub}>Click the Send button again</Text>
         </View>
       </View>
 
       {/* Next CTA */}
       <View style={styles.bottom}>
-        <Pressable style={styles.nextBtn} onPress={onNext}>
-          <Text style={styles.nextText}>Next</Text>
+        <Pressable
+          style={[styles.nextBtn, !isNextEnabled && styles.nextBtnDisabled]}
+          onPress={onNext}
+          disabled={!isNextEnabled}
+        >
+          <Text style={[styles.nextText, !isNextEnabled && styles.nextTextDisabled]}>
+            Next
+          </Text>
         </Pressable>
       </View>
     </KeyboardAvoidingView>
@@ -90,6 +106,9 @@ const styles = StyleSheet.create({
     letterSpacing: 6,
     color: '#cfcfcf',
     marginBottom: 20,
+  },
+  otpTextActive: {
+    color: '#111',
   },
 
   sendBtn: {
@@ -126,9 +145,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  nextBtnDisabled: {
+    backgroundColor: '#E7E7E7',
+  },
   nextText: {
     fontSize: 16,
     color: '#fff',
     fontWeight: '700',
+  },
+  nextTextDisabled: {
+    color: '#9B9B9B',
   },
 });

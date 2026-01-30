@@ -22,6 +22,7 @@ const GetStartedPhoneScreen = ({ navigation }: any) => {
 
   const [phone, setPhone] = useState('');
 
+  // Enable native stack navigation and back behavior
   useEffect(() => {
     navigation.setOptions({
       headerShown: true,
@@ -30,19 +31,22 @@ const GetStartedPhoneScreen = ({ navigation }: any) => {
     });
   }, [navigation]);
 
+  // Extract digits only from the phone input
   const cleanedPhone = useMemo(() => phone.replace(/[^\d]/g, ''), [phone]);
   const isValid = cleanedPhone.length >= 9;
 
   const onSelectCountry = (country: Country) => {
     setCountryCode(country.cca2);
-    // callingCode is an array in the library (some countries have multiple codes)
+    // callingCode is an array in the library (some countries have multiple codes, pick only firstone)
     const firstCode = country.callingCode?.[0] ?? '';
     if (firstCode) setCallingCode(firstCode);
     setIsPickerVisible(false);
   };
 
+  // Clear phone input value
   const onClear = () => setPhone('');
 
+  // Guard against invalid state before navigating to the next step
   const onNext = () => {
   if (!isValid) return;
 
@@ -83,7 +87,7 @@ const GetStartedPhoneScreen = ({ navigation }: any) => {
             <Text style={styles.chev}>▾</Text>
           </Pressable>
 
-          {/* Phone input */}
+          {/* Phone input, no TouchableOpacity here for state management */}
           <View style={[styles.inputWrap, phone.length > 0 && styles.inputWrapActive]}>
             <TextInput
               value={phone}
