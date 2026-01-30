@@ -408,7 +408,7 @@
 - Preloaded icon fonts in App.tsx using expo-font: `Font.loadAsync`
 - Ensured icons are loaded before navigation renders, preventing late or missing icons on auth buttons
 
-## [2026-01-28]
+## [2026-01-28] - [2026-01-30]
 
 ### Sign-up Screen
 - Added new navigation screen `GetStartedPhone` as the first step of the sign-up flow
@@ -421,9 +421,19 @@
 - Implemented a mock OTP verification flow using local state
 - Generated a random 6-digit code on demand for portfolio demonstration 
 
+### Get Username Screen
+- Added `GetUsernameScreen` as the final step of the sign-up flow
+- Navigated to this screen after successful verification on `VerifyOtpScreen`
+- Enabled the Next button only when a username is entered
+
 ### Developer Experience
 - Added path aliases for cleaner and more maintainable imports
 - Included global image module declarations to support alias-based asset imports
+
+### Upcoming Backend Integration
+- Backend and database setup planned to support user authentication and profile creation
+- OTP generation and verification to be migrated from demo logic to server-side implementation
+
 
 
 
