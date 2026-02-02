@@ -436,7 +436,14 @@
 
 ## [2026-02-02] - [2026-02-05]
 
-### Git branch root-navigation-structure
+### Git branch: feature/root-navigation-structure
+
+#### Planning
+- Planned a root-based navigation structure where the root app controls Auth/Main flow
+- Agreed to unify navigator naming and ownership across Root, loginUI, and mainServiceUI
+- Decided to separate navigation types by domain (Root / Auth / Main)
+- Prepared root-level `src/` directory for upcoming navigation refactor
+
 
 
 
