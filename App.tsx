@@ -1,3 +1,4 @@
+// Root/App.tsx
 import React, { useEffect, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { NavigationContainer } from '@react-navigation/native';
