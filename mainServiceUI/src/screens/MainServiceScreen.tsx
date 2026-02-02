@@ -1,3 +1,4 @@
+// mainServiceUI/src/screens/MainServiceScreens.tsx
 import ChallengeSection from '../components/ChallengesRewarded';
 import DiscoverSection from '../components/DiscoverThings';
 import PaymentPointsSection from '../components/PaymentPanel';
