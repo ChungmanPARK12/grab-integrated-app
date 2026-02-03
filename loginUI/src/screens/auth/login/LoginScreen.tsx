@@ -1,4 +1,4 @@
-import { RootStackParamList } from '@login/navigation/types';
+import { AuthStackParamList } from '@login/navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
@@ -14,7 +14,7 @@ import {
 import { LoginT as T } from '@ui/tokens/loginScreen';
 import backgroundImage from '@assets/grab-background.png';
 
-type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
+type NavigationProp = NativeStackNavigationProp<AuthStackParamList, 'Login'>;
 
 const LoginScreen = () => {
   const [bgLoaded, setBgLoaded] = useState(false);

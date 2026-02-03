@@ -12,9 +12,9 @@ import TopBar from '../components/TopBar';
 
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '@login/navigation/types';
+import type { MainStackParamList } from '@/mainServiceUI/src/navigation/type';
 
-type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'MainService'>;
+type NavigationProp = NativeStackNavigationProp<MainStackParamList, 'MainService'>;
 
 const MainServiceScreen = () => {
   const navigation = useNavigation<NavigationProp>();

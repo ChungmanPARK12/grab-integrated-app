@@ -1,8 +1,5 @@
 // src/loginUI/components/AuthOptionsScreen.tsx
 import { AntDesign, Entypo, FontAwesome } from '@expo/vector-icons';
-import { RootStackParamList } from '@login/navigation/types';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback } from 'react';
 import {
   SafeAreaView,
@@ -12,22 +9,20 @@ import {
   View,
 } from 'react-native';
 
+import { useAuth } from '@/src/providers/AuthProvider';
 import { AuthOptionsT as T } from '@ui/tokens/authOptions';
 
-type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'AuthOptions'>;
-
 const AuthOptionsScreen: React.FC = () => {
-  const navigation = useNavigation<NavigationProp>();
+  const { signIn } = useAuth();
 
   /**
    * Temporary auth bypass for portfolio v1
    * - No real OAuth / phone auth
-   * - All auth buttons just navigate to the main service screen
+   * - All auth buttons just sign in and switch to Main flow via RootNavigator
    */
   const handleAuthBypass = useCallback(() => {
-    // Temporary until implemented Facebook login
-    navigation.navigate('MainService');
-  }, [navigation]);
+    signIn();
+  }, [signIn]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -38,28 +33,29 @@ const AuthOptionsScreen: React.FC = () => {
 
       <View style={styles.buttonArea}>
         {/* Facebook (bypass) */}
-        <TouchableOpacity
-          style={styles.authButton}
-          onPress={handleAuthBypass}
-        >
-          <FontAwesome name="facebook" size={20} style={styles.icon} color="#1877F2" />
+        <TouchableOpacity style={styles.authButton} onPress={handleAuthBypass}>
+          <FontAwesome
+            name="facebook"
+            size={20}
+            style={styles.icon}
+            color="#1877F2"
+          />
           <Text style={styles.authText}>Continue With Facebook</Text>
         </TouchableOpacity>
 
         {/* Google (bypass) */}
-        <TouchableOpacity
-          style={styles.authButton}
-          onPress={handleAuthBypass}
-        >
-          <AntDesign name="google" size={20} color="#DB4437" style={styles.icon} />
+        <TouchableOpacity style={styles.authButton} onPress={handleAuthBypass}>
+          <AntDesign
+            name="google"
+            size={20}
+            color="#DB4437"
+            style={styles.icon}
+          />
           <Text style={styles.authText}>Continue With Google</Text>
         </TouchableOpacity>
 
         {/* Apple (bypass) */}
-        <TouchableOpacity
-          style={styles.authButton}
-          onPress={handleAuthBypass}
-        >
+        <TouchableOpacity style={styles.authButton} onPress={handleAuthBypass}>
           <AntDesign name="apple" size={20} color="black" style={styles.icon} />
           <Text style={styles.authText}>Continue With Apple</Text>
         </TouchableOpacity>
@@ -71,10 +67,7 @@ const AuthOptionsScreen: React.FC = () => {
         </View>
 
         {/* Phone number (bypass) */}
-        <TouchableOpacity
-          style={styles.authButton}
-          onPress={handleAuthBypass}
-        >
+        <TouchableOpacity style={styles.authButton} onPress={handleAuthBypass}>
           <Entypo name="phone" size={20} color="black" style={styles.icon} />
           <Text style={styles.authText2}>Continue With Mobile Number</Text>
         </TouchableOpacity>
@@ -93,18 +86,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   topArea: {
-  alignItems: 'center',
-  marginTop: 50,
-  transform: [{ translateY: T.topAreaOffsetY ?? 0 }],
-},
-
+    alignItems: 'center',
+    marginTop: 50,
+    transform: [{ translateY: T.topAreaOffsetY ?? 0 }],
+  },
   logoline: {
     fontSize: 48 * (T.logoFontScale ?? 1),
     fontWeight: 'bold',
     color: 'white',
     marginBottom: 0,
   },
-
   tagline: {
     fontSize: 20 * (T.taglineFontScale ?? 1),
     color: 'white',
@@ -127,19 +118,23 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   icon: { marginRight: 12 },
-authText: {
-  marginLeft: 35,
-  fontWeight: 'bold',
-  color: 'black',
-  fontSize: 14 * (T.authTextFontScale ?? 1),
-},
-authText2: {
-  marginLeft: 13,
-  fontWeight: 'bold',
-  color: 'black',
-  fontSize: 14 * (T.authTextFontScale ?? 1),
-},
-  dividerRow: { flexDirection: 'row', alignItems: 'center', marginVertical: 15 },
+  authText: {
+    marginLeft: 35,
+    fontWeight: 'bold',
+    color: 'black',
+    fontSize: 14 * (T.authTextFontScale ?? 1),
+  },
+  authText2: {
+    marginLeft: 13,
+    fontWeight: 'bold',
+    color: 'black',
+    fontSize: 14 * (T.authTextFontScale ?? 1),
+  },
+  dividerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 15,
+  },
   divider: { flex: 1, height: 1, backgroundColor: 'white' },
   orText: { marginHorizontal: 8, color: 'white' },
 });

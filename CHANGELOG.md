@@ -438,11 +438,26 @@
 
 ### Git branch: feature/root-navigation-structure
 
-#### Planning
+### Planning
 - Planned a root-based navigation structure where the root app controls Auth/Main flow
 - Agreed to unify navigator naming and ownership across Root, loginUI, and mainServiceUI
 - Decided to separate navigation types by domain (Root / Auth / Main)
 - Prepared root-level `src/` directory for upcoming navigation refactor
+
+### Implementation
+- Implemented `RootNavigator` to control Auth/Main flow at the root level
+- Added global `AuthProvider` for authentication state management
+- Centralized `NavigationContainer` ownership in `App.tsx`
+
+### Navigation Refactor
+- Separated navigation types by domain (loginUI / mainServiceUI)
+- Established `MainNavigator` as the entry point for mainServiceUI
+
+### Verification
+- Verified Auth → Main transition via auth state (`signIn`)
+- Confirmed app boots and runs without navigation or type errors
+
+
 
 
 
