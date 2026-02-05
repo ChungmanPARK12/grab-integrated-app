@@ -37,7 +37,7 @@ const VerifyOtpScreen = ({ navigation, route }: any) => {
   const onNext = () => {
     if (!isNextEnabled) return;
 
-    navigation.navigate('GetUsername', {
+    navigation.navigate('GetUsernameScreen', {
       phoneNumber,
       countryCode,
     });

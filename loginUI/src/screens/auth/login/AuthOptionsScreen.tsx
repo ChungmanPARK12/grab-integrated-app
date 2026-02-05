@@ -21,7 +21,7 @@ const AuthOptionsScreen: React.FC = () => {
    * - All auth buttons just sign in and switch to Main flow via RootNavigator
    */
   const handleAuthBypass = useCallback(() => {
-    signIn();
+    signIn('AuthOptions bypass button');
   }, [signIn]);
 
   return (

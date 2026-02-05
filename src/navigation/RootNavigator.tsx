@@ -17,7 +17,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export const RootNavigator = () => {
   const { isSignedIn } = useAuth();
 
-  // ✅ moved from LoginNavigator (keep same behavior)
+  // moved from LoginNavigator (keep same behavior)
   const [isAppReady, setIsAppReady] = useState(false);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export const RootNavigator = () => {
       <View style={styles.splashContainer}>
         <StatusBar hidden />
         <Image
-          source={require('../../assets/loading.jpg')}
+          source={require('../../loginUI/assets/loading.jpg')}
           style={styles.splashImage}
           resizeMode="cover"
         />

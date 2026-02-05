@@ -457,6 +457,25 @@
 - Verified Auth → Main transition via auth state (`signIn`)
 - Confirmed app boots and runs without navigation or type errors
 
+### Debugging (Integrated Navigation Structure)
+
+#### App.tsx
+- Wrapped the app with `AuthProvider` to manage global authentication state changes.
+- Used `NavigationContainer` as the single source of navigation state for the app
+  (Stack.Navigator, navigation.navigate).
+
+#### AuthProvider
+- Added console logging to trace authentication state changes
+  (`signed-in` / `signed-out`) during runtime.
+
+#### auth/LoginNavigator
+- Explicitly set `initialRouteName="Login"` for clarity and consistency.
+- Manages 5 authentication-related screens in loginUI.
+
+#### main/MainNavigator
+- Manages the main entry screen for mainServiceUI.
+
+
 
 
 

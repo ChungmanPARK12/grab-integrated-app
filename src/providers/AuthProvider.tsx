@@ -5,12 +5,14 @@ import React, {
   useMemo,
   useState,
   PropsWithChildren,
+  useCallback,
+  useEffect,
 } from 'react';
 
 type AuthContextValue = {
   isSignedIn: boolean;
-  signIn: () => void;
-  signOut: () => void;
+  signIn: (reason?: string) => void;
+  signOut: (reason?: string) => void;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -18,13 +20,29 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [isSignedIn, setIsSignedIn] = useState(false);
 
+  // Log whenever auth state changes (single source of truth)
+  useEffect(() => {
+    console.log(`[Auth] state changed -> isSignedIn=${isSignedIn}`);
+  }, [isSignedIn]);
+
+  // Log when signIn/signOut is called (who/why)
+  const signIn = useCallback((reason?: string) => {
+    console.log(`[Auth] signIn called${reason ? ` | reason=${reason}` : ''}`);
+    setIsSignedIn(true);
+  }, []);
+
+  const signOut = useCallback((reason?: string) => {
+    console.log(`[Auth] signOut called${reason ? ` | reason=${reason}` : ''}`);
+    setIsSignedIn(false);
+  }, []);
+
   const value = useMemo<AuthContextValue>(
     () => ({
       isSignedIn,
-      signIn: () => setIsSignedIn(true),
-      signOut: () => setIsSignedIn(false),
+      signIn,
+      signOut,
     }),
-    [isSignedIn]
+    [isSignedIn, signIn, signOut]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,3 +1,4 @@
+// loginUI/navigation/types.ts
 export type AuthStackParamList = {
   Login: undefined;
   AuthOptions: undefined;
