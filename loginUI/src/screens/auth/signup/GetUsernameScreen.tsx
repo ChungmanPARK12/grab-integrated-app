@@ -1,5 +1,6 @@
 // src/login/components/GetStartedNameScreen.tsx
 import React, { useEffect, useMemo, useState } from 'react';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
   View,
   Text,
@@ -10,28 +11,32 @@ import {
   TextInput,
 } from 'react-native';
 
-const GetUsername = ({ navigation, route }: any) => {
-  const { phoneNumber, countryCode } = route.params || {};
+import { AuthStackParamList } from '@login/navigation/types';
+import { useAuth } from '@/src/providers/AuthProvider';
+
+type Props = NativeStackScreenProps<AuthStackParamList, 'GetStartedName'>;
+
+const GetUsername = ({ navigation, route }: Props) => {
+  const { phoneNumber, countryCode } = route.params;
   const [username, setUsername] = useState('');
+
+  const { signIn } = useAuth();
 
   useEffect(() => {
     navigation.setOptions({
       headerShown: true,
       title: 'Get Started',
-      headerBackTitleVisible: false,
+  
     });
   }, [navigation]);
 
-  const isNextEnabled = useMemo(() => {
-    return username.trim().length > 0;
-  }, [username]);
+  const isNextEnabled = useMemo(() => username.trim().length > 0, [username]);
 
   const onNext = () => {
     if (!isNextEnabled) return;
 
-    // Next step will be connected later (Main service / etc.)
-    // navigation.navigate('MainService');
-    console.log('Name:', username, countryCode, phoneNumber);
+    // Switch to Main by updating the global auth state
+    signIn();
   };
 
   return (
@@ -66,7 +71,12 @@ const GetUsername = ({ navigation, route }: any) => {
           disabled={!isNextEnabled}
           style={[styles.nextBtn, !isNextEnabled && styles.nextBtnDisabled]}
         >
-          <Text style={[styles.nextText, !isNextEnabled && styles.nextTextDisabled]}>
+          <Text
+            style={[
+              styles.nextText,
+              !isNextEnabled && styles.nextTextDisabled,
+            ]}
+          >
             Next
           </Text>
         </Pressable>
@@ -128,7 +138,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   nextBtnDisabled: {
-    backgroundColor: '#DFF3E7', // 스샷처럼 연한 초록 느낌
+    backgroundColor: '#DFF3E7',
   },
   nextText: {
     fontSize: 16,
