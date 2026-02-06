@@ -5,13 +5,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Ionicons, FontAwesome, AntDesign, Entypo } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 
-import LoginNavigator from '@login/screens/LoginNavigator';
+import { AuthProvider } from './src/providers/AuthProvider';
+import { RootNavigator } from './src/navigation/RootNavigator';
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [ready, setReady] = useState(false);
-
+  // Preload icon in splash
   useEffect(() => {
     const prepare = async () => {
       try {
@@ -35,8 +36,10 @@ export default function App() {
   if (!ready) return null;
 
   return (
-    <NavigationContainer>
-      <LoginNavigator />
-    </NavigationContainer>
+    <AuthProvider>
+      <NavigationContainer>
+        <RootNavigator />
+      </NavigationContainer>
+    </AuthProvider>
   );
 }

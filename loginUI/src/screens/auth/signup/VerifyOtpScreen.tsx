@@ -1,5 +1,7 @@
 // src/login/components/VerifyOtpScreen.tsx
 import React, { useEffect, useMemo, useState } from 'react';
+import { AuthStackParamList } from '@login/navigation/types';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import {
   View,
   Text,
@@ -8,6 +10,8 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+
+type NavigationProp = NativeStackNavigationProp<AuthStackParamList, 'VerifyOtp'>;
 
 const VerifyOtpScreen = ({ navigation, route }: any) => {
   const { phoneNumber, countryCode } = route.params || {};
@@ -19,7 +23,7 @@ const VerifyOtpScreen = ({ navigation, route }: any) => {
     navigation.setOptions({
       headerShown: true,
       title: '',
-      headerBackTitleVisible: false,
+      
     });
   }, [navigation]);
 
@@ -37,7 +41,7 @@ const VerifyOtpScreen = ({ navigation, route }: any) => {
   const onNext = () => {
     if (!isNextEnabled) return;
 
-    navigation.navigate('GetUsername', {
+    navigation.navigate('GetStartedName', {
       phoneNumber,
       countryCode,
     });

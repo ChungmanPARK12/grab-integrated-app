@@ -434,6 +434,56 @@
 - Backend and database setup planned to support user authentication and profile creation
 - OTP generation and verification to be migrated from demo logic to server-side implementation
 
+## [2026-02-02] - [2026-02-05]
+
+### Git branch: feature/root-navigation-structure
+
+### Planning
+- Planned a root-based navigation structure where the root app controls Auth/Main flow
+- Agreed to unify navigator naming and ownership across Root, loginUI, and mainServiceUI
+- Decided to separate navigation types by domain (Root / Auth / Main)
+- Prepared root-level `src/` directory for upcoming navigation refactor
+
+### Implementation
+- Implemented `RootNavigator` to control Auth/Main flow at the root level
+- Added global `AuthProvider` for authentication state management
+- Centralized `NavigationContainer` ownership in `App.tsx`
+
+### Navigation Refactor
+- Separated navigation types by domain (loginUI / mainServiceUI)
+- Established `MainNavigator` as the entry point for mainServiceUI
+
+### Verification
+- Verified Auth → Main transition via auth state (`signIn`)
+- Confirmed app boots and runs without navigation or type errors
+
+### Debugging (Integrated Navigation Structure)
+
+#### App.tsx
+- Wrapped the app with `AuthProvider` to manage global authentication state changes.
+- Used `NavigationContainer` as the single source of navigation state for the app
+  (Stack.Navigator, navigation.navigate).
+
+#### AuthProvider
+- Added console logging to trace authentication state changes
+  (`signed-in` / `signed-out`) during runtime.
+
+#### auth/LoginNavigator
+- Explicitly set `initialRouteName="Login"` for clarity and consistency.
+- Manages 5 authentication-related screens in loginUI.
+
+#### main/MainNavigator
+- Manages the main entry screen for mainServiceUI.
+
+#### Signup
+- Completed the signup flow and switched to **MainServiceUI** via auth state change.
+
+
+
+
+
+
+
 
 
 
