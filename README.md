@@ -133,19 +133,17 @@ The project was developed and tested with the following environment:
 
 Exact SDK and dependency versions are defined in `package.json` and `app.json`.
 
+## Recently Completed Improvements
+
+- Restructured **root-based navigation**
+- Centralized Auth / Main flow control at the app root
+- Completed **Sign-up → MainScreen** transition
+
 ## Next Steps
 
 - Implement backend logic for the **Sign-up flow**
 - Connect Sign-up screen with server-side authentication
 - Prepare authentication structure for future feature expansion
-
----
-
-## Recently Completed Improvements (This Week)
-
-- Restructured **root-based navigation**
-- Centralized Auth / Main flow control at the app root
-- Completed **Sign-up → MainScreen** transition
 
 ## License
 
