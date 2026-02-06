@@ -5,7 +5,7 @@ export const AuthOptionsT = Platform.select({
     logoFontScale: 1,
     taglineFontScale: 1,
 
-    buttonsOffsetY: 25,   
+    buttonsOffsetY: 0,   
   },
   android: {
     logoFontScale: 1.2,

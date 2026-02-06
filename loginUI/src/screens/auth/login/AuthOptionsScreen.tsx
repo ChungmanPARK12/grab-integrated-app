@@ -2,7 +2,6 @@
 import { AntDesign, Entypo, FontAwesome } from '@expo/vector-icons';
 import React, { useCallback } from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -19,13 +18,14 @@ const AuthOptionsScreen: React.FC = () => {
    * Temporary auth bypass for portfolio v1
    * - No real OAuth / phone auth
    * - All auth buttons just sign in and switch to Main flow via RootNavigator
+   * Switch the flow to Main in RootNavigator
    */
   const handleAuthBypass = useCallback(() => {
     signIn('AuthOptions bypass button');
   }, [signIn]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.topArea}>
         <Text style={styles.logoline}>Grab</Text>
         <Text style={styles.tagline}>Your everyday everything app</Text>
@@ -72,7 +72,7 @@ const AuthOptionsScreen: React.FC = () => {
           <Text style={styles.authText2}>Continue With Mobile Number</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -83,11 +83,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#00B14F',
     paddingHorizontal: 24,
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   topArea: {
     alignItems: 'center',
-    marginTop: 50,
+    marginTop: 90,
     transform: [{ translateY: T.topAreaOffsetY ?? 0 }],
   },
   logoline: {

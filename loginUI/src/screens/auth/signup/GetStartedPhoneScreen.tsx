@@ -1,5 +1,7 @@
 // src/login/components/GetStartedPhoneScreen.tsx
 import React, { useEffect, useMemo, useState } from 'react';
+import { AuthStackParamList } from '@login/navigation/types';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import {
   View,
   Text,
@@ -14,6 +16,8 @@ import CountryPicker, {
   CountryCode,
 } from 'react-native-country-picker-modal';
 
+type NavigationProp = NativeStackNavigationProp<AuthStackParamList, 'GetStartedSignup'>;
+
 const GetStartedPhoneScreen = ({ navigation }: any) => {
   // Default country: Australia
   const [countryCode, setCountryCode] = useState<CountryCode>('AU');
@@ -27,7 +31,7 @@ const GetStartedPhoneScreen = ({ navigation }: any) => {
     navigation.setOptions({
       headerShown: true,
       title: 'Get Started',
-      headerBackTitleVisible: false,
+      
     });
   }, [navigation]);
 

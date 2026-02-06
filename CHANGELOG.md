@@ -475,6 +475,11 @@
 #### main/MainNavigator
 - Manages the main entry screen for mainServiceUI.
 
+#### Signup
+- Completed the signup flow and switched to **MainServiceUI** via auth state change.
+
+
+
 
 
 

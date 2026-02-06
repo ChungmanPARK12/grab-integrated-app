@@ -2,7 +2,7 @@
 import { AuthStackParamList } from '@login/navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   ImageBackground,
@@ -17,13 +17,27 @@ import backgroundImage from '@assets/grab-background.png';
 
 type NavigationProp = NativeStackNavigationProp<AuthStackParamList, 'Login'>;
 
+// Max wait time to avoid an infinite spinner if the image load is slow or fails silently.
+const MAX_BG_WAIT_MS = 5000;
+
 const LoginScreen = () => {
   const [bgLoaded, setBgLoaded] = useState(false);
+  const [timedOut, setTimedOut] = useState(false);
+
   const navigation = useNavigation<NavigationProp>();
-  
+
+  // Fail-safe: stop showing the loader after a timeout.
+  useEffect(() => {
+    const t = setTimeout(() => setTimedOut(true), MAX_BG_WAIT_MS);
+    return () => clearTimeout(t);
+  }, []);
+
+  const showLoader = !bgLoaded && !timedOut;
+  const showContent = bgLoaded || timedOut;
+
   return (
     <>
-      {!bgLoaded && (
+      {showLoader && (
         <View style={styles.loader}>
           <ActivityIndicator size="large" color="#ffffff" />
         </View>
@@ -34,21 +48,25 @@ const LoginScreen = () => {
         style={styles.background}
         resizeMode="cover"
         onLoadEnd={() => setBgLoaded(true)}
+        // Fail-safe: if the image fails, still show the UI instead of spinning forever.
+        onError={() => setBgLoaded(true)}
       >
-        {bgLoaded && (
+        {showContent && (
           <View style={styles.container}>
             <View style={styles.buttonArea}>
               <TouchableOpacity
                 style={styles.loginButton}
-                onPress={() => navigation.navigate('AuthOptions')} //navigate here
+                onPress={() => navigation.navigate('AuthOptions')}
                 accessibilityRole="button"
               >
                 <Text style={styles.loginText}>Log In</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.signupButton}
-                onPress={() => navigation.navigate('GetStartedSignup')} // navigate to phone sign-up screen
-                accessibilityRole="button">
+              <TouchableOpacity
+                style={styles.signupButton}
+                onPress={() => navigation.navigate('GetStartedSignup')}
+                accessibilityRole="button"
+              >
                 <Text style={styles.signupText}>New to Grab? Sign up!</Text>
               </TouchableOpacity>
             </View>
@@ -71,7 +89,7 @@ const styles = StyleSheet.create({
   },
   background: {
     flex: 1,
-    backgroundColor: '#00B14F', // fallback
+    backgroundColor: '#00B14F', // Fallback background color.
   },
   container: {
     flex: 1,
