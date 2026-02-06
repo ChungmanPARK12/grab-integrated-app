@@ -133,15 +133,19 @@ The project was developed and tested with the following environment:
 
 Exact SDK and dependency versions are defined in `package.json` and `app.json`.
 
-## Next Steps (Preparing for Portfolio v2 – Post v1 Stabilization)
+## Next Steps
 
-- Update the **Expo Go** app on test devices before starting Portfolio v2 development **(Clear)**
-- Test the app on an **Android** physical device **(Clear)**
-- Refactor the **skeleton blinking** logic for better stability and consistency across main service components **(Clear)**
+- Implement backend logic for the **Sign-up flow**
+- Connect Sign-up screen with server-side authentication
+- Prepare authentication structure for future feature expansion
 
-## Recently Completed Improvements (Portfolio v1 Stabilization)
-- Applied platform-aware styling tokens to resolve Android UI inconsistencies **(Clear)**  
-- Balanced font sizes, icon sizes, buttons, and spacing across iOS and Android **(Clear)**  
+---
+
+## Recently Completed Improvements (This Week)
+
+- Restructured **root-based navigation**
+- Centralized Auth / Main flow control at the app root
+- Completed **Sign-up → MainScreen** transition
 
 ## License
 
