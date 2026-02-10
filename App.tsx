@@ -12,7 +12,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [ready, setReady] = useState(false);
-  // Preload icon in splash
+  // Preload icon in splash image
   useEffect(() => {
     const prepare = async () => {
       try {
