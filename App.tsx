@@ -12,7 +12,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [ready, setReady] = useState(false);
-  // Preload icon in splash image
+  // Need to integrate the method, splash screen from RootNavigator
   useEffect(() => {
     const prepare = async () => {
       try {
