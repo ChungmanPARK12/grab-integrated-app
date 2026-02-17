@@ -478,6 +478,106 @@
 #### Signup
 - Completed the signup flow and switched to **MainServiceUI** via auth state change.
 
+## [2026-02-10]
+
+### Backend Auth Architecture Initialization
+
+## Backend Project Initialization
+
+- Created `backend/` directory inside `grab-integrated-app`
+- Initialized separate Node.js project with `npm init`
+- Installed core backend dependencies:
+  - express, cors, helmet, morgan
+  - jsonwebtoken, bcrypt
+  - prisma, @prisma/client
+  - zod, dotenv
+- Installed TypeScript dev dependencies
+
+## Express Server Setup
+
+- Implemented `app.ts` for middleware configuration
+- Implemented `server.ts` as entry point
+- Configured base `/api` routing structure
+
+## TypeScript Module Resolution Fix
+
+- Identified ESM/CommonJS module resolution conflict
+- Created `tsconfig.json` with:
+  - `"module": "CommonJS"`
+  - `"moduleResolution": "Node"`
+- Resolved `Cannot find module './app'` runtime error
+- Successfully launched development server via `npm run dev`
+
+## Current Status
+
+- Backend server running successfully on `http://localhost:4000`
+- Project ready for database integration (PostgreSQL + Prisma)
+- Signup authentication architecture ready for implementation
+
+## Next Plan
+
+- Create Postgres with Docker container
+- Design Prisma model(User, OtpSession....)
+- Front logic to API
+
+## [2026-02-16]
+
+### Docker Desktop Installation & WSL Integration
+
+- Installed Docker Desktop (Windows AMD64)
+- Connected Docker Desktop to WSL (Ubuntu-22.04)
+- Successfully started PostgreSQL container via docker-compose
+
+---
+
+### Database Configuration (Prisma + Docker)
+
+- Created `docker-compose.yml`
+- Configured `.env` with DATABASE_URL
+- Set up `prisma.config.ts`
+- Initialized Prisma (`npx prisma init`)
+- Created `prisma/schema.prisma`
+
+---
+
+### Prisma Connection Issues Resolved
+
+**Errors encountered:**
+- P1000 – Authentication failed
+- P1001 – Cannot reach database server
+- P4001 – Database is empty
+
+**Root cause:**
+- Local PostgreSQL (Dragonstack) was already running on port 5432
+- WSL networking required `host.docker.internal` instead of `localhost`
+- Environment variable override issue with `DATABASE_URL`
+
+**Fixes applied:**
+- Stopped local PostgreSQL service
+- Used `host.docker.internal` in `.env`
+- Cleared exported environment variables (`unset DATABASE_URL`)
+- Verified Docker container credentials
+- Confirmed DB connectivity via `psql` inside container
+
+- Successfully connected Prisma to Docker PostgreSQL  
+- Database introspection reached (P4001 = empty DB, expected state)
+
+---
+
+## Next Plan
+
+- Define Prisma models (User, OTP)
+- Run `prisma migrate dev`
+- Generate Prisma Client
+- Start implementing signup backend flow
+
+
+
+
+
+
+
+
 
 
 
