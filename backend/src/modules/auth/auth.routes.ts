@@ -1,7 +1,16 @@
-import { Router } from 'express';
+// src/modules/auth/auth.routes.ts
+import { Router } from "express";
+import { postSignupPhone } from "./auth.controller";
 
 export const authRouter = Router();
 
-authRouter.post('/signup/phone', (_req, res) => res.json({ message: 'TODO' }));
-authRouter.post('/signup/otp', (_req, res) => res.json({ message: 'TODO' }));
-authRouter.post('/signup/username', (_req, res) => res.json({ message: 'TODO' }));
+/**
+ * Signup flow:
+ * 1) POST /signup/phone     -> request OTP
+ * 2) POST /signup/otp       -> verify OTP (next step)
+ * 3) POST /signup/username  -> set username + issue JWT (later)
+ */
+authRouter.post("/signup/phone", postSignupPhone);
+
+authRouter.post("/signup/otp", (_req, res) => res.json({ message: "TODO" }));
+authRouter.post("/signup/username", (_req, res) => res.json({ message: "TODO" }));

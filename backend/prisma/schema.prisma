@@ -1,11 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
@@ -13,4 +7,42 @@ datasource db {
   provider = "postgresql"
 }
 
+enum OtpPurpose {
+  SIGNUP
+  LOGIN
+}
 
+model User {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  phone       String   @unique
+  username    String?  @unique
+
+  isVerified  Boolean  @default(false)
+
+  @@index([createdAt])
+}
+
+model OtpRequest {
+  id          String     @id @default(uuid())
+  createdAt   DateTime   @default(now())
+
+  phone       String
+  purpose     OtpPurpose @default(SIGNUP)
+
+  codeHash    String
+
+  expiresAt   DateTime
+  consumedAt  DateTime?
+
+  attempts    Int        @default(0)
+  maxAttempts Int        @default(5)
+
+  ip          String?
+  userAgent   String?
+
+  @@index([phone, createdAt])
+  @@index([expiresAt])
+}
