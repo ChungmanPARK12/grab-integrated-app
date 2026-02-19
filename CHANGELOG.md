@@ -571,6 +571,96 @@
 - Generate Prisma Client
 - Start implementing signup backend flow
 
+## [2026-02-16]
+
+### Prisma DB Model Design (User, OtpRequest)
+- Defined `User` and `OtpRequest` models in `schema.prisma`
+- Ran `npx prisma generate`
+- Executed `npx prisma migrate dev --name init-auth`
+- Successfully synced database schema with Prisma models
+
+### Prisma Generate Issue (Prisma v7 Config Migration)
+- Resolved datasource configuration conflict (P1012)
+- Removed `url` from `schema.prisma`
+- Moved connection configuration to `prisma/config.ts`
+- Confirmed Prisma Client generation (v7.4.0)
+
+### Migration Issue (P1001 - Database Connection)
+- Diagnosed database connectivity issue on port 5432
+- Enabled Docker Desktop WSL integration
+- Successfully applied migration
+
+### Current Status
+- Docker + PostgreSQL running correctly
+- Prisma connected and schema migrated
+- Database is fully synchronized with application models
+- `prisma.ts` is centralize management PrismaClient for DB
+
+### Auth Flow Structure Initialization
+- Created Prisma singleton (`src/libs/prisma.ts`)
+- Implemented OTP utility functions (`otp.util.ts`)
+  - 6-digit OTP generation
+  - Secure OTP hashing (HMAC-SHA256)
+- Implemented signup phone endpoint:
+  - `auth.routes.ts`
+  - `auth.controller.ts`
+  - `auth.service.ts`
+- Connected route under `/api/auth`
+- Implemented OTP request flow:
+  - Phone validation
+  - Basic rate limiting
+  - OTP hash storage in DB
+  - Dev-only OTP return for testing
+
+### Next Step
+- Implement authentication business logic
+  - OTP request endpoint
+  - OTP verification flow
+  - Username registration
+  - JWT issuance
+
+## [2026-02-16]
+
+### Modules/auth
+- Created `signupPhone` and working on `signupOtp`.
+- controller.ts handles method three of them for the signup
+
+## [2026-02-19]
+
+### Signup OTP Flow Implemented
+
+- Implemented `POST /api/auth/signup/phone`
+  - Generates OTP (1 min TTL)
+  - Stores hashed OTP in DB
+  - Returns `requestId` and `expiresAt` 
+
+- Implemented `POST /api/auth/signup/otp`
+  - Validates and verifies OTP
+  - Handles expiry, attempts, and reuse
+  - Marks OTP as consumed
+  - Upserts verified user
+  - Issues temporary token for next step
+
+### Prisma v7 Runtime Fix
+
+- Added PostgreSQL driver adapter
+- Resolved PrismaClient constructor error
+- Server successfully running and tested via Postman
+
+### The role of auth.service.ts
+
+- Implements the core authentication business logic
+- Handles OTP generation, verification, and validation rules
+- Manages database operations through Prisma
+- Controls error handling and domain-level exceptions
+- Issues temporary tokens for the next signup step
+
+
+
+
+
+
+
 
 
 

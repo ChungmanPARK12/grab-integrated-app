@@ -1,6 +1,6 @@
 // src/modules/auth/auth.routes.ts
 import { Router } from "express";
-import { postSignupPhone } from "./auth.controller";
+import { postSignupPhone, postSignupOtp } from "./auth.controller";
 
 export const authRouter = Router();
 
@@ -11,6 +11,5 @@ export const authRouter = Router();
  * 3) POST /signup/username  -> set username + issue JWT (later)
  */
 authRouter.post("/signup/phone", postSignupPhone);
-
-authRouter.post("/signup/otp", (_req, res) => res.json({ message: "TODO" }));
+authRouter.post("/signup/otp", postSignupOtp);
 authRouter.post("/signup/username", (_req, res) => res.json({ message: "TODO" }));
