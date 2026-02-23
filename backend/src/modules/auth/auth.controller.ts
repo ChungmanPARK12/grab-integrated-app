@@ -1,6 +1,7 @@
 // src/modules/auth/auth.controller.ts
 import type { Request, Response } from "express";
-import { requestSignupOtp, verifySignupOtp } from "./auth.service";
+import { requestSignupOtp, verifySignupOtp, signupUsername } from "./auth.service";
+import { asyncHandler } from "../../libs/asyncHandler";
 
 /**
  * POST /signup/phone
@@ -57,3 +58,28 @@ export const postSignupOtp = async (req: Request, res: Response) => {
     return res.status(status).json({ message });
   }
 };
+
+/**
+ * POST /signup/username
+ * Authorization: Bearer <tempToken>
+ * Body: { username: string }
+ */
+
+export const postSignupUsername = asyncHandler(async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    const e: any = new Error("missing authorization");
+    e.statusCode = 401;
+    throw e;
+  }
+
+  const { username } = req.body as { username?: string };
+  if (!username) {
+    const e: any = new Error("username is required");
+    e.statusCode = 400;
+    throw e;
+  }
+
+  const result = await signupUsername({ username, authHeader });
+  return res.status(200).json(result);
+});

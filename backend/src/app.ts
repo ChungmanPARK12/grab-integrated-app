@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 
 import routes from './routes';
+import { errorHandler } from './middlewares/errorHandler';
 
 export const createApp = () => {
   const app = express();
@@ -16,6 +17,7 @@ export const createApp = () => {
   app.get('/health', (_req, res) => res.json({ ok: true }));
 
   app.use('/api', routes);
+  app.use(errorHandler);
 
   return app;
 };

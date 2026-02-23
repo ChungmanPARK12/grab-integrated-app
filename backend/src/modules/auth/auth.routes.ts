@@ -1,6 +1,6 @@
 // src/modules/auth/auth.routes.ts
 import { Router } from "express";
-import { postSignupPhone, postSignupOtp } from "./auth.controller";
+import { postSignupPhone, postSignupOtp, postSignupUsername } from "./auth.controller";
 
 export const authRouter = Router();
 
@@ -12,4 +12,4 @@ export const authRouter = Router();
  */
 authRouter.post("/signup/phone", postSignupPhone);
 authRouter.post("/signup/otp", postSignupOtp);
-authRouter.post("/signup/username", (_req, res) => res.json({ message: "TODO" }));
+authRouter.post("/signup/username", postSignupUsername);

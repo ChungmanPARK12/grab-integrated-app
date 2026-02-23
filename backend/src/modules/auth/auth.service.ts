@@ -16,6 +16,11 @@ type VerifySignupOtpInput = {
   userAgent?: string;
 };
 
+type SignupUsernameInput = {
+  username: string;
+  authHeader: string;
+};
+
 const OTP_TTL_MINUTES = 1;
 const OTP_RATE_LIMIT_SECONDS = 60;
 
@@ -193,3 +198,71 @@ export const verifySignupOtp = async ({ requestId, otp, ip, userAgent }: VerifyS
     tempToken: result.tempToken,
   };
 };
+
+export const signupUsername = async ({ username, authHeader }: SignupUsernameInput) => {
+  const normalized = username.trim().toLowerCase();
+
+  // minimal validation (Step 3: simple rule)
+  if (normalized.length < 3 || normalized.length > 20) {
+    throw httpError(400, "invalid username length");
+  }
+  if (!/^[a-z0-9._]+$/.test(normalized)) {
+    throw httpError(400, "invalid username format");
+  }
+
+  const { userId } = verifyTempToken(authHeader);
+
+  try {
+    const updated = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        username: normalized,
+        signupCompleted: true, 
+      },
+      select: { id: true, phone: true, username: true, isVerified: true, signupCompleted: true },
+    });
+
+    return {
+      ok: true,
+      user: updated,
+    };
+  } catch (e: any) {
+    // Prisma unique constraint
+    if (e?.code === "P2002") {
+      throw httpError(409, "username already taken");
+    }
+    throw e;
+  }
+};
+
+const TEMP_PURPOSE = "SIGNUP_USERNAME" as const;
+
+const verifyTempToken = (authHeader: string) => {
+  if (!authHeader.startsWith("Bearer ")) {
+    throw httpError(401, "missing bearer token");
+  }
+
+  const token = authHeader.slice("Bearer ".length);
+
+  const secret = process.env.JWT_TEMP_SECRET;
+  if (!secret) {
+    throw httpError(500, "server misconfigured: missing JWT_TEMP_SECRET");
+  }
+
+  try {
+    const payload = jwt.verify(token, secret) as any;
+
+    if (payload?.purpose !== TEMP_PURPOSE) {
+      throw httpError(401, "invalid temp token purpose");
+    }
+
+    const userId = payload?.sub as string | undefined;
+    if (!userId) {
+      throw httpError(401, "invalid temp token");
+    }
+
+    return { userId };
+  } catch {
+    throw httpError(401, "invalid or expired temp token");
+  }
+};   
