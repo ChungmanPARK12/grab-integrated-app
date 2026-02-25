@@ -1,7 +1,9 @@
 // src/modules/auth/auth.service.ts
 import { prisma } from "../../libs/prisma";
 import { generateOtp, hashOtp } from "./otp.util";
+// Create token, authentication and encode
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 type RequestSignupOtpInput = {
   phone: string;
@@ -27,10 +29,82 @@ const OTP_RATE_LIMIT_SECONDS = 60;
 // Temp token TTL (used only for the next step: username registration)
 const TEMP_TOKEN_TTL_MINUTES = 10;
 
+// Access/Refresh token TTL
+const ACCESS_TOKEN_TTL_MINUTES = 15;
+const REFRESH_TOKEN_TTL_DAYS = 30;
+
+// Token purposes
+const TEMP_PURPOSE = "SIGNUP_USERNAME" as const;
+const ACCESS_PURPOSE = "ACCESS" as const;
+const REFRESH_PURPOSE = "REFRESH" as const;
+
 const httpError = (statusCode: number, message: string) => {
   const e: any = new Error(message);
   e.statusCode = statusCode;
   return e;
+};
+
+const sha256 = (value: string) => crypto.createHash("sha256").update(value).digest("hex");
+
+const addMinutes = (minutes: number) => new Date(Date.now() + minutes * 60 * 1000);
+const addDays = (days: number) => new Date(Date.now() + days * 24 * 60 * 60 * 1000);
+
+const verifyTempToken = (authHeader: string) => {
+  if (!authHeader.startsWith("Bearer ")) {
+    throw httpError(401, "missing bearer token");
+  }
+
+  const token = authHeader.slice("Bearer ".length);
+
+  const secret = process.env.JWT_TEMP_SECRET;
+  if (!secret) {
+    throw httpError(500, "server misconfigured: missing JWT_TEMP_SECRET");
+  }
+
+  try {
+    const payload = jwt.verify(token, secret) as any;
+
+    if (payload?.purpose !== TEMP_PURPOSE) {
+      throw httpError(401, "invalid temp token purpose");
+    }
+
+    const userId = payload?.sub as string | undefined;
+    if (!userId) {
+      throw httpError(401, "invalid temp token payload");
+    }
+
+    return { userId };
+  } catch {
+    throw httpError(401, "invalid or expired temp token");
+  }
+};
+
+const issueAccessToken = (userId: string) => {
+  const secret = process.env.JWT_ACCESS_SECRET;
+  if (!secret) throw httpError(500, "server misconfigured: missing JWT_ACCESS_SECRET");
+
+  return jwt.sign(
+    {
+      sub: userId,
+      purpose: ACCESS_PURPOSE,
+    },
+    secret,
+    { expiresIn: `${ACCESS_TOKEN_TTL_MINUTES}m` }
+  );
+};
+
+const issueRefreshToken = (userId: string) => {
+  const secret = process.env.JWT_REFRESH_SECRET;
+  if (!secret) throw httpError(500, "server misconfigured: missing JWT_REFRESH_SECRET");
+
+  return jwt.sign(
+    {
+      sub: userId,
+      purpose: REFRESH_PURPOSE,
+    },
+    secret,
+    { expiresIn: `${REFRESH_TOKEN_TTL_DAYS}d` }
+  );
 };
 
 export const requestSignupOtp = async ({ phone, ip, userAgent }: RequestSignupOtpInput) => {
@@ -73,7 +147,7 @@ export const requestSignupOtp = async ({ phone, ip, userAgent }: RequestSignupOt
   }
 
   const codeHash = hashOtp(normalizedPhone, otp, secret);
-  const expiresAt = new Date(Date.now() + OTP_TTL_MINUTES * 60 * 1000);
+  const expiresAt = addMinutes(OTP_TTL_MINUTES);
 
   const created = await prisma.otpRequest.create({
     data: {
@@ -106,7 +180,6 @@ export const requestSignupOtp = async ({ phone, ip, userAgent }: RequestSignupOt
 export const verifySignupOtp = async ({ requestId, otp, ip, userAgent }: VerifySignupOtpInput) => {
   const otpTrimmed = otp.trim();
 
-  // Minimal sanity check
   if (!/^\d{6}$/.test(otpTrimmed)) {
     throw httpError(400, "invalid otp format");
   }
@@ -127,7 +200,6 @@ export const verifySignupOtp = async ({ requestId, otp, ip, userAgent }: VerifyS
     throw httpError(400, "otp expired");
   }
 
-  // Block if already exceeded attempts
   if (reqRow.attempts >= reqRow.maxAttempts) {
     throw httpError(429, "too many attempts");
   }
@@ -139,7 +211,6 @@ export const verifySignupOtp = async ({ requestId, otp, ip, userAgent }: VerifyS
 
   const expectedHash = hashOtp(reqRow.phone, otpTrimmed, secret);
 
-  // If OTP is wrong: increase attempts and return error
   if (expectedHash !== reqRow.codeHash) {
     const nextAttempts = reqRow.attempts + 1;
 
@@ -147,7 +218,6 @@ export const verifySignupOtp = async ({ requestId, otp, ip, userAgent }: VerifyS
       where: { id: reqRow.id },
       data: {
         attempts: nextAttempts,
-        // Optionally record metadata on verification attempts
         ip,
         userAgent,
       },
@@ -160,9 +230,8 @@ export const verifySignupOtp = async ({ requestId, otp, ip, userAgent }: VerifyS
     throw httpError(400, "invalid otp");
   }
 
-  // OTP is correct -> finalize in a transaction
   const result = await prisma.$transaction(async (tx) => {
-    const consumed = await tx.otpRequest.update({
+    await tx.otpRequest.update({
       where: { id: reqRow.id },
       data: {
         consumedAt: new Date(),
@@ -171,7 +240,6 @@ export const verifySignupOtp = async ({ requestId, otp, ip, userAgent }: VerifyS
       },
     });
 
-    // Create user only after OTP verification (recommended strategy)
     const user = await tx.user.upsert({
       where: { phone: reqRow.phone },
       update: { isVerified: true },
@@ -179,18 +247,17 @@ export const verifySignupOtp = async ({ requestId, otp, ip, userAgent }: VerifyS
       select: { id: true, phone: true },
     });
 
-    // Issue a short-lived temp token for the username step
     const tempToken = jwt.sign(
       {
         sub: user.id,
         phone: user.phone,
-        purpose: "SIGNUP_USERNAME",
+        purpose: TEMP_PURPOSE,
       },
       secret,
       { expiresIn: `${TEMP_TOKEN_TTL_MINUTES}m` }
     );
 
-    return { user, consumed, tempToken };
+    return { tempToken };
   });
 
   return {
@@ -202,7 +269,6 @@ export const verifySignupOtp = async ({ requestId, otp, ip, userAgent }: VerifyS
 export const signupUsername = async ({ username, authHeader }: SignupUsernameInput) => {
   const normalized = username.trim().toLowerCase();
 
-  // minimal validation (Step 3: simple rule)
   if (normalized.length < 3 || normalized.length > 20) {
     throw httpError(400, "invalid username length");
   }
@@ -212,57 +278,58 @@ export const signupUsername = async ({ username, authHeader }: SignupUsernameInp
 
   const { userId } = verifyTempToken(authHeader);
 
+  // 1) Persist username + signupCompleted
+  let updatedUser: {
+    id: string;
+    phone: string;
+    username: string | null;
+    isVerified: boolean;
+    signupCompleted: boolean;
+  };
+
   try {
-    const updated = await prisma.user.update({
+    updatedUser = await prisma.user.update({
       where: { id: userId },
       data: {
         username: normalized,
-        signupCompleted: true, 
+        signupCompleted: true,
       },
-      select: { id: true, phone: true, username: true, isVerified: true, signupCompleted: true },
+      select: {
+        id: true,
+        phone: true,
+        username: true,
+        isVerified: true,
+        signupCompleted: true,
+      },
     });
-
-    return {
-      ok: true,
-      user: updated,
-    };
   } catch (e: any) {
-    // Prisma unique constraint
     if (e?.code === "P2002") {
       throw httpError(409, "username already taken");
     }
     throw e;
   }
+
+  // 2) Issue tokens
+  const accessToken = issueAccessToken(updatedUser.id);
+  const refreshToken = issueRefreshToken(updatedUser.id);
+
+  // 3) Store hashed refresh token in DB
+  const refreshTokenHash = sha256(refreshToken);
+  const refreshExpiresAt = addDays(REFRESH_TOKEN_TTL_DAYS);
+
+  // NOTE: Prisma model name may differ. If TypeScript complains, adjust to match your Prisma client.
+  await prisma.refreshToken.create({
+    data: {
+      userId: updatedUser.id,
+      tokenHash: refreshTokenHash,
+      expiresAt: refreshExpiresAt,
+    },
+  });
+
+  return {
+    ok: true,
+    user: updatedUser,
+    accessToken,
+    refreshToken,
+  };
 };
-
-const TEMP_PURPOSE = "SIGNUP_USERNAME" as const;
-
-const verifyTempToken = (authHeader: string) => {
-  if (!authHeader.startsWith("Bearer ")) {
-    throw httpError(401, "missing bearer token");
-  }
-
-  const token = authHeader.slice("Bearer ".length);
-
-  const secret = process.env.JWT_TEMP_SECRET;
-  if (!secret) {
-    throw httpError(500, "server misconfigured: missing JWT_TEMP_SECRET");
-  }
-
-  try {
-    const payload = jwt.verify(token, secret) as any;
-
-    if (payload?.purpose !== TEMP_PURPOSE) {
-      throw httpError(401, "invalid temp token purpose");
-    }
-
-    const userId = payload?.sub as string | undefined;
-    if (!userId) {
-      throw httpError(401, "invalid temp token");
-    }
-
-    return { userId };
-  } catch {
-    throw httpError(401, "invalid or expired temp token");
-  }
-};   

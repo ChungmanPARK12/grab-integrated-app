@@ -655,6 +655,70 @@
 - Controls error handling and domain-level exceptions
 - Issues temporary tokens for the next signup step
 
+## [2026-02-23]
+
+### Signup Flow — Username Step (In Progress)
+
+- Updated `User` model in `schema.prisma`
+- Added `signupCompleted` field
+- Added `RefreshToken` model
+- Applied Prisma migration
+- Verified DB sync and regenerated Prisma Client
+
+### Global Error Handling (Infrastructure Setup)
+
+- Implemented global `errorHandler` middleware
+- Registered `errorHandler` after all routes in `app.ts`
+- Added `libs/asyncHandler.ts` to properly handle async route errors
+- Refactored `signupUsername` controller to use `asyncHandler`
+- Standardized error response format across authentication endpoints
+
+> Purpose: Prepare stable error flow before implementing access & refresh token logic
+---
+
+### Code Structure Review
+
+#### `auth/auth.controller.ts`
+- Handles HTTP layer (request / response)
+- Validates headers and request body
+- Catches service errors and converts them into HTTP responses
+
+#### `auth/auth.service.ts`
+- Contains business logic for authentication flow
+- Handles DB access via Prisma
+- Implements OTP verification logic
+- Manages username validation and duplication checks
+- Executes transactional operations
+- Throws structured errors for controller to handle
+
+## [2026-02-19]
+
+### Signup Flow Debugging (OTP Verification)
+
+- Tested full OTP signup flow via Postman
+- Verified phone number submission → OTP issued
+- Confirmed OTP validation logic (expiry, attempts, verification)
+- Successfully received tempToken after OTP verification
+- End-to-end flow executed without runtime errors
+
+### Request Handling Flow (Controller–Service–DB)
+
+Route (Express Router)
+→ Controller (HTTP layer: parse req / validate input / call service)
+→ Service (business logic: auth rules, token checks, state updates)
+→ Prisma (DB read/write, transactions)
+→ Service returns result (or throws error), asyncHanlder -> errorHandler
+→ Controller sends JSON response
+→ Global errorHandler formats any thrown errors into a consistent response
+
+### Next Plan — Session Management
+
+- Issue `accessToken` after signup completion
+- Issue and store hashed `refreshToken` in DB
+- Implement `/auth/refresh` endpoint
+- Add logout logic (refresh token revoke)
+- Create access token middleware for protected routes
+
 
 
 
