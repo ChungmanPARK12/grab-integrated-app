@@ -691,7 +691,7 @@
 - Executes transactional operations
 - Throws structured errors for controller to handle
 
-## [2026-02-19]
+## [2026-02-24]
 
 ### Signup Flow Debugging (OTP Verification)
 
@@ -704,12 +704,12 @@
 ### Request Handling Flow (Controller–Service–DB)
 
 Route (Express Router)
-→ Controller (HTTP layer: parse req / validate input / call service)
-→ Service (business logic: auth rules, token checks, state updates)
-→ Prisma (DB read/write, transactions)
-→ Service returns result (or throws error), asyncHanlder -> errorHandler
-→ Controller sends JSON response
-→ Global errorHandler formats any thrown errors into a consistent response
+- Controller (HTTP layer: parse req / validate input / call service)
+- Service (business logic: auth rules, token checks, state updates)
+- Prisma (DB read/write, transactions)
+- Service returns result (or throws error), asyncHanlder -> errorHandler
+- Controller sends JSON response
+- Global errorHandler formats any thrown errors into a consistent response
 
 ### Next Plan — Session Management
 
@@ -718,6 +718,67 @@ Route (Express Router)
 - Implement `/auth/refresh` endpoint
 - Add logout logic (refresh token revoke)
 - Create access token middleware for protected routes
+
+## [2026-02-26]
+
+### AuthRefresh and AuthLogout
+
+#### Controller
+
+- `postSignupPhone`
+- `postSignupOtp`
+- `postSignupUsername`
+- `postAuthRefresh`
+- `postAuthLogout`
+- HTTP parsing / status / response
+
+#### Service
+- issue OTP
+- Verification OTP
+- issue tempToken
+- register username
+- issue access Toekn
+- issue refreshToekn
+- refresh Token
+- logout revoke
+
+### jwt.util.ts
+- Centralize Token creation
+- Handles expiring, secret and payload structure
+- The reason why separated `secret code` to `.env` is becuase of security issue, not sharing git. 
+
+## [2026-02-27]
+
+### Future Plan
+
+#### 1. Signup Finalization
+- Define Signup completion criteria (DoD)
+- Standardize error handling in controllers
+- Freeze API request/response specification
+- Document full Signup flow (OTP → Username → Token)
+- Validate DB state after successful signup
+
+#### 2. Auth Stabilization
+- Implement `requireAuth` middleware
+- Add protected endpoint (`GET /me`)
+- Verify access expiration & refresh rotation
+- Test logout & token revoke behavior
+
+#### 3. Login Expansion
+- Extend OTP flow for LOGIN purpose
+- Implement `/login/phone` and `/login/otp`
+- Separate signup vs login logic
+
+#### 4. Security & Cleanup
+- Add basic rate limiting
+- Improve auth logging
+- Define refresh session cleanup policy
+
+#### 5. Domain Phase (Next Step)
+- User profile API
+- Core service/domain modeling
+- Order / QR-based system planning
+
 
 
 

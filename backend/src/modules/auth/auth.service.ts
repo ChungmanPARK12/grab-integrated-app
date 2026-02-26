@@ -1,7 +1,6 @@
 // src/modules/auth/auth.service.ts
 import { prisma } from "../../libs/prisma";
 import { generateOtp, hashOtp } from "./otp.util";
-// Create token, authentication and encode
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 
@@ -21,6 +20,14 @@ type VerifySignupOtpInput = {
 type SignupUsernameInput = {
   username: string;
   authHeader: string;
+};
+
+type RefreshAuthTokensInput = {
+  refreshToken: string;
+};
+
+type LogoutInput = {
+  refreshToken: string;
 };
 
 const OTP_TTL_MINUTES = 1;
@@ -44,10 +51,11 @@ const httpError = (statusCode: number, message: string) => {
   return e;
 };
 
-const sha256 = (value: string) => crypto.createHash("sha256").update(value).digest("hex");
+const sha256 = (value: string) =>
+  crypto.createHash("sha256").update(value).digest("hex");
 
-const addMinutes = (minutes: number) => new Date(Date.now() + minutes * 60 * 1000);
-const addDays = (days: number) => new Date(Date.now() + days * 24 * 60 * 60 * 1000);
+const addMinutes = (minutes: number) =>
+  new Date(Date.now() + minutes * 60 * 1000);
 
 const verifyTempToken = (authHeader: string) => {
   if (!authHeader.startsWith("Bearer ")) {
@@ -81,7 +89,8 @@ const verifyTempToken = (authHeader: string) => {
 
 const issueAccessToken = (userId: string) => {
   const secret = process.env.JWT_ACCESS_SECRET;
-  if (!secret) throw httpError(500, "server misconfigured: missing JWT_ACCESS_SECRET");
+  if (!secret)
+    throw httpError(500, "server misconfigured: missing JWT_ACCESS_SECRET");
 
   return jwt.sign(
     {
@@ -95,7 +104,8 @@ const issueAccessToken = (userId: string) => {
 
 const issueRefreshToken = (userId: string) => {
   const secret = process.env.JWT_REFRESH_SECRET;
-  if (!secret) throw httpError(500, "server misconfigured: missing JWT_REFRESH_SECRET");
+  if (!secret)
+    throw httpError(500, "server misconfigured: missing JWT_REFRESH_SECRET");
 
   return jwt.sign(
     {
@@ -107,7 +117,49 @@ const issueRefreshToken = (userId: string) => {
   );
 };
 
-export const requestSignupOtp = async ({ phone, ip, userAgent }: RequestSignupOtpInput) => {
+const getJwtExpAsDate = (token: string): Date => {
+  const payloadPart = token.split(".")[1];
+  const decoded = JSON.parse(Buffer.from(payloadPart, "base64").toString());
+  if (!decoded?.exp) {
+    throw httpError(500, "failed to read token exp");
+  }
+  return new Date(decoded.exp * 1000);
+};
+
+const hashRefreshTokenForDb = (refreshToken: string): string => {
+  const pepper = process.env.JWT_REFRESH_PEPPER;
+  if (!pepper) {
+    throw httpError(500, "server misconfigured: missing JWT_REFRESH_PEPPER");
+  }
+  return sha256(refreshToken + pepper);
+};
+
+const verifyRefreshTokenJwt = (refreshToken: string) => {
+  const secret = process.env.JWT_REFRESH_SECRET;
+  if (!secret)
+    throw httpError(500, "server misconfigured: missing JWT_REFRESH_SECRET");
+
+  try {
+    const payload = jwt.verify(refreshToken, secret) as any;
+
+    if (payload?.purpose !== REFRESH_PURPOSE) {
+      throw httpError(401, "invalid refresh token purpose");
+    }
+
+    const userId = payload?.sub as string | undefined;
+    if (!userId) throw httpError(401, "invalid refresh token payload");
+
+    return { userId };
+  } catch {
+    throw httpError(401, "invalid or expired refresh token");
+  }
+};
+
+export const requestSignupOtp = async ({
+  phone,
+  ip,
+  userAgent,
+}: RequestSignupOtpInput) => {
   const normalizedPhone = phone.trim();
 
   if (normalizedPhone.length < 8) {
@@ -177,7 +229,12 @@ export const requestSignupOtp = async ({ phone, ip, userAgent }: RequestSignupOt
  * - Increments attempts on failure
  * - On success: marks consumedAt + upserts verified user + returns temp token
  */
-export const verifySignupOtp = async ({ requestId, otp, ip, userAgent }: VerifySignupOtpInput) => {
+export const verifySignupOtp = async ({
+  requestId,
+  otp,
+  ip,
+  userAgent,
+}: VerifySignupOtpInput) => {
   const otpTrimmed = otp.trim();
 
   if (!/^\d{6}$/.test(otpTrimmed)) {
@@ -266,7 +323,10 @@ export const verifySignupOtp = async ({ requestId, otp, ip, userAgent }: VerifyS
   };
 };
 
-export const signupUsername = async ({ username, authHeader }: SignupUsernameInput) => {
+export const signupUsername = async ({
+  username,
+  authHeader,
+}: SignupUsernameInput) => {
   const normalized = username.trim().toLowerCase();
 
   if (normalized.length < 3 || normalized.length > 20) {
@@ -313,11 +373,10 @@ export const signupUsername = async ({ username, authHeader }: SignupUsernameInp
   const accessToken = issueAccessToken(updatedUser.id);
   const refreshToken = issueRefreshToken(updatedUser.id);
 
-  // 3) Store hashed refresh token in DB
-  const refreshTokenHash = sha256(refreshToken);
-  const refreshExpiresAt = addDays(REFRESH_TOKEN_TTL_DAYS);
+  // 3) Store hashed refresh token in DB (pepper 포함)
+  const refreshTokenHash = hashRefreshTokenForDb(refreshToken);
+  const refreshExpiresAt = getJwtExpAsDate(refreshToken);
 
-  // NOTE: Prisma model name may differ. If TypeScript complains, adjust to match your Prisma client.
   await prisma.refreshToken.create({
     data: {
       userId: updatedUser.id,
@@ -332,4 +391,70 @@ export const signupUsername = async ({ username, authHeader }: SignupUsernameInp
     accessToken,
     refreshToken,
   };
+};
+
+/**
+ * POST /auth/refresh
+ * - verify refresh JWT + purpose
+ * - check DB session (not revoked, not expired)
+ * - rotate (revoke old, issue new pair, store new refresh hash)
+ */
+export const refreshAuthTokens = async ({ refreshToken }: RefreshAuthTokensInput) => {
+  const { userId } = verifyRefreshTokenJwt(refreshToken);
+
+  const tokenHash = hashRefreshTokenForDb(refreshToken);
+
+  const session = await prisma.refreshToken.findFirst({
+    where: {
+      tokenHash,
+      revokedAt: null,
+      expiresAt: { gt: new Date() },
+    },
+    select: { id: true },
+  });
+
+  if (!session) {
+    throw httpError(401, "refresh token revoked or not found");
+  }
+
+  // rotation: revoke old
+  await prisma.refreshToken.update({
+    where: { id: session.id },
+    data: { revokedAt: new Date() },
+  });
+
+  // issue new pair
+  const newAccessToken = issueAccessToken(userId);
+  const newRefreshToken = issueRefreshToken(userId);
+
+  // store new refresh session
+  await prisma.refreshToken.create({
+    data: {
+      userId,
+      tokenHash: hashRefreshTokenForDb(newRefreshToken),
+      expiresAt: getJwtExpAsDate(newRefreshToken),
+    },
+  });
+
+  return {
+    ok: true,
+    accessToken: newAccessToken,
+    refreshToken: newRefreshToken,
+  };
+};
+
+/**
+ * POST /auth/logout
+ * - revoke refresh session
+ */
+export const logout = async ({ refreshToken }: LogoutInput) => {
+  
+  const tokenHash = hashRefreshTokenForDb(refreshToken);
+
+  await prisma.refreshToken.updateMany({
+    where: { tokenHash, revokedAt: null },
+    data: { revokedAt: new Date() },
+  });
+
+  return { ok: true };
 };

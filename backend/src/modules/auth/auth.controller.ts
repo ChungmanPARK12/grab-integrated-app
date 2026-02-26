@@ -1,6 +1,12 @@
 // src/modules/auth/auth.controller.ts
 import type { Request, Response } from "express";
-import { requestSignupOtp, verifySignupOtp, signupUsername } from "./auth.service";
+import {
+  requestSignupOtp,
+  verifySignupOtp,
+  signupUsername,
+  refreshAuthTokens,
+  logout,
+} from "./auth.service";
 import { asyncHandler } from "../../libs/asyncHandler";
 
 /**
@@ -64,7 +70,6 @@ export const postSignupOtp = async (req: Request, res: Response) => {
  * Authorization: Bearer <tempToken>
  * Body: { username: string }
  */
-
 export const postSignupUsername = asyncHandler(async (req, res) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
@@ -81,5 +86,39 @@ export const postSignupUsername = asyncHandler(async (req, res) => {
   }
 
   const result = await signupUsername({ username, authHeader });
+  return res.status(200).json(result);
+});
+
+/**
+ * POST /auth/refresh
+ * Body: { refreshToken: string }
+ */
+export const postAuthRefresh = asyncHandler(async (req, res) => {
+  const { refreshToken } = req.body as { refreshToken?: string };
+
+  if (!refreshToken || typeof refreshToken !== "string") {
+    const e: any = new Error("refreshToken is required");
+    e.statusCode = 400;
+    throw e;
+  }
+
+  const result = await refreshAuthTokens({ refreshToken });
+  return res.status(200).json(result);
+});
+
+/**
+ * POST /auth/logout
+ * Body: { refreshToken: string }
+ */
+export const postAuthLogout = asyncHandler(async (req, res) => {
+  const { refreshToken } = req.body as { refreshToken?: string };
+
+  if (!refreshToken || typeof refreshToken !== "string") {
+    const e: any = new Error("refreshToken is required");
+    e.statusCode = 400;
+    throw e;
+  }
+
+  const result = await logout({ refreshToken });
   return res.status(200).json(result);
 });
