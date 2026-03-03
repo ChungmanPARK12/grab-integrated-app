@@ -3,6 +3,11 @@ import { prisma } from "../../libs/prisma";
 import { generateOtp, hashOtp } from "./otp.util";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import {
+  findValidRefreshToken,
+  revokeRefreshToken,
+  storeRefreshToken,
+} from "./refreshToken.util";
 
 type RequestSignupOtpInput = {
   phone: string;
@@ -89,8 +94,9 @@ const verifyTempToken = (authHeader: string) => {
 
 const issueAccessToken = (userId: string) => {
   const secret = process.env.JWT_ACCESS_SECRET;
-  if (!secret)
+  if (!secret) {
     throw httpError(500, "server misconfigured: missing JWT_ACCESS_SECRET");
+  }
 
   return jwt.sign(
     {
@@ -104,8 +110,9 @@ const issueAccessToken = (userId: string) => {
 
 const issueRefreshToken = (userId: string) => {
   const secret = process.env.JWT_REFRESH_SECRET;
-  if (!secret)
+  if (!secret) {
     throw httpError(500, "server misconfigured: missing JWT_REFRESH_SECRET");
+  }
 
   return jwt.sign(
     {
@@ -126,18 +133,11 @@ const getJwtExpAsDate = (token: string): Date => {
   return new Date(decoded.exp * 1000);
 };
 
-const hashRefreshTokenForDb = (refreshToken: string): string => {
-  const pepper = process.env.JWT_REFRESH_PEPPER;
-  if (!pepper) {
-    throw httpError(500, "server misconfigured: missing JWT_REFRESH_PEPPER");
-  }
-  return sha256(refreshToken + pepper);
-};
-
 const verifyRefreshTokenJwt = (refreshToken: string) => {
   const secret = process.env.JWT_REFRESH_SECRET;
-  if (!secret)
+  if (!secret) {
     throw httpError(500, "server misconfigured: missing JWT_REFRESH_SECRET");
+  }
 
   try {
     const payload = jwt.verify(refreshToken, secret) as any;
@@ -373,16 +373,11 @@ export const signupUsername = async ({
   const accessToken = issueAccessToken(updatedUser.id);
   const refreshToken = issueRefreshToken(updatedUser.id);
 
-  // 3) Store hashed refresh token in DB (pepper 포함)
-  const refreshTokenHash = hashRefreshTokenForDb(refreshToken);
-  const refreshExpiresAt = getJwtExpAsDate(refreshToken);
-
-  await prisma.refreshToken.create({
-    data: {
-      userId: updatedUser.id,
-      tokenHash: refreshTokenHash,
-      expiresAt: refreshExpiresAt,
-    },
+  // 3) Store refresh token session in DB (hashed + peppered)
+  await storeRefreshToken({
+    userId: updatedUser.id,
+    refreshToken,
+    expiresAt: getJwtExpAsDate(refreshToken),
   });
 
   return {
@@ -399,41 +394,34 @@ export const signupUsername = async ({
  * - check DB session (not revoked, not expired)
  * - rotate (revoke old, issue new pair, store new refresh hash)
  */
-export const refreshAuthTokens = async ({ refreshToken }: RefreshAuthTokensInput) => {
+export const refreshAuthTokens = async ({
+  refreshToken,
+}: RefreshAuthTokensInput) => {
   const { userId } = verifyRefreshTokenJwt(refreshToken);
 
-  const tokenHash = hashRefreshTokenForDb(refreshToken);
-
-  const session = await prisma.refreshToken.findFirst({
-    where: {
-      tokenHash,
-      revokedAt: null,
-      expiresAt: { gt: new Date() },
-    },
-    select: { id: true },
-  });
-
+  // Validate refresh token session in DB
+  const session = await findValidRefreshToken(refreshToken);
   if (!session) {
     throw httpError(401, "refresh token revoked or not found");
   }
 
-  // rotation: revoke old
-  await prisma.refreshToken.update({
-    where: { id: session.id },
-    data: { revokedAt: new Date() },
-  });
+  // Extra safety: ensure session belongs to the same user
+  if (session.userId !== userId) {
+    throw httpError(401, "token user mismatch");
+  }
 
-  // issue new pair
+  // Rotate: revoke old refresh token (idempotent)
+  await revokeRefreshToken(refreshToken);
+
+  // Issue new pair
   const newAccessToken = issueAccessToken(userId);
   const newRefreshToken = issueRefreshToken(userId);
 
-  // store new refresh session
-  await prisma.refreshToken.create({
-    data: {
-      userId,
-      tokenHash: hashRefreshTokenForDb(newRefreshToken),
-      expiresAt: getJwtExpAsDate(newRefreshToken),
-    },
+  // Store new refresh session
+  await storeRefreshToken({
+    userId,
+    refreshToken: newRefreshToken,
+    expiresAt: getJwtExpAsDate(newRefreshToken),
   });
 
   return {
@@ -445,16 +433,9 @@ export const refreshAuthTokens = async ({ refreshToken }: RefreshAuthTokensInput
 
 /**
  * POST /auth/logout
- * - revoke refresh session
+ * - revoke refresh session (idempotent)
  */
 export const logout = async ({ refreshToken }: LogoutInput) => {
-  
-  const tokenHash = hashRefreshTokenForDb(refreshToken);
-
-  await prisma.refreshToken.updateMany({
-    where: { tokenHash, revokedAt: null },
-    data: { revokedAt: new Date() },
-  });
-
+  await revokeRefreshToken(refreshToken);
   return { ok: true };
 };

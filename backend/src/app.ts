@@ -1,3 +1,4 @@
+// src/app
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -17,6 +18,14 @@ export const createApp = () => {
   app.get('/health', (_req, res) => res.json({ ok: true }));
 
   app.use('/api', routes);
+
+  app.use((_req, _res, next) => {
+  const e: any = new Error("not found");
+  e.statusCode = 404;
+  e.code = "NOT_FOUND";
+  next(e);
+  });
+
   app.use(errorHandler);
 
   return app;

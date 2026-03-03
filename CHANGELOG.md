@@ -751,7 +751,7 @@ Route (Express Router)
 
 ### Future Plan
 
-#### 1. Signup Finalization
+#### 1. Signup Finalization - Completed
 - Define Signup completion criteria (DoD)
 - Standardize error handling in controllers
 - Freeze API request/response specification
@@ -778,6 +778,56 @@ Route (Express Router)
 - User profile API
 - Core service/domain modeling
 - Order / QR-based system planning
+
+## [2026-03-02]
+
+### 1.Signup Finalization
+
+- Refactored controllers to use `asyncHandler` for centralized async error flow
+- Standardized global error response format via `errorHandler`
+- Added custom 404 handler to unify unknown route responses
+- Restructured API paths:
+  - `/api/signup/*`
+  - `/api/auth/*`
+- Verified full Signup E2E flow (OTP → Username → Token Issue)
+- Validated DB state consistency after successful signup
+
+### 2.Auth Stabilization
+
+- Enforced explicit JWT algorithm (`HS256`)
+- Separated access & refresh token secrets
+- Introduced strict token payload types
+- Added type-safe verify logic
+
+### Middleware
+
+- Implemented `requireAuth` (Bearer parsing + access verification)
+- Injected authenticated user into `req.user`
+- Standardized 401 handling
+
+### Type Safety
+
+- Extended Express `Request` type (`req.user`)
+- Centralized authentication logic into middleware
+
+## [2026-03-02]
+
+### 2. Auth Stabilization — Phase 2 Progress (Refresh Sessions)
+
+- Consolidated all refresh-token hashing + DB session operations into `refreshToken.util.ts`
+  - `hashRefreshToken` uses `JWT_REFRESH_PEPPER` (fail-fast if missing)
+  - `storeRefreshToken`, `findValidRefreshToken`, `revokeRefreshToken` centralized
+
+- Updated `auth.service.ts`
+  - Removed duplicated refresh-token hashing/storage logic (e.g. `hashRefreshTokenForDb`)
+  - Unified refresh session storage via `storeRefreshToken()`
+  - Refresh rotation flow uses utils (validate → revoke → issue new pair → store new session)
+
+- Updated `auth.controller.ts`
+  - Changed logout response to `204 No Content`
+  - Noted: controller-level `httpError` + `requireString` will be extracted later for reuse
+
+
 
 
 

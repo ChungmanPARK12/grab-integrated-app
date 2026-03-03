@@ -1,11 +1,23 @@
 // src/modules/auth/jwt.util.ts
-import jwt, { type Secret, type SignOptions } from "jsonwebtoken";
+import jwt, { type Secret, type SignOptions, type JwtPayload } from "jsonwebtoken";
 
 const ACCESS_EXPIRES_IN: SignOptions["expiresIn"] =
   (process.env.ACCESS_TOKEN_EXPIRES_IN as SignOptions["expiresIn"]) ?? "15m";
 
 const REFRESH_EXPIRES_IN: SignOptions["expiresIn"] =
   (process.env.REFRESH_TOKEN_EXPIRES_IN as SignOptions["expiresIn"]) ?? "30d";
+
+const JWT_ALG: SignOptions["algorithm"] = "HS256";
+
+export type AccessTokenPayload = {
+  sub: string; // userId
+  role?: "user" | "admin"; 
+};
+
+export type RefreshTokenPayload = {
+  sub: string; // userId
+  ver: number; // refresh token version (rotation / revoke 대응)
+};
 
 const getAccessSecret = (): Secret => {
   const secret = process.env.JWT_ACCESS_SECRET;
@@ -19,20 +31,27 @@ const getRefreshSecret = (): Secret => {
   return secret as Secret;
 };
 
-export const signAccessToken = (payload: object): string => {
-  const options: SignOptions = { expiresIn: ACCESS_EXPIRES_IN };
+export const signAccessToken = (payload: AccessTokenPayload): string => {
+  const options: SignOptions = { expiresIn: ACCESS_EXPIRES_IN, algorithm: JWT_ALG };
   return jwt.sign(payload, getAccessSecret(), options);
 };
 
-export const signRefreshToken = (payload: object): string => {
-  const options: SignOptions = { expiresIn: REFRESH_EXPIRES_IN };
+export const signRefreshToken = (payload: RefreshTokenPayload): string => {
+  const options: SignOptions = { expiresIn: REFRESH_EXPIRES_IN, algorithm: JWT_ALG };
   return jwt.sign(payload, getRefreshSecret(), options);
 };
 
-export const verifyAccessToken = (token: string) => {
-  return jwt.verify(token, getAccessSecret());
+const assertJwtPayloadObject = (decoded: string | JwtPayload): JwtPayload => {
+  if (typeof decoded === "string") throw new Error("invalid token payload");
+  return decoded;
 };
 
-export const verifyRefreshToken = (token: string) => {
-  return jwt.verify(token, getRefreshSecret());
+export const verifyAccessToken = (token: string): AccessTokenPayload & JwtPayload => {
+  const decoded = jwt.verify(token, getAccessSecret(), { algorithms: [JWT_ALG] });
+  return assertJwtPayloadObject(decoded) as AccessTokenPayload & JwtPayload;
+};
+
+export const verifyRefreshToken = (token: string): RefreshTokenPayload & JwtPayload => {
+  const decoded = jwt.verify(token, getRefreshSecret(), { algorithms: [JWT_ALG] });
+  return assertJwtPayloadObject(decoded) as RefreshTokenPayload & JwtPayload;
 };

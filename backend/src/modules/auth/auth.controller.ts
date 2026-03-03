@@ -1,5 +1,6 @@
 // src/modules/auth/auth.controller.ts
 import type { Request, Response } from "express";
+import { asyncHandler } from "../../libs/asyncHandler";
 import {
   requestSignupOtp,
   verifySignupOtp,
@@ -7,83 +8,64 @@ import {
   refreshAuthTokens,
   logout,
 } from "./auth.service";
-import { asyncHandler } from "../../libs/asyncHandler";
+
+const httpError = (statusCode: number, message: string) => {
+  const e: any = new Error(message);
+  e.statusCode = statusCode;
+  return e;
+};
+
+const requireString = (value: unknown, fieldName: string) => {
+  if (!value || typeof value !== "string") {
+    throw httpError(400, `${fieldName} is required`);
+  }
+  return value;
+};
 
 /**
  * POST /signup/phone
  * Body: { phone: string }
  */
-export const postSignupPhone = async (req: Request, res: Response) => {
-  try {
-    const { phone } = req.body as { phone?: string };
+export const postSignupPhone = asyncHandler(async (req: Request, res: Response) => {
+  const phone = requireString((req.body as any)?.phone, "phone");
 
-    if (!phone || typeof phone !== "string") {
-      return res.status(400).json({ message: "phone is required" });
-    }
+  const result = await requestSignupOtp({
+    phone,
+    ip: req.ip,
+    userAgent: req.get("user-agent") ?? undefined,
+  });
 
-    const result = await requestSignupOtp({
-      phone,
-      ip: req.ip,
-      userAgent: req.get("user-agent") ?? undefined,
-    });
-
-    return res.status(200).json(result);
-  } catch (err: any) {
-    const message = err?.message ?? "Internal Server Error";
-    const status = err?.statusCode ?? 500;
-    return res.status(status).json({ message });
-  }
-};
+  return res.status(200).json(result);
+});
 
 /**
  * POST /signup/otp
  * Body: { requestId: string, otp: string }
  */
-export const postSignupOtp = async (req: Request, res: Response) => {
-  try {
-    const { requestId, otp } = req.body as { requestId?: string; otp?: string };
+export const postSignupOtp = asyncHandler(async (req: Request, res: Response) => {
+  const requestId = requireString((req.body as any)?.requestId, "requestId");
+  const otp = requireString((req.body as any)?.otp, "otp");
 
-    if (!requestId || typeof requestId !== "string") {
-      return res.status(400).json({ message: "requestId is required" });
-    }
-    if (!otp || typeof otp !== "string") {
-      return res.status(400).json({ message: "otp is required" });
-    }
+  const result = await verifySignupOtp({
+    requestId,
+    otp,
+    ip: req.ip,
+    userAgent: req.get("user-agent") ?? undefined,
+  });
 
-    const result = await verifySignupOtp({
-      requestId,
-      otp,
-      ip: req.ip,
-      userAgent: req.get("user-agent") ?? undefined,
-    });
-
-    return res.status(200).json(result);
-  } catch (err: any) {
-    const message = err?.message ?? "Internal Server Error";
-    const status = err?.statusCode ?? 500;
-    return res.status(status).json({ message });
-  }
-};
+  return res.status(200).json(result);
+});
 
 /**
  * POST /signup/username
  * Authorization: Bearer <tempToken>
  * Body: { username: string }
  */
-export const postSignupUsername = asyncHandler(async (req, res) => {
+export const postSignupUsername = asyncHandler(async (req: Request, res: Response) => {
   const authHeader = req.headers.authorization;
-  if (!authHeader) {
-    const e: any = new Error("missing authorization");
-    e.statusCode = 401;
-    throw e;
-  }
+  if (!authHeader) throw httpError(401, "missing authorization");
 
-  const { username } = req.body as { username?: string };
-  if (!username) {
-    const e: any = new Error("username is required");
-    e.statusCode = 400;
-    throw e;
-  }
+  const username = requireString((req.body as any)?.username, "username");
 
   const result = await signupUsername({ username, authHeader });
   return res.status(200).json(result);
@@ -93,14 +75,8 @@ export const postSignupUsername = asyncHandler(async (req, res) => {
  * POST /auth/refresh
  * Body: { refreshToken: string }
  */
-export const postAuthRefresh = asyncHandler(async (req, res) => {
-  const { refreshToken } = req.body as { refreshToken?: string };
-
-  if (!refreshToken || typeof refreshToken !== "string") {
-    const e: any = new Error("refreshToken is required");
-    e.statusCode = 400;
-    throw e;
-  }
+export const postAuthRefresh = asyncHandler(async (req: Request, res: Response) => {
+  const refreshToken = requireString((req.body as any)?.refreshToken, "refreshToken");
 
   const result = await refreshAuthTokens({ refreshToken });
   return res.status(200).json(result);
@@ -110,15 +86,9 @@ export const postAuthRefresh = asyncHandler(async (req, res) => {
  * POST /auth/logout
  * Body: { refreshToken: string }
  */
-export const postAuthLogout = asyncHandler(async (req, res) => {
-  const { refreshToken } = req.body as { refreshToken?: string };
+export const postAuthLogout = asyncHandler(async (req: Request, res: Response) => {
+  const refreshToken = requireString((req.body as any)?.refreshToken, "refreshToken");
 
-  if (!refreshToken || typeof refreshToken !== "string") {
-    const e: any = new Error("refreshToken is required");
-    e.statusCode = 400;
-    throw e;
-  }
-
-  const result = await logout({ refreshToken });
-  return res.status(200).json(result);
+  await logout({ refreshToken });
+  return res.sendStatus(204);
 });

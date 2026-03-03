@@ -1,11 +1,17 @@
-// refreshToken.utils
+// modules/auth/refreshToken.utils
 import crypto from 'crypto';
 import { prisma } from "../../libs/prisma";
 
 export const hashRefreshToken = (token: string): string => {
+  const pepper = process.env.JWT_REFRESH_PEPPER;
+
+  if (!pepper) {
+    throw new Error("server misconfigured: missing JWT_REFRESH_PEPPER");
+  }
+
   return crypto
     .createHash('sha256')
-    .update(token + process.env.REFRESH_TOKEN_PEPPER!)
+    .update(token + pepper)
     .digest('hex');
 };
 
