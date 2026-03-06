@@ -5,8 +5,11 @@ import {
   requestSignupOtp,
   verifySignupOtp,
   signupUsername,
+  requestLoginOtp,
+  verifyLoginOtp,
   refreshAuthTokens,
   logout,
+  getAuthMe as getAuthMeService,
 } from "./auth.service";
 
 const httpError = (statusCode: number, message: string) => {
@@ -72,6 +75,40 @@ export const postSignupUsername = asyncHandler(async (req: Request, res: Respons
 });
 
 /**
+ * POST /login/phone
+ * Body: { phone: string }
+ */
+export const postLoginPhone = asyncHandler(async (req: Request, res: Response) => {
+  const phone = requireString((req.body as any)?.phone, "phone");
+
+  const result = await requestLoginOtp({
+    phone,
+    ip: req.ip,
+    userAgent: req.get("user-agent") ?? undefined,
+  });
+
+  return res.status(200).json(result);
+});
+
+/**
+ * POST /login/otp
+ * Body: { requestId: string, otp: string }
+ */
+export const postLoginOtp = asyncHandler(async (req: Request, res: Response) => {
+  const requestId = requireString((req.body as any)?.requestId, "requestId");
+  const otp = requireString((req.body as any)?.otp, "otp");
+
+  const result = await verifyLoginOtp({
+    requestId,
+    otp,
+    ip: req.ip,
+    userAgent: req.get("user-agent") ?? undefined,
+  });
+
+  return res.status(200).json(result);
+});
+
+/**
  * POST /auth/refresh
  * Body: { refreshToken: string }
  */
@@ -91,4 +128,16 @@ export const postAuthLogout = asyncHandler(async (req: Request, res: Response) =
 
   await logout({ refreshToken });
   return res.sendStatus(204);
+});
+
+/**
+ * GET /auth/me
+ * Authorization: Bearer <accessToken>
+ */
+export const getAuthMe = asyncHandler(async (req: Request, res: Response) => {
+  if (!req.user?.userId) throw httpError(401, "unauthorized");
+
+  const user = await getAuthMeService(req.user.userId);
+
+  return res.status(200).json(user);
 });

@@ -11,31 +11,29 @@ class UnauthorizedError extends Error {
 
 const parseBearer = (req: Request): string => {
   const header = req.headers.authorization;
-
   if (!header) throw new UnauthorizedError("Missing Authorization header");
 
   const [scheme, token] = header.split(" ");
-
-  if (scheme !== "Bearer" || !token) {
+  if (scheme?.toLowerCase() !== "bearer" || !token) {
     throw new UnauthorizedError("Invalid Authorization header format");
   }
-
   return token;
+};
+
+const normalizeRole = (role: unknown): "user" | "admin" | undefined => {
+  return role === "user" || role === "admin" ? role : undefined;
 };
 
 export const requireAuth = (req: Request, _res: Response, next: NextFunction) => {
   try {
     const token = parseBearer(req);
-
     const decoded = verifyAccessToken(token);
 
-    req.user = {
-      userId: decoded.sub,
-      role: decoded.role,
-    };
+    if (!decoded.sub) throw new UnauthorizedError("Invalid token payload");
 
-    next();
+    req.user = { userId: decoded.sub, role: normalizeRole(decoded.role) };
+    return next();
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };

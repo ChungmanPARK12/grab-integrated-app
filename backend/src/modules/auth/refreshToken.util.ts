@@ -51,3 +51,20 @@ export const revokeRefreshToken = async (refreshToken: string) => {
     data: { revokedAt: new Date() },
   });
 };
+
+export const cleanupExpiredRefreshTokens = async () => {
+  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+
+  await prisma.refreshToken.deleteMany({
+    where: {
+      OR: [
+        {
+          expiresAt: { lt: new Date() },
+        },
+        {
+          revokedAt: { lt: sevenDaysAgo },
+        },
+      ],
+    },
+  });
+};

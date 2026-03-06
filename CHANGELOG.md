@@ -827,6 +827,121 @@ Route (Express Router)
   - Changed logout response to `204 No Content`
   - Noted: controller-level `httpError` + `requireString` will be extracted later for reuse
 
+### Phase 2-2 — JWT / Refresh Layer Separation
+
+- Centralized all JWT access/refresh logic into `jwt.util.ts`
+  - Enforced HS256 algorithm
+  - Introduced `typ` (ACCESS / REFRESH) to prevent token confusion
+  - Added strict verification via `verifyAccessToken` / `verifyRefreshToken`
+
+- Removed duplicated JWT logic from `auth.service.ts`
+  - Deleted `issueAccessToken`, `issueRefreshToken`
+  - Deleted `verifyRefreshTokenJwt`
+  - Replaced with `signAccessToken`, `signRefreshToken`, `verifyRefreshToken`
+
+- Fully separated refresh token session handling into `refreshToken.util.ts`
+  - Hash + pepper logic centralized
+  - DB session validation via `findValidRefreshToken`
+  - Rotation handled via `revokeRefreshToken` + `storeRefreshToken`
+
+- `auth.service.ts` now strictly handles business flow only
+  - No direct crypto hashing
+  - No direct JWT signing/verification for access/refresh
+  - Delegates infra concerns to utility layers
+
+## [2026-03-05]
+
+### 2. Auth Stabilization — Phase 3
+
+**Added**
+
+- `requireAuth` middleware for Access Token verification
+- Extracts token from `Authorization: Bearer <token>`
+
+**Type Extension**
+
+- Extended Express `Request` type to support `req.user`
+
+**Protected Route**
+
+- Added authenticated endpoint:
+
+GET /auth/me
+
+- Returns current authenticated user from Access Token
+
+**Router Update**
+
+- Applied `requireAuth` middleware to protected route
+
+**Authorization**
+
+- Added `requireRole` middleware for role-based access control
+- Supports role validation such as `"admin"` or `"user"`
+
+Example usage:
+ - requireAuth -> requireRole("admin") -> controller
+ 
+ - **Client** -> **requireAuth**(Authentication) -> **requireRole**(Authorization) -> **Controller**(HTTP request / response handling) -> **Service**(Business logic) -> **Prisma**(Database access)
+
+## [2026-03-06]
+
+### 3. Login Expansion
+
+**Added**
+
+- Extended OTP flow to support `LOGIN` purpose
+- Implemented login endpoints
+- POST/login/phone, POST/login/otp
+
+
+**Service**
+
+- Added `requestLoginOtp` and `verifyLoginOtp` in `auth.service.ts`
+
+**Controller**
+
+- Added `postLoginPhone` and `postLoginOtp` in `auth.controller.ts`
+
+**Routing**
+
+- Added `login.routes.ts`
+- Registered `loginRouter` in `routes/index.ts`
+
+**Architecture**
+
+- Separated signup and login flows
+
+### 4. Security & Cleanup
+
+**Added**
+
+- Basic rate limiting middleware (`authRateLimit`)
+- Applied rate limiting to auth endpoints
+- Auth event logging via `authLogger`
+- Refresh token session cleanup policy
+
+**Routing**
+
+- Integrated `authRateLimit` in `signup.routes`, `login.routes`, and `auth.routes`
+
+**Verification**
+
+- Confirmed `429 Too Many Requests` response after exceeding request limit
+- Verified rate limiting using repeated requests to `/login/phone` in Postman
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
