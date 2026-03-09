@@ -1,4 +1,4 @@
-// Root/src/providers/AuthProvider.tsx
+// src/providers/AuthProvider.tsx
 import React, {
   createContext,
   useContext,
@@ -11,7 +11,13 @@ import React, {
 
 type AuthContextValue = {
   isSignedIn: boolean;
-  signIn: (reason?: string) => void;
+  accessToken: string | null;
+  refreshToken: string | null;
+  signIn: (
+    accessToken: string,
+    refreshToken: string,
+    reason?: string
+  ) => void;
   signOut: (reason?: string) => void;
 };
 
@@ -19,30 +25,47 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [refreshToken, setRefreshToken] = useState<string | null>(null);
 
-  // Log whenever auth state changes (single source of truth)
   useEffect(() => {
-    console.log(`[Auth] state changed -> isSignedIn=${isSignedIn}`);
-  }, [isSignedIn]);
+    console.log(
+      `[Auth] state changed -> isSignedIn=${isSignedIn}, accessToken=${accessToken ? 'set' : 'null'}, refreshToken=${refreshToken ? 'set' : 'null'}`
+    );
+  }, [isSignedIn, accessToken, refreshToken]);
 
-  // Log when signIn/signOut is called (who/why)
-  const signIn = useCallback((reason?: string) => {
-    console.log(`[Auth] signIn called${reason ? ` | reason=${reason}` : ''}`);
-    setIsSignedIn(true);
-  }, []);
+  const signIn = useCallback(
+    (nextAccessToken: string, nextRefreshToken: string, reason?: string) => {
+      console.log(
+        `[Auth] signIn called${reason ? ` | reason=${reason}` : ''}`
+      );
+
+      setAccessToken(nextAccessToken);
+      setRefreshToken(nextRefreshToken);
+      setIsSignedIn(true);
+    },
+    []
+  );
 
   const signOut = useCallback((reason?: string) => {
-    console.log(`[Auth] signOut called${reason ? ` | reason=${reason}` : ''}`);
+    console.log(
+      `[Auth] signOut called${reason ? ` | reason=${reason}` : ''}`
+    );
+
+    setAccessToken(null);
+    setRefreshToken(null);
     setIsSignedIn(false);
   }, []);
 
   const value = useMemo<AuthContextValue>(
     () => ({
       isSignedIn,
+      accessToken,
+      refreshToken,
       signIn,
       signOut,
     }),
-    [isSignedIn, signIn, signOut]
+    [isSignedIn, accessToken, refreshToken, signIn, signOut]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

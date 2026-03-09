@@ -16,9 +16,47 @@ import { useAuth } from '@/src/providers/AuthProvider';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'GetStartedName'>;
 
-const GetUsername = ({ navigation, route }: Props) => {
-  const { phoneNumber, countryCode } = route.params;
+const BASE_URL = 'http://192.168.20.9:3000';
+
+const completeSignupUsername = async (username: string, tempToken: string) => {
+  const response = await fetch(`${BASE_URL}/signup/username`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${tempToken}`,
+    },
+    body: JSON.stringify({ username }),
+  });
+
+  const data = await response.json().catch(() => null);
+
+  if (!response.ok) {
+    const message =
+      data?.message || data?.error || `Request failed: ${response.status}`;
+    throw new Error(message);
+  }
+
+  return data as {
+    ok: true;
+    user: {
+      id: string;
+      phone: string;
+      username: string | null;
+      role: 'user' | 'admin';
+      isVerified: boolean;
+      signupCompleted: boolean;
+    };
+    accessToken: string;
+    refreshToken: string;
+  };
+};
+
+const GetStartedNameScreen = ({ navigation, route }: Props) => {
+  const { phoneNumber, tempToken } = route.params;
+
   const [username, setUsername] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const { signIn } = useAuth();
 
@@ -26,18 +64,31 @@ const GetUsername = ({ navigation, route }: Props) => {
     navigation.setOptions({
       headerShown: true,
       title: 'Get Started',
-  
     });
   }, [navigation]);
 
-  const isNextEnabled = useMemo(() => username.trim().length > 0, [username]);
+  const isNextEnabled = useMemo(() => {
+    return username.trim().length > 0 && !loading;
+  }, [username, loading]);
 
-  const onNext = () => {
-    if (!isNextEnabled) return;
+  const onNext = async () => {
+  if (!isNextEnabled) return;
 
-    // Switch to Main by updating the global auth state
-    signIn();
-  };
+  try {
+    setLoading(true);
+    setErrorMessage('');
+
+    const result = await completeSignupUsername(username.trim(), tempToken);
+
+    signIn(result.accessToken, result.refreshToken, 'signup completed');
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : 'Failed to complete signup';
+    setErrorMessage(message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <KeyboardAvoidingView
@@ -46,16 +97,26 @@ const GetUsername = ({ navigation, route }: Props) => {
     >
       <View style={styles.content}>
         <Text style={styles.label}>Name</Text>
-        <Text style={styles.question}>What should people call you?</Text>
+        <Text style={styles.question}>
+          What should people call you?
+        </Text>
+
+        <Text style={styles.phoneText}>{phoneNumber}</Text>
 
         <TextInput
           value={username}
-          onChangeText={setUsername}
+          onChangeText={(text) => {
+            setUsername(text);
+            setErrorMessage('');
+          }}
           placeholder=""
           autoFocus
           returnKeyType="done"
           style={styles.input}
+          editable={!loading}
         />
+
+        {!!errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
 
         <Text style={styles.terms}>
           By continuing, you confirm you&apos;ve read and agree to our{' '}
@@ -77,7 +138,7 @@ const GetUsername = ({ navigation, route }: Props) => {
               !isNextEnabled && styles.nextTextDisabled,
             ]}
           >
-            Next
+            {loading ? 'Creating...' : 'Next'}
           </Text>
         </Pressable>
       </View>
@@ -85,10 +146,13 @@ const GetUsername = ({ navigation, route }: Props) => {
   );
 };
 
-export default GetUsername;
+export default GetStartedNameScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
 
   content: {
     paddingHorizontal: 20,
@@ -105,6 +169,11 @@ const styles = StyleSheet.create({
     color: '#9a9a9a',
     marginBottom: 10,
   },
+  phoneText: {
+    fontSize: 13,
+    color: '#666',
+    marginBottom: 14,
+  },
 
   input: {
     height: 44,
@@ -114,6 +183,12 @@ const styles = StyleSheet.create({
     color: '#111',
     paddingVertical: 8,
     marginBottom: 18,
+  },
+
+  errorText: {
+    color: '#d93025',
+    fontSize: 14,
+    marginBottom: 12,
   },
 
   terms: {

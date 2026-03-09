@@ -928,7 +928,33 @@ Example usage:
 **Verification**
 
 - Confirmed `429 Too Many Requests` response after exceeding request limit
-- Verified rate limiting using repeated requests to `/login/phone` in Postman
+- Verified rate limiting using repeated requests to `/login/phone` in 
+
+## [2026-03-09] - [2026-03-10]
+
+### 5. Frontend Auth Integration — Signup Flow
+
+**Added**
+
+- Connected `/signup/phone` API in `GetStartedPhoneScreen`
+- Connected `/signup/otp` API in `VerifyOtpScreen`
+- Connected `/signup/username` API in `GetStartedNameScreen`
+- Implemented OTP verification input and error handling
+- Added 60-second OTP expiration countdown based on `expiresAt`
+- Passed `requestId`, `tempToken`, and OTP metadata through navigation params
+
+**Updated**
+
+- Extended `AuthProvider` to support `accessToken` and `refreshToken`
+- Updated `signIn(accessToken, refreshToken)` flow after signup completion
+- Updated `GetStartedNameScreen` to call `signIn()` with issued tokens
+- Configured `BASE_URL` for backend API connection
+
+**Notes**
+
+- Secure token storage (SecureStore) not implemented yet
+- Session restore and refresh token flow planned next
+- End-to-end signup flow testing scheduled next session
 
 
 

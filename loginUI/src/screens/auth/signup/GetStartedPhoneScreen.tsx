@@ -1,7 +1,7 @@
 // src/login/components/GetStartedPhoneScreen.tsx
 import React, { useEffect, useMemo, useState } from 'react';
 import { AuthStackParamList } from '@login/navigation/types';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
   View,
   Text,
@@ -16,22 +16,49 @@ import CountryPicker, {
   CountryCode,
 } from 'react-native-country-picker-modal';
 
-type NavigationProp = NativeStackNavigationProp<AuthStackParamList, 'GetStartedSignup'>;
+type Props = NativeStackScreenProps<AuthStackParamList, 'GetStartedSignup'>;
 
-const GetStartedPhoneScreen = ({ navigation }: any) => {
+const BASE_URL = 'http://192.168.20.9:3000';
+
+const requestSignupPhone = async (phone: string) => {
+  const response = await fetch(`${BASE_URL}/signup/phone`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ phone }),
+  });
+
+  const data = await response.json().catch(() => null);
+
+  if (!response.ok) {
+    const message =
+      data?.message || data?.error || `Request failed: ${response.status}`;
+    throw new Error(message);
+  }
+
+  return data as {
+    requestId: string;
+    expiresAt: string;
+    devOtp?: string;
+  };
+};
+
+const GetStartedPhoneScreen = ({ navigation }: Props) => {
   // Default country: Australia
   const [countryCode, setCountryCode] = useState<CountryCode>('AU');
   const [callingCode, setCallingCode] = useState<string>('61');
   const [isPickerVisible, setIsPickerVisible] = useState(false);
 
   const [phone, setPhone] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   // Enable native stack navigation and back behavior
   useEffect(() => {
     navigation.setOptions({
       headerShown: true,
       title: 'Get Started',
-      
     });
   }, [navigation]);
 
@@ -41,24 +68,43 @@ const GetStartedPhoneScreen = ({ navigation }: any) => {
 
   const onSelectCountry = (country: Country) => {
     setCountryCode(country.cca2);
-    // callingCode is an array in the library (some countries have multiple codes, pick only firstone)
+
+    // callingCode is an array in the library
     const firstCode = country.callingCode?.[0] ?? '';
     if (firstCode) setCallingCode(firstCode);
+
     setIsPickerVisible(false);
   };
 
   // Clear phone input value
   const onClear = () => setPhone('');
 
-  // Guard against invalid state before navigating to the next step
-  const onNext = () => {
-  if (!isValid) return;
+  const onNext = async () => {
+    if (!isValid || loading) return;
 
-  navigation.navigate('VerifyOtp', {
-    phoneNumber: cleanedPhone,
-    countryCode: `+${callingCode}`,
-  });
-};
+    const fullPhone = `+${callingCode}${cleanedPhone}`;
+
+    try {
+      setLoading(true);
+      setErrorMessage('');
+
+      const result = await requestSignupPhone(fullPhone);
+
+      navigation.navigate('VerifyOtp', {
+        phoneNumber: fullPhone,
+        requestId: result.requestId,
+        expiresAt: result.expiresAt,
+        devOtp: result.devOtp,
+        flow: 'signup',
+      } as never);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Failed to request signup OTP';
+      setErrorMessage(message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -69,7 +115,6 @@ const GetStartedPhoneScreen = ({ navigation }: any) => {
         <Text style={styles.label}>Phone Number</Text>
 
         <View style={styles.row}>
-          {/* Country code selector */}
           <Pressable
             style={styles.countryBox}
             onPress={() => setIsPickerVisible(true)}
@@ -91,7 +136,6 @@ const GetStartedPhoneScreen = ({ navigation }: any) => {
             <Text style={styles.chev}>▾</Text>
           </Pressable>
 
-          {/* Phone input, no TouchableOpacity here for state management */}
           <View style={[styles.inputWrap, phone.length > 0 && styles.inputWrapActive]}>
             <TextInput
               value={phone}
@@ -101,9 +145,10 @@ const GetStartedPhoneScreen = ({ navigation }: any) => {
               returnKeyType="done"
               style={styles.input}
               autoFocus
+              editable={!loading}
             />
 
-            {phone.length > 0 && (
+            {phone.length > 0 && !loading && (
               <Pressable onPress={onClear} hitSlop={10} style={styles.clearBtn}>
                 <Text style={styles.clearText}>×</Text>
               </Pressable>
@@ -112,14 +157,18 @@ const GetStartedPhoneScreen = ({ navigation }: any) => {
         </View>
       </View>
 
+      {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+
       <View style={styles.bottom}>
         <Pressable
           onPress={onNext}
-          disabled={!isValid}
-          style={[styles.nextBtn, !isValid && styles.nextBtnDisabled]}
+          disabled={!isValid || loading}
+          style={[styles.nextBtn, (!isValid || loading) && styles.nextBtnDisabled]}
         >
-          <Text style={[styles.nextText, !isValid && styles.nextTextDisabled]}>
-            Next
+          <Text
+            style={[styles.nextText, (!isValid || loading) && styles.nextTextDisabled]}
+          >
+            {loading ? 'Sending...' : 'Next'}
           </Text>
         </Pressable>
       </View>
@@ -130,12 +179,26 @@ const GetStartedPhoneScreen = ({ navigation }: any) => {
 export default GetStartedPhoneScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
 
-  content: { paddingHorizontal: 20, paddingTop: 24 },
-  label: { fontSize: 14, color: '#333', marginBottom: 10 },
+  content: {
+    paddingHorizontal: 20,
+    paddingTop: 24,
+  },
+  label: {
+    fontSize: 14,
+    color: '#333',
+    marginBottom: 10,
+  },
 
-  row: { flexDirection: 'row', gap: 12, alignItems: 'center' },
+  row: {
+    flexDirection: 'row',
+    gap: 12,
+    alignItems: 'center',
+  },
 
   countryBox: {
     height: 48,
@@ -153,8 +216,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
-  countryText: { fontSize: 16, color: '#111' },
-  chev: { fontSize: 14, color: '#555', marginLeft: 8 },
+  countryText: {
+    fontSize: 16,
+    color: '#111',
+  },
+  chev: {
+    fontSize: 14,
+    color: '#555',
+    marginLeft: 8,
+  },
 
   inputWrap: {
     flex: 1,
@@ -166,9 +236,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  inputWrapActive: { borderColor: '#00B14F' },
+  inputWrapActive: {
+    borderColor: '#00B14F',
+  },
 
-  input: { flex: 1, fontSize: 16, color: '#111', paddingVertical: 0 },
+  input: {
+    flex: 1,
+    fontSize: 16,
+    color: '#111',
+    paddingVertical: 0,
+  },
 
   clearBtn: {
     width: 28,
@@ -178,9 +255,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  clearText: { fontSize: 18, lineHeight: 18, color: '#555' },
+  clearText: {
+    fontSize: 18,
+    lineHeight: 18,
+    color: '#555',
+  },
 
-  bottom: { paddingHorizontal: 20, paddingBottom: 18, paddingTop: 10 },
+  errorText: {
+    color: '#d93025',
+    fontSize: 14,
+    paddingHorizontal: 20,
+    marginTop: 10,
+  },
+
+  bottom: {
+    paddingHorizontal: 20,
+    paddingBottom: 18,
+    paddingTop: 10,
+  },
   nextBtn: {
     height: 52,
     borderRadius: 26,
@@ -188,8 +280,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  nextBtnDisabled: { backgroundColor: '#a7e3bf' },
+  nextBtnDisabled: {
+    backgroundColor: '#a7e3bf',
+  },
 
-  nextText: { fontSize: 16, color: '#fff', fontWeight: '700' },
-  nextTextDisabled: { color: '#f2fff7' },
+  nextText: {
+    fontSize: 16,
+    color: '#fff',
+    fontWeight: '700',
+  },
+  nextTextDisabled: {
+    color: '#f2fff7',
+  },
 });
