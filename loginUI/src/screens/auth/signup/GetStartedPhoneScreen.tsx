@@ -18,10 +18,10 @@ import CountryPicker, {
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'GetStartedSignup'>;
 
-const BASE_URL = 'http://192.168.20.9:3000';
+const BASE_URL = "https://nonlyrical-melonie-eudiometric.ngrok-free.dev";
 
 const requestSignupPhone = async (phone: string) => {
-  const response = await fetch(`${BASE_URL}/signup/phone`, {
+  const response = await fetch(`${BASE_URL}/api/signup/phone`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

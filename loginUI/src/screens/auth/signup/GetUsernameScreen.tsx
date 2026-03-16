@@ -16,10 +16,10 @@ import { useAuth } from '@/src/providers/AuthProvider';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'GetStartedName'>;
 
-const BASE_URL = 'http://192.168.20.9:3000';
+const BASE_URL = "https://nonlyrical-melonie-eudiometric.ngrok-free.dev";
 
 const completeSignupUsername = async (username: string, tempToken: string) => {
-  const response = await fetch(`${BASE_URL}/signup/username`, {
+  const response = await fetch(`${BASE_URL}/api/signup/username`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

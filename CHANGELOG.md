@@ -956,6 +956,32 @@ Example usage:
 - Session restore and refresh token flow planned next
 - End-to-end signup flow testing scheduled next session
 
+## [2026-03-12] - [2026-03-20]
+
+### Fullstack Signup Flow Testing
+- Started end-to-end testing for the signup authentication flow (React Native → Express API).
+
+### Network Connection Issue
+- Encountered connection issues due to `localhost` not being accessible from the mobile device.
+- Introduced **ngrok** to expose the local backend server.
+
+### ngrok Setup
+- Configured ngrok tunnel to forward traffic to the local backend (`localhost:4000`).
+- Successfully established connection between the mobile app and backend API through ngrok.
+
+### Express API Debugging
+- Fixed routing issues in `signup.routes.ts` and `login.routes.ts` caused by incorrect path definitions.
+- Removed temporary debug route used for testing API connectivity.
+
+### Runtime Error Investigation
+- Resolved proxy issue with `express-rate-limit` by configuring Express proxy settings.
+- Encountered **500 Internal Server Error** during signup request.
+
+### Current Issue
+- Prisma database request failing with `P1008 SocketTimeout`.
+- Suspected cause: database connectivity or environment configuration.
+
+
 
 
 

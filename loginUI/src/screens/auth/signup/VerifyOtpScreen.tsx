@@ -14,10 +14,10 @@ import {
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'VerifyOtp'>;
 
-const BASE_URL = 'http://192.168.20.9:3000';
+const BASE_URL = "https://nonlyrical-melonie-eudiometric.ngrok-free.dev";
 
 const verifySignupOtpRequest = async (requestId: string, otp: string) => {
-  const response = await fetch(`${BASE_URL}/signup/otp`, {
+  const response = await fetch(`${BASE_URL}/api/signup/otp`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
