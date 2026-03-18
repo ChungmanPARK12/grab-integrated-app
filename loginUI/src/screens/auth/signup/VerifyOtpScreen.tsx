@@ -14,7 +14,70 @@ import {
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'VerifyOtp'>;
 
-const BASE_URL = "https://nonlyrical-melonie-eudiometric.ngrok-free.dev";
+const BASE_URL = 'https://nonlyrical-melonie-eudiometric.ngrok-free.dev';
+
+type OtpRequestResponse = {
+  requestId: string;
+  expiresAt: string;
+  devOtp?: string;
+};
+
+type VerifySignupOtpResponse = {
+  verified: true;
+  tempToken: string;
+};
+
+type VerifyLoginOtpResponse = {
+  ok: true;
+  user: {
+    id: string;
+    phone: string;
+    username: string | null;
+    role: 'user' | 'admin';
+  };
+  accessToken: string;
+  refreshToken: string;
+};
+
+const requestSignupPhone = async (phone: string) => {
+  const response = await fetch(`${BASE_URL}/api/signup/phone`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ phone }),
+  });
+
+  const data = await response.json().catch(() => null);
+
+  if (!response.ok) {
+    const message =
+      data?.message || data?.error || `Request failed: ${response.status}`;
+    throw new Error(message);
+  }
+
+  return data as OtpRequestResponse;
+};
+
+const requestLoginPhone = async (phone: string) => {
+  const response = await fetch(`${BASE_URL}/api/login/phone`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ phone }),
+  });
+
+  const data = await response.json().catch(() => null);
+
+  if (!response.ok) {
+    const message =
+      data?.message || data?.error || `Request failed: ${response.status}`;
+    throw new Error(message);
+  }
+
+  return data as OtpRequestResponse;
+};
 
 const verifySignupOtpRequest = async (requestId: string, otp: string) => {
   const response = await fetch(`${BASE_URL}/api/signup/otp`, {
@@ -36,17 +99,48 @@ const verifySignupOtpRequest = async (requestId: string, otp: string) => {
     throw new Error(message);
   }
 
-  return data as {
-    verified: true;
-    tempToken: string;
-  };
+  return data as VerifySignupOtpResponse;
+};
+
+const verifyLoginOtpRequest = async (requestId: string, otp: string) => {
+  const response = await fetch(`${BASE_URL}/api/login/otp`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      requestId,
+      otp,
+    }),
+  });
+
+  const data = await response.json().catch(() => null);
+
+  if (!response.ok) {
+    const message =
+      data?.message || data?.error || `Request failed: ${response.status}`;
+    throw new Error(message);
+  }
+
+  return data as VerifyLoginOtpResponse;
 };
 
 const VerifyOtpScreen = ({ navigation, route }: Props) => {
-  const { phoneNumber, requestId, expiresAt, devOtp, flow } = route.params;
+  const {
+    phoneNumber,
+    requestId: initialRequestId,
+    expiresAt: initialExpiresAt,
+    devOtp: initialDevOtp,
+    flow,
+  } = route.params;
+
+  const [requestId, setRequestId] = useState(initialRequestId);
+  const [expiresAt, setExpiresAt] = useState(initialExpiresAt);
+  const [devOtp, setDevOtp] = useState<string | undefined>(initialDevOtp);
 
   const [otp, setOtp] = useState('');
   const [loading, setLoading] = useState(false);
+  const [resending, setResending] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [showDevOtp, setShowDevOtp] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(0);
@@ -81,6 +175,12 @@ const VerifyOtpScreen = ({ navigation, route }: Props) => {
     return () => clearInterval(intervalId);
   }, [expiresAt]);
 
+  useEffect(() => {
+    if (isExpired) {
+      setErrorMessage('Code expired. Please request a new OTP.');
+    }
+  }, [isExpired]);
+
   const formattedTime = useMemo(() => {
     const minutes = Math.floor(secondsLeft / 60);
     const seconds = secondsLeft % 60;
@@ -89,38 +189,75 @@ const VerifyOtpScreen = ({ navigation, route }: Props) => {
   }, [secondsLeft]);
 
   const isNextEnabled = useMemo(() => {
-    return otp.trim().length === 6 && !loading && !isExpired;
-  }, [otp, loading, isExpired]);
+    return otp.trim().length === 6 && !loading && !resending && !isExpired;
+  }, [otp, loading, resending, isExpired]);
 
   const onChangeOtp = (text: string) => {
     const onlyDigits = text.replace(/[^\d]/g, '').slice(0, 6);
     setOtp(onlyDigits);
-    setErrorMessage('');
+
+    if (!isExpired) {
+      setErrorMessage('');
+    }
   };
 
   const onShowOtp = () => {
-    if (!devOtp || isExpired || loading) return;
+    if (!devOtp || isExpired || loading || resending) return;
 
     setOtp(devOtp);
     setShowDevOtp(true);
     setErrorMessage('');
   };
 
+  const onResendOtp = async () => {
+    if (loading || resending) return;
+
+    try {
+      setResending(true);
+      setErrorMessage('');
+
+      const result =
+        flow === 'signup'
+          ? await requestSignupPhone(phoneNumber)
+          : await requestLoginPhone(phoneNumber);
+
+      setRequestId(result.requestId);
+      setExpiresAt(result.expiresAt);
+      setDevOtp(result.devOtp);
+      setOtp('');
+      setShowDevOtp(false);
+      setIsExpired(false);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Failed to request a new OTP';
+      setErrorMessage(message);
+    } finally {
+      setResending(false);
+    }
+  };
+
   const onNext = async () => {
     if (!isNextEnabled) return;
-    if (flow !== 'signup') return;
 
     try {
       setLoading(true);
       setErrorMessage('');
 
-      const result = await verifySignupOtpRequest(requestId, otp.trim());
+      if (flow === 'signup') {
+        const result = await verifySignupOtpRequest(requestId, otp.trim());
 
-      navigation.navigate('GetStartedName', {
-        phoneNumber,
-        requestId,
-        tempToken: result.tempToken,
-      });
+        navigation.navigate('GetStartedName', {
+          phoneNumber,
+          requestId,
+          tempToken: result.tempToken,
+        });
+        return;
+      }
+
+      const result = await verifyLoginOtpRequest(requestId, otp.trim());
+
+      // signIn(result.accessToken, result.refreshToken) 
+      console.log('Login OTP verified:', result);
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'Failed to verify OTP';
@@ -129,6 +266,10 @@ const VerifyOtpScreen = ({ navigation, route }: Props) => {
       setLoading(false);
     }
   };
+
+  const helperText = isExpired
+    ? 'Request a new OTP and try again.'
+    : `You can request a new OTP after ${formattedTime}.`;
 
   return (
     <KeyboardAvoidingView
@@ -147,43 +288,52 @@ const VerifyOtpScreen = ({ navigation, route }: Props) => {
           keyboardType="number-pad"
           maxLength={6}
           style={[styles.otpInput, isExpired && styles.otpInputDisabled]}
-          editable={!loading && !isExpired}
+          editable={!loading && !resending && !isExpired}
         />
 
-        {expiresAt ? (
-          isExpired ? (
-            <Text style={styles.expiredText}>
-              Code expired. Please request a new OTP.
-            </Text>
-          ) : (
-            <Text style={styles.timerText}>Code expires in {formattedTime}</Text>
-          )
-        ) : null}
-
-        {devOtp ? (
-          <Pressable
-            style={styles.sendBtn}
-            onPress={onShowOtp}
-            disabled={loading || isExpired}
-          >
-            <Text
-              style={[
-                styles.sendText,
-                (loading || isExpired) && styles.sendTextDisabled,
-              ]}
-            >
-              {showDevOtp ? 'OTP inserted' : 'Use dev OTP'}
-            </Text>
-          </Pressable>
+        {!isExpired && expiresAt ? (
+          <Text style={styles.timerText}>Code expires in {formattedTime}</Text>
         ) : null}
 
         {!!errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
 
+        <View style={styles.actions}>
+          {devOtp ? (
+            <Pressable
+              style={styles.linkBtn}
+              onPress={onShowOtp}
+              disabled={loading || resending || isExpired}
+            >
+              <Text
+                style={[
+                  styles.linkText,
+                  (loading || resending || isExpired) && styles.linkTextDisabled,
+                ]}
+              >
+                {showDevOtp ? 'OTP inserted' : 'Use dev OTP'}
+              </Text>
+            </Pressable>
+          ) : null}
+
+          <Pressable
+            style={styles.linkBtn}
+            onPress={onResendOtp}
+            disabled={loading || resending || !isExpired}
+          >
+            <Text
+              style={[
+                styles.linkText,
+                (!isExpired || loading || resending) && styles.linkTextDisabled,
+              ]}
+            >
+              {resending ? 'Requesting new OTP...' : 'Request new OTP'}
+            </Text>
+          </Pressable>
+        </View>
+
         <View style={styles.helper}>
           <Text style={styles.helperTitle}>Didn't receive it?</Text>
-          <Text style={styles.helperSub}>
-            Go back and request a new OTP after the timer ends.
-          </Text>
+          <Text style={styles.helperSub}>{helperText}</Text>
         </View>
       </View>
 
@@ -240,35 +390,36 @@ const styles = StyleSheet.create({
   timerText: {
     fontSize: 13,
     color: '#666',
-    marginBottom: 16,
-  },
-  expiredText: {
-    fontSize: 13,
-    color: '#d93025',
-    marginBottom: 16,
-  },
-
-  sendBtn: {
-    alignSelf: 'flex-start',
-    marginBottom: 24,
-  },
-  sendText: {
-    fontSize: 16,
-    color: '#00B14F',
-    fontWeight: '600',
-  },
-  sendTextDisabled: {
-    color: '#9ccfb1',
+    marginBottom: 12,
   },
 
   errorText: {
     color: '#d93025',
     fontSize: 14,
-    marginBottom: 16,
+    marginBottom: 12,
+  },
+
+  actions: {
+    marginBottom: 24,
+    gap: 10,
+  },
+
+  linkBtn: {
+    alignSelf: 'flex-start',
+  },
+
+  linkText: {
+    fontSize: 16,
+    color: '#00B14F',
+    fontWeight: '600',
+  },
+
+  linkTextDisabled: {
+    color: '#9ccfb1',
   },
 
   helper: {
-    marginTop: 24,
+    marginTop: 8,
   },
   helperTitle: {
     fontSize: 14,
@@ -283,6 +434,7 @@ const styles = StyleSheet.create({
   bottom: {
     paddingHorizontal: 20,
     paddingBottom: 18,
+    paddingTop: 10,
   },
   nextBtn: {
     height: 52,

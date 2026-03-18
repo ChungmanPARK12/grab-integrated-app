@@ -956,7 +956,7 @@ Example usage:
 - Session restore and refresh token flow planned next
 - End-to-end signup flow testing scheduled next session
 
-## [2026-03-12] - [2026-03-20]
+## [2026-03-12] - [2026-03-18]
 
 ### Fullstack Signup Flow Testing
 - Started end-to-end testing for the signup authentication flow (React Native → Express API).
@@ -980,6 +980,32 @@ Example usage:
 ### Current Issue
 - Prisma database request failing with `P1008 SocketTimeout`.
 - Suspected cause: database connectivity or environment configuration.
+
+## [2026-03-19] — Signup Flow Completed (OTP-based Authentication)
+
+### Added
+- Implemented full signup flow using phone number + OTP verification
+- Added `VerifyOtpScreen` for OTP input and validation
+- Introduced requestId-based OTP tracking system
+- Connected frontend with backend `/api/signup` and `/api/signup/otp` endpoints
+
+### Updated
+- Auth navigation flow extended:
+  - Login → AuthOptions → Signup → VerifyOtp → Name Input → MainService
+- Refactored API request handling using `BASE_URL` environment setup
+- Improved error handling for OTP validation (expired / invalid cases)
+
+### Backend Integration
+- Signup request creates OTP entry with:
+  - `requestId`
+  - `expiresAt`
+- OTP verification endpoint validates:
+  - requestId match
+  - OTP correctness
+  - expiration time
+
+### Result
+- End-to-end signup flow successfully navigates to `MainServiceScreen`
 
 
 
