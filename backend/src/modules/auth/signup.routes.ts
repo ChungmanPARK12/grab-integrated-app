@@ -4,6 +4,7 @@ import {
   postSignupPhone,
   postSignupOtp,
   postSignupUsername,
+  postSignupCheckPhone,
 } from "./auth.controller";
 import { authRateLimit } from "../../middlewares/rateLimit";
 
@@ -15,3 +16,4 @@ export const signupRouter = Router();
 signupRouter.post("/phone", postSignupPhone);
 signupRouter.post("/otp", postSignupOtp);
 signupRouter.post("/username", postSignupUsername);
+signupRouter.post("/check-phone", postSignupCheckPhone);

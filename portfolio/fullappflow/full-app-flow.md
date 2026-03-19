@@ -40,8 +40,9 @@
   <img src="https://github.com/user-attachments/assets/5f2077d8-e341-4942-ac44-943cab8169fb" width="280"/>
 </p>
 
-- Introduces the Grab brand and guides the user into the login flow.  
-- In **Portfolio v1**, only the **Log In** button is active and proceeds to the authentication options screen.
+- Introduces the Grab brand and guides the user into the authentication flow  
+- **Log In** button → navigates to `AuthOptionsScreen`
+- **Sign Up** button → navigates to `signup/GetStartedPhoneScreen`
 
 ---
 
@@ -63,10 +64,35 @@
 
 ---
 
-**Source:** `loginUI/src/components/AuthOptionsScreen.tsx`
+**Source:** `loginUI/src/screens/auth/login/AuthOptionsScreen.tsx`
 
 - Registers navigation using `useNavigation<NavigationProp>()`.  
 - `handleAuthBypass` is a temporary handler that routes all login buttons to `MainService` until real OAuth logic is added.  
+
+---
+
+### 4.1. Signup - Get Started Phone Screen
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/14d18b8f-b9df-489c-9b67-3df5c657c449" width="280"/>
+</p>
+
+- `GetStartedPhoneScreen` → user enters phone number and requests signup OTP
+- `VerifyOtpScreen` → user verifies OTP issued for the signup request
+- `GetUsernameScreen` → user enters profile name after successful OTP verification
+- After signup is completed, the app navigates to `MainService`
+
+---
+
+**Source:** 
+- `loginUI/src/screens/auth/signup/GetStartedPhoneScreen.tsx`  
+- `loginUI/src/screens/auth/signup/VerifyOtpScreen.tsx`  
+- `loginUI/src/screens/auth/signup/GetUsernameScreen.tsx`
+
+- Connected to the backend signup flow with request-based OTP verification
+
+**Demo video:**  
+- [Watch Random Play demo](https://chungmanpark12.github.io/classicq-media/random-play.html)
 
 ---
 

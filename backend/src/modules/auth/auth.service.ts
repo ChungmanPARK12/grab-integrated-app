@@ -1,4 +1,3 @@
-// src/modules/auth/auth.service.ts
 import { prisma } from "../../libs/prisma";
 import { authLogger } from "../../libs/authLogger";
 import { generateOtp, hashOtp } from "./otp.util";
@@ -10,6 +9,10 @@ import {
 } from "./refreshToken.util";
 import { signAccessToken, signRefreshToken, verifyRefreshToken } from "./jwt.util";
 import { cleanupExpiredRefreshTokens } from "./refreshToken.util";
+
+type CheckSignupPhoneAvailabilityInput = {
+  phone: string;
+};
 
 type RequestSignupOtpInput = {
   phone: string;
@@ -104,6 +107,36 @@ const getJwtExpAsDate = (token: string): Date => {
     throw httpError(500, "failed to read token exp");
   }
   return new Date(decoded.exp * 1000);
+};
+
+export const checkSignupPhoneAvailability = async ({
+  phone,
+}: CheckSignupPhoneAvailabilityInput) => {
+  const normalizedPhone = phone.trim();
+
+  if (normalizedPhone.length < 8) {
+    throw httpError(400, "invalid phone format");
+  }
+
+  const existingUser = await prisma.user.findUnique({
+    where: { phone: normalizedPhone },
+    select: {
+      id: true,
+      isVerified: true,
+      signupCompleted: true,
+    },
+  });
+
+  if (existingUser?.isVerified || existingUser?.signupCompleted) {
+    return {
+      available: false,
+      message: "phone is already registered",
+    };
+  }
+
+  return {
+    available: true,
+  };
 };
 
 export const requestSignupOtp = async ({
@@ -633,7 +666,7 @@ export const refreshAuthTokens = async ({
   }
 
   await revokeRefreshToken(refreshToken);
-  
+
   const newAccessToken = signAccessToken({
     sub: user.id,
     role: user.role,

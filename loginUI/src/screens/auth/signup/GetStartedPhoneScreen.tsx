@@ -1,4 +1,4 @@
-// src/login/components/GetStartedPhoneScreen.tsx
+// src/screens/auth/signup/GetStartedPhoneScreen.tsx
 import React, { useEffect, useMemo, useState } from 'react';
 import { AuthStackParamList } from '@login/navigation/types';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -18,10 +18,15 @@ import CountryPicker, {
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'GetStartedSignup'>;
 
-const BASE_URL = "https://nonlyrical-melonie-eudiometric.ngrok-free.dev";
+const BASE_URL = 'https://nonlyrical-melonie-eudiometric.ngrok-free.dev';
 
-const requestSignupPhone = async (phone: string) => {
-  const response = await fetch(`${BASE_URL}/api/signup/phone`, {
+type CheckSignupPhoneResponse = {
+  available: boolean;
+  message?: string;
+};
+
+const checkSignupPhone = async (phone: string) => {
+  const response = await fetch(`${BASE_URL}/api/signup/check-phone`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -37,15 +42,10 @@ const requestSignupPhone = async (phone: string) => {
     throw new Error(message);
   }
 
-  return data as {
-    requestId: string;
-    expiresAt: string;
-    devOtp?: string;
-  };
+  return data as CheckSignupPhoneResponse;
 };
 
 const GetStartedPhoneScreen = ({ navigation }: Props) => {
-  // Default country: Australia
   const [countryCode, setCountryCode] = useState<CountryCode>('AU');
   const [callingCode, setCallingCode] = useState<string>('61');
   const [isPickerVisible, setIsPickerVisible] = useState(false);
@@ -54,7 +54,6 @@ const GetStartedPhoneScreen = ({ navigation }: Props) => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  // Enable native stack navigation and back behavior
   useEffect(() => {
     navigation.setOptions({
       headerShown: true,
@@ -62,21 +61,18 @@ const GetStartedPhoneScreen = ({ navigation }: Props) => {
     });
   }, [navigation]);
 
-  // Extract digits only from the phone input
   const cleanedPhone = useMemo(() => phone.replace(/[^\d]/g, ''), [phone]);
   const isValid = cleanedPhone.length >= 9;
 
   const onSelectCountry = (country: Country) => {
     setCountryCode(country.cca2);
 
-    // callingCode is an array in the library
     const firstCode = country.callingCode?.[0] ?? '';
     if (firstCode) setCallingCode(firstCode);
 
     setIsPickerVisible(false);
   };
 
-  // Clear phone input value
   const onClear = () => setPhone('');
 
   const onNext = async () => {
@@ -88,18 +84,22 @@ const GetStartedPhoneScreen = ({ navigation }: Props) => {
       setLoading(true);
       setErrorMessage('');
 
-      const result = await requestSignupPhone(fullPhone);
+      const result = await checkSignupPhone(fullPhone);
+
+      if (!result.available) {
+        setErrorMessage(
+          result.message || 'This phone number is already registered.'
+        );
+        return;
+      }
 
       navigation.navigate('VerifyOtp', {
         phoneNumber: fullPhone,
-        requestId: result.requestId,
-        expiresAt: result.expiresAt,
-        devOtp: result.devOtp,
         flow: 'signup',
-      } as never);
+      });
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'Failed to request signup OTP';
+        error instanceof Error ? error.message : 'Failed to continue';
       setErrorMessage(message);
     } finally {
       setLoading(false);
@@ -129,7 +129,6 @@ const GetStartedPhoneScreen = ({ navigation }: Props) => {
                 onClose={() => setIsPickerVisible(false)}
                 onSelect={onSelectCountry}
               />
-
               <Text style={styles.countryText}>{`+${callingCode}`}</Text>
             </View>
 
@@ -139,7 +138,10 @@ const GetStartedPhoneScreen = ({ navigation }: Props) => {
           <View style={[styles.inputWrap, phone.length > 0 && styles.inputWrapActive]}>
             <TextInput
               value={phone}
-              onChangeText={setPhone}
+              onChangeText={(text) => {
+                setPhone(text);
+                if (errorMessage) setErrorMessage('');
+              }}
               placeholder="Input mobile number"
               keyboardType="number-pad"
               returnKeyType="done"
@@ -168,7 +170,7 @@ const GetStartedPhoneScreen = ({ navigation }: Props) => {
           <Text
             style={[styles.nextText, (!isValid || loading) && styles.nextTextDisabled]}
           >
-            {loading ? 'Sending...' : 'Next'}
+            {loading ? 'Checking...' : 'Next'}
           </Text>
         </Pressable>
       </View>

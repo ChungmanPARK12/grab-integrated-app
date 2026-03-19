@@ -1,4 +1,4 @@
-// src/login/components/VerifyOtpScreen.tsx
+// src/screens/auth/signup/VerifyOtpScreen.tsx
 import React, { useEffect, useMemo, useState } from 'react';
 import { AuthStackParamList } from '@login/navigation/types';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -126,25 +126,18 @@ const verifyLoginOtpRequest = async (requestId: string, otp: string) => {
 };
 
 const VerifyOtpScreen = ({ navigation, route }: Props) => {
-  const {
-    phoneNumber,
-    requestId: initialRequestId,
-    expiresAt: initialExpiresAt,
-    devOtp: initialDevOtp,
-    flow,
-  } = route.params;
+  const { phoneNumber, flow } = route.params;
 
-  const [requestId, setRequestId] = useState(initialRequestId);
-  const [expiresAt, setExpiresAt] = useState(initialExpiresAt);
-  const [devOtp, setDevOtp] = useState<string | undefined>(initialDevOtp);
+  const [requestId, setRequestId] = useState('');
+  const [expiresAt, setExpiresAt] = useState<string | undefined>(undefined);
 
   const [otp, setOtp] = useState('');
   const [loading, setLoading] = useState(false);
-  const [resending, setResending] = useState(false);
+  const [requestingOtp, setRequestingOtp] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [showDevOtp, setShowDevOtp] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(0);
   const [isExpired, setIsExpired] = useState(false);
+  const [hasRequestedOtp, setHasRequestedOtp] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({
@@ -154,7 +147,7 @@ const VerifyOtpScreen = ({ navigation, route }: Props) => {
   }, [navigation]);
 
   useEffect(() => {
-    if (!expiresAt) {
+    if (!hasRequestedOtp || !expiresAt) {
       setSecondsLeft(0);
       setIsExpired(false);
       return;
@@ -171,15 +164,14 @@ const VerifyOtpScreen = ({ navigation, route }: Props) => {
     updateTimer();
 
     const intervalId = setInterval(updateTimer, 1000);
-
     return () => clearInterval(intervalId);
-  }, [expiresAt]);
+  }, [expiresAt, hasRequestedOtp]);
 
   useEffect(() => {
-    if (isExpired) {
+    if (hasRequestedOtp && isExpired) {
       setErrorMessage('Code expired. Please request a new OTP.');
     }
-  }, [isExpired]);
+  }, [isExpired, hasRequestedOtp]);
 
   const formattedTime = useMemo(() => {
     const minutes = Math.floor(secondsLeft / 60);
@@ -188,33 +180,38 @@ const VerifyOtpScreen = ({ navigation, route }: Props) => {
     return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   }, [secondsLeft]);
 
+  const canEnterOtp = hasRequestedOtp && !isExpired;
+  const showRequestOtpButton = !hasRequestedOtp || isExpired;
+
   const isNextEnabled = useMemo(() => {
-    return otp.trim().length === 6 && !loading && !resending && !isExpired;
-  }, [otp, loading, resending, isExpired]);
+    return otp.trim().length === 6 && !loading && !requestingOtp && canEnterOtp;
+  }, [otp, loading, requestingOtp, canEnterOtp]);
+
+  const helperText = !hasRequestedOtp
+    ? 'Tap below to request an OTP.'
+    : isExpired
+      ? 'Your code has expired. Request a new OTP.'
+      : `Code expires in ${formattedTime}.`;
 
   const onChangeOtp = (text: string) => {
     const onlyDigits = text.replace(/[^\d]/g, '').slice(0, 6);
     setOtp(onlyDigits);
 
-    if (!isExpired) {
+    if (errorMessage) {
       setErrorMessage('');
     }
   };
 
-  const onShowOtp = () => {
-    if (!devOtp || isExpired || loading || resending) return;
-
-    setOtp(devOtp);
-    setShowDevOtp(true);
-    setErrorMessage('');
-  };
-
-  const onResendOtp = async () => {
-    if (loading || resending) return;
+  const onRequestOtp = async () => {
+    if (loading || requestingOtp || !showRequestOtpButton) return;
 
     try {
-      setResending(true);
+      setRequestingOtp(true);
       setErrorMessage('');
+      setOtp('');
+      setRequestId('');
+      setExpiresAt(undefined);
+      setIsExpired(false);
 
       const result =
         flow === 'signup'
@@ -223,16 +220,17 @@ const VerifyOtpScreen = ({ navigation, route }: Props) => {
 
       setRequestId(result.requestId);
       setExpiresAt(result.expiresAt);
-      setDevOtp(result.devOtp);
-      setOtp('');
-      setShowDevOtp(false);
+      setHasRequestedOtp(true);
       setIsExpired(false);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'Failed to request a new OTP';
+        error instanceof Error ? error.message : 'Failed to request OTP';
       setErrorMessage(message);
+      setHasRequestedOtp(false);
+      setRequestId('');
+      setExpiresAt(undefined);
     } finally {
-      setResending(false);
+      setRequestingOtp(false);
     }
   };
 
@@ -256,7 +254,6 @@ const VerifyOtpScreen = ({ navigation, route }: Props) => {
 
       const result = await verifyLoginOtpRequest(requestId, otp.trim());
 
-      // signIn(result.accessToken, result.refreshToken) 
       console.log('Login OTP verified:', result);
     } catch (error) {
       const message =
@@ -266,10 +263,6 @@ const VerifyOtpScreen = ({ navigation, route }: Props) => {
       setLoading(false);
     }
   };
-
-  const helperText = isExpired
-    ? 'Request a new OTP and try again.'
-    : `You can request a new OTP after ${formattedTime}.`;
 
   return (
     <KeyboardAvoidingView
@@ -287,49 +280,34 @@ const VerifyOtpScreen = ({ navigation, route }: Props) => {
           placeholder="Enter OTP"
           keyboardType="number-pad"
           maxLength={6}
-          style={[styles.otpInput, isExpired && styles.otpInputDisabled]}
-          editable={!loading && !resending && !isExpired}
+          style={[styles.otpInput, !canEnterOtp && styles.otpInputDisabled]}
+          editable={canEnterOtp && !loading && !requestingOtp}
         />
 
-        {!isExpired && expiresAt ? (
+        {hasRequestedOtp && !isExpired ? (
           <Text style={styles.timerText}>Code expires in {formattedTime}</Text>
         ) : null}
 
         {!!errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
 
-        <View style={styles.actions}>
-          {devOtp ? (
+        {showRequestOtpButton ? (
+          <View style={styles.actions}>
             <Pressable
               style={styles.linkBtn}
-              onPress={onShowOtp}
-              disabled={loading || resending || isExpired}
+              onPress={onRequestOtp}
+              disabled={loading || requestingOtp}
             >
               <Text
                 style={[
                   styles.linkText,
-                  (loading || resending || isExpired) && styles.linkTextDisabled,
+                  (loading || requestingOtp) && styles.linkTextDisabled,
                 ]}
               >
-                {showDevOtp ? 'OTP inserted' : 'Use dev OTP'}
+                {requestingOtp ? 'Requesting OTP...' : 'Request OTP'}
               </Text>
             </Pressable>
-          ) : null}
-
-          <Pressable
-            style={styles.linkBtn}
-            onPress={onResendOtp}
-            disabled={loading || resending || !isExpired}
-          >
-            <Text
-              style={[
-                styles.linkText,
-                (!isExpired || loading || resending) && styles.linkTextDisabled,
-              ]}
-            >
-              {resending ? 'Requesting new OTP...' : 'Request new OTP'}
-            </Text>
-          </Pressable>
-        </View>
+          </View>
+        ) : null}
 
         <View style={styles.helper}>
           <Text style={styles.helperTitle}>Didn't receive it?</Text>
@@ -382,6 +360,7 @@ const styles = StyleSheet.create({
     color: '#111',
     marginBottom: 12,
   },
+
   otpInputDisabled: {
     backgroundColor: '#f5f5f5',
     color: '#999',
@@ -421,11 +400,13 @@ const styles = StyleSheet.create({
   helper: {
     marginTop: 8,
   },
+
   helperTitle: {
     fontSize: 14,
     color: '#111',
     marginBottom: 4,
   },
+
   helperSub: {
     fontSize: 13,
     color: '#9a9a9a',
@@ -436,6 +417,7 @@ const styles = StyleSheet.create({
     paddingBottom: 18,
     paddingTop: 10,
   },
+
   nextBtn: {
     height: 52,
     borderRadius: 26,
@@ -443,14 +425,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
   nextBtnDisabled: {
     backgroundColor: '#E7E7E7',
   },
+
   nextText: {
     fontSize: 16,
     color: '#fff',
     fontWeight: '700',
   },
+
   nextTextDisabled: {
     color: '#9B9B9B',
   },

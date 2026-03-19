@@ -1,7 +1,7 @@
-// src/modules/auth/auth.controller.ts
 import type { Request, Response } from "express";
 import { asyncHandler } from "../../libs/asyncHandler";
 import {
+  checkSignupPhoneAvailability,
   requestSignupOtp,
   verifySignupOtp,
   signupUsername,
@@ -24,6 +24,18 @@ const requireString = (value: unknown, fieldName: string) => {
   }
   return value;
 };
+
+/**
+ * POST /signup/check-phone
+ * Body: { phone: string }
+ */
+export const postSignupCheckPhone = asyncHandler(async (req: Request, res: Response) => {
+  const phone = requireString((req.body as any)?.phone, "phone");
+
+  const result = await checkSignupPhoneAvailability({ phone });
+
+  return res.status(200).json(result);
+});
 
 /**
  * POST /signup/phone

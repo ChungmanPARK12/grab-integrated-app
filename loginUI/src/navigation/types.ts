@@ -8,7 +8,7 @@ export type AuthStackParamList = {
 
   VerifyOtp: {
     phoneNumber: string;
-    requestId: string;
+    requestId?: string;
     expiresAt?: string;
     devOtp?: string;
     flow: 'signup' | 'login';

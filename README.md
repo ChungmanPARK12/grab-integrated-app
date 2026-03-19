@@ -9,25 +9,32 @@ Built through direct app experience with AI supporting, this project presents a 
 
 ## Project Overview
 
-This project demonstrates how I structure and implement a real-world mobile service flow in React Native.
-It covers the full onboarding and authentication flow, from initial app launch through login and into the main service experience.
+This project demonstrates how I design and implement a real-world mobile service flow in React Native with Expo.
+It covers the onboarding and authentication experience from app launch to the main service screen, and now includes backend-connected sign-up verification.
 
-- Clean navigation architecture.  
-- Accurate loading behaviors.  
-- UX patterns inspired by the real Grab app.  
+The project focuses on:
+
+- Clean navigation architecture
+- Backend-connected authentication flow
+- OTP-based sign-up verification
+- Accurate loading behaviors
+- UX patterns inspired by the real Grab app 
 
 ## Features
 
 - **Startup flow**: Splash → loading status (spinner) → login screen
-- **Multiple authentication entry points** (Facebook, Google, Apple, Mobile)
-- **Portfolio v1 login bypass** to enter the Main Service UI for demo purposes
+- **Authentication entry points UI** (Facebook, Google, Apple, Mobile)
+- **Backend-connected mobile sign-up flow**
+- **OTP verification flow** using `requestId` and expiration-based validation
+- **Sign-up completion flow**: Sign-up → OTP verification → profile input → Main Service screen
 - **Main Service UI skeleton placeholders** for smoother perceived loading while assets render
 - **PromoBanner synchronized loading** so banner image and card icons appear together
 
 ## Implementation Notes
 
 - Temporary login bypass applied for **Portfolio v1**
-- Authentication and Facebook OAuth flow planned for future **dev-client** mode testing once verification is approved.
+  - Bypass is used for **social login options (Facebook, Google, Apple)** to allow direct access to the Main Service UI during development
+- Authentication and Facebook OAuth flow planned for future **dev-client** mode testing once verification is approved
 
 ## Full App Flow
 
