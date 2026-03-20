@@ -92,7 +92,7 @@
 - Connected to the backend signup flow with request-based OTP verification
 
 **Demo video:**  
-- [Watch Signup demo](https://github.com/ChungmanPARK12/classicq-media/blob/cce61ecc0a26edfe3b732559c20c730cf47c69f3/grab/signup.mp4)
+- [Watch Signup demo](https://chungmanpark12.github.io/classicq-media/grab/signup.html)
 
 ---
 
