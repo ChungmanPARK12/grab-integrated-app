@@ -130,6 +130,7 @@ const VerifyOtpScreen = ({ navigation, route }: Props) => {
 
   const [requestId, setRequestId] = useState('');
   const [expiresAt, setExpiresAt] = useState<string | undefined>(undefined);
+  const [devOtp, setDevOtp] = useState<string | undefined>(undefined);
 
   const [otp, setOtp] = useState('');
   const [loading, setLoading] = useState(false);
@@ -188,10 +189,10 @@ const VerifyOtpScreen = ({ navigation, route }: Props) => {
   }, [otp, loading, requestingOtp, canEnterOtp]);
 
   const helperText = !hasRequestedOtp
-    ? 'Tap below to request an OTP.'
+    ? 'Tap above to request an OTP.'
     : isExpired
       ? 'Your code has expired. Request a new OTP.'
-      : `Code expires in ${formattedTime}.`;
+      : 'Tap "Request OTP" above to get a new code.';
 
   const onChangeOtp = (text: string) => {
     const onlyDigits = text.replace(/[^\d]/g, '').slice(0, 6);
@@ -211,6 +212,7 @@ const VerifyOtpScreen = ({ navigation, route }: Props) => {
       setOtp('');
       setRequestId('');
       setExpiresAt(undefined);
+      setDevOtp(undefined);
       setIsExpired(false);
 
       const result =
@@ -220,6 +222,7 @@ const VerifyOtpScreen = ({ navigation, route }: Props) => {
 
       setRequestId(result.requestId);
       setExpiresAt(result.expiresAt);
+      setDevOtp(result.devOtp);
       setHasRequestedOtp(true);
       setIsExpired(false);
     } catch (error) {
@@ -229,6 +232,7 @@ const VerifyOtpScreen = ({ navigation, route }: Props) => {
       setHasRequestedOtp(false);
       setRequestId('');
       setExpiresAt(undefined);
+      setDevOtp(undefined);
     } finally {
       setRequestingOtp(false);
     }
@@ -253,7 +257,6 @@ const VerifyOtpScreen = ({ navigation, route }: Props) => {
       }
 
       const result = await verifyLoginOtpRequest(requestId, otp.trim());
-
       console.log('Login OTP verified:', result);
     } catch (error) {
       const message =
@@ -286,6 +289,10 @@ const VerifyOtpScreen = ({ navigation, route }: Props) => {
 
         {hasRequestedOtp && !isExpired ? (
           <Text style={styles.timerText}>Code expires in {formattedTime}</Text>
+        ) : null}
+
+        {devOtp && hasRequestedOtp && !isExpired ? (
+          <Text style={styles.devOtpText}> {devOtp} </Text>
         ) : null}
 
         {!!errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
@@ -367,8 +374,15 @@ const styles = StyleSheet.create({
   },
 
   timerText: {
-    fontSize: 13,
+    fontSize: 15,
     color: '#666',
+    marginBottom: 8,
+  },
+
+  devOtpText: {
+    fontSize: 18,
+    color: '#00B14F',
+    fontWeight: '700',
     marginBottom: 12,
   },
 
