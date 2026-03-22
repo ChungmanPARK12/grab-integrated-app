@@ -29,6 +29,12 @@ The project focuses on:
 - **Sign-up completion flow**: Sign-up → OTP verification → profile input → Main Service screen
 - **Main Service UI skeleton placeholders** for smoother perceived loading while assets render
 - **PromoBanner synchronized loading** so banner image and card icons appear together
+- **Backend foundation**
+  - Node.js + Express authentication API
+  - Prisma ORM for database access
+  - PostgreSQL for persistent user / OTP / token data
+  - JWT-based temp / access / refresh token flow
+  - Request-based OTP verification with rate limiting and expiration handling
 
 ## Implementation Notes
 
@@ -108,15 +114,29 @@ Then restart the app using `npx expo start --tunnel`
 Expo Go forces `useProxy: true`, meaning the OAuth redirect goes through Expo’s proxy server instead of a native URI.  
 Since Facebook does not support this flow, the app cannot receive the callback — confirming that a custom **dev-client** is required for proper Facebook login support.
 
-### Main Service UI (Asset Loading)
+---
 
-**Source:** `mainServiceUI/src/components/PaymentPanel.tsx`
+### Authentication Flow Debugging
 
-During the **skeleton blinking** implementation, the UI occasionally became stuck in the loading state, or rendered icons out of sync.  
-To stabilize the experience, the component preloads icons invisibly during the skeleton phase so the final content appears all at once after loading completes.
-This is a temporary solution and will be refactored in **Portfolio v2**.
+**Tools:** Postman, Express API, Prisma + PostgreSQL  
 
-- Detailed debugging notes and iteration history are documented in `CHANGELOG.md`.
+#### 1. OTP Request & Rate Limiting
+- Tested `/api/signup/phone`
+- Identified and handled **rate limiting (60s)**
+- Resolved `429 too many requests` issue during rapid requests
+- Ensured OTP is only issued after cooldown
+
+#### 2. Token Issuance Flow (Signup → JWT)
+- Verified `/api/signup/otp` → `tempToken` issuance
+- Confirmed JWT payload structure and expiration
+- Tested full flow:
+  - OTP verification → tempToken
+  - username registration → accessToken & refreshToken
+- Ensured correct transition between authentication stages
+
+---
+
+- Detailed debugging notes are documented in `CHANGELOG.md`.
 
 ## Expo Workflow & Environment
 
