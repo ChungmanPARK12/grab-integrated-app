@@ -35,6 +35,10 @@ The project focuses on:
   - PostgreSQL for persistent user / OTP / token data
   - JWT-based temp / access / refresh token flow
   - Request-based OTP verification with rate limiting and expiration handling
+- **Local development & testing environment**
+  - Backend server and database run locally using Docker
+  - ngrok used to expose local API endpoints for mobile device testing
+  - Enabled real-device integration between React Native app and local backend
 
 ## Implementation Notes
 
