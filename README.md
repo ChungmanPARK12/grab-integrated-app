@@ -164,13 +164,14 @@ Exact SDK and dependency versions are defined in `package.json` and `app.json`.
 
 - Restructured **root-based navigation**
 - Centralized Auth / Main flow control at the app root
-- Completed **Sign-up → MainScreen** transition
+- Completed **backend-connected Sign-up flow**
+- Implemented **OTP-based verification with expiration and rate limiting**
+- Integrated **JWT authentication flow** (tempToken → accessToken → refreshToken)
 
 ## Next Steps
 
-- Implement backend logic for the **Sign-up flow**
-- Connect Sign-up screen with server-side authentication
-- Prepare authentication structure for future feature expansion
+- Implement **mobile number login flow** (OTP-based login)
+- Connect `AuthOptionsScreen` login buttons to real backend authentication
 
 ## License
 
