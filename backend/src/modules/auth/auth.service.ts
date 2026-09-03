@@ -1,3 +1,4 @@
+// src/modules/auth/auth.service
 import { prisma } from "../../libs/prisma";
 import { authLogger } from "../../libs/authLogger";
 import { generateOtp, hashOtp } from "./otp.util";

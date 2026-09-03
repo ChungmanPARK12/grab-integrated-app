@@ -16,4 +16,4 @@ export const authLogger = {
   info: (event: string, meta?: AuthLogMeta) => write("INFO", event, meta),
   warn: (event: string, meta?: AuthLogMeta) => write("WARN", event, meta),
   error: (event: string, meta?: AuthLogMeta) => write("ERROR", event, meta),
-};
+};     

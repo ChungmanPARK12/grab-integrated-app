@@ -1,11 +1,9 @@
-
 # Grab Integrated App – Portfolio v1
 
 ![Image](https://github.com/user-attachments/assets/5408f9e6-c53f-4aa6-9cf0-20af59ffb9e9)
 
 A React Native + Expo mobile app inspired by the Grab super app.  
 Built through direct app experience with AI supporting, this project presents a portfolio-ready format — not through cloning, but through analysis and redesign.
-
 
 ## Project Overview
 
@@ -18,7 +16,7 @@ The project focuses on:
 - Backend-connected authentication flow
 - OTP-based sign-up verification
 - Accurate loading behaviors
-- UX patterns inspired by the real Grab app 
+- UX patterns inspired by the real Grab app
 
 ## Features
 
@@ -54,6 +52,22 @@ Full app flow details are documented here:
 
 - [Full App Flow Documentation](portfolio/fullappflow/full-app-flow.md)
 
+## UML Architecture
+
+This section documents the system architecture of the Grab Integrated App using UML diagrams.
+
+The UML documentation is organized into multiple levels to provide both a high-level architectural overview and detailed implementation references.
+
+- **Level 1** — High-level system architecture
+- **Level 2** — Package structure and dependency relationships
+- **Level 3** — Detailed implementation-level architecture
+
+The current UML documentation focuses primarily on the **backend architecture**, including application entry points, routing, authentication, business logic, database access, middleware, and security utilities.
+
+Detailed UML architecture documentation is available here:
+
+- [UML Architecture Documentation](portfolio/uml/uml-architecture.md)
+
 ## Installation
 
 - **IDE**  
@@ -65,19 +79,20 @@ Full app flow details are documented here:
   https://nodejs.org
 
 - **Clone the Repository**:
-   ```bash
-   git clone https://github.com/ChungmanPARK12/grab-integrated-app.git
-   cd grab-integrated-app
-   ```
+
+  ```bash
+  git clone https://github.com/ChungmanPARK12/grab-integrated-app.git
+  cd grab-integrated-app
+  ```
 
 - **Install Dependencies**:
-   ```bash
-   npm install
-   ```
-   or
-   ```bash
-   yarn install
-   ```
+  ```bash
+  npm install
+  ```
+  or
+  ```bash
+  yarn install
+  ```
 
 ## Getting Started
 
@@ -85,16 +100,19 @@ This project uses the modern Expo workflow.
 Once dependencies are installed, you can start the development server and run the app on a mobile device.
 
 ### Start the Development Server
+
 ```bash
-npx expo start 
+npx expo start
 ```
 
 **Note(WSL):** If the app does not open on a physical device due to network of IP configuration issues, use:
+
 ```bash
-npx expo start -tunnel 
+npx expo start -tunnel
 ```
 
 ### Run the App
+
 Use **Expo Go** on your Android or iOS device to run the app.
 
 Scan the **QR code** shown in the terminal, and Expo Go will automatically open and load the project.
@@ -106,6 +124,7 @@ If the app behaves unexpectedly or changes are not reflected, try clearing the c
 ```bash
 npx expo start -c
 ```
+
 Then restart the app using `npx expo start --tunnel`
 
 ## Debugging
@@ -115,6 +134,7 @@ Then restart the app using `npx expo start --tunnel`
 **Source:** `loginUI/src/services/facebookAuth.ts`
 
 #### Expo Go Redirect Limitation
+
 Expo Go forces `useProxy: true`, meaning the OAuth redirect goes through Expo’s proxy server instead of a native URI.  
 Since Facebook does not support this flow, the app cannot receive the callback — confirming that a custom **dev-client** is required for proper Facebook login support.
 
@@ -122,15 +142,17 @@ Since Facebook does not support this flow, the app cannot receive the callback �
 
 ### Authentication Flow Debugging
 
-**Tools:** Postman, Express API, Prisma + PostgreSQL  
+**Tools:** Postman, Express API, Prisma + PostgreSQL
 
 #### 1. OTP Request & Rate Limiting
+
 - Tested `/api/signup/phone`
 - Identified and handled **rate limiting (60s)**
 - Resolved `429 too many requests` issue during rapid requests
 - Ensured OTP is only issued after cooldown
 
 #### 2. Token Issuance Flow (Signup → JWT)
+
 - Verified `/api/signup/otp` → `tempToken` issuance
 - Confirmed JWT payload structure and expiration
 - Tested full flow:
@@ -145,13 +167,16 @@ Since Facebook does not support this flow, the app cannot receive the callback �
 ## Expo Workflow & Environment
 
 ### Expo Go
+
 **Expo Go** is used to preview and test UI/UX directly on a real mobile device.
 
 ### npx expo
+
 `npx expo` runs the Expo CLI without a global installation.
 It is used to start the development server, manage the Metro bundler, and generate the **QR code** for Expo Go.
 
 ### Environment Versions
+
 The project was developed and tested with the following environment:
 
 - **Node.js**: v20.x
@@ -160,7 +185,7 @@ The project was developed and tested with the following environment:
 - **Expo SDK**: SDK 54
 - **Tested on**:
   - iOS (Expo Go)
-  - Android (Expo Go) 
+  - Android (Expo Go)
 
 Exact SDK and dependency versions are defined in `package.json` and `app.json`.
 
@@ -180,17 +205,3 @@ Exact SDK and dependency versions are defined in `package.json` and `app.json`.
 ## License
 
 This project is licensed under the MIT License.
-
-
-
-
-
-
-
-
-
-
-
-
-
-

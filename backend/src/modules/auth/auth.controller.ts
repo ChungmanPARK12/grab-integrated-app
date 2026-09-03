@@ -1,3 +1,4 @@
+// auth.controller
 import type { Request, Response } from "express";
 import { asyncHandler } from "../../libs/asyncHandler";
 import {
