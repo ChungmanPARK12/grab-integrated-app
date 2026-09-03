@@ -54,17 +54,7 @@ Full app flow details are documented here:
 
 ## UML Architecture
 
-This section documents the system architecture of the Grab Integrated App using UML diagrams.
-
-The UML documentation is organized into multiple levels to provide both a high-level architectural overview and detailed implementation references.
-
-- **Level 1** — High-level system architecture
-- **Level 2** — Package structure and dependency relationships
-- **Level 3** — Detailed implementation-level architecture
-
-The current UML documentation focuses primarily on the **backend architecture**, including application entry points, routing, authentication, business logic, database access, middleware, and security utilities.
-
-Detailed UML architecture documentation is available here:
+The system architecture is documented using multi-level UML diagrams, covering the overall system structure, backend package dependencies, and implementation-level design.
 
 - [UML Architecture Documentation](portfolio/uml/uml-architecture.md)
 
