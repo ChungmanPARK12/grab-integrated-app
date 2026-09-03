@@ -106,3 +106,29 @@ Request-security middleware such as rate limiting and authentication guards may 
 #### UML Diagram
 
 - [View 02 — Authentication Routing & Service](https://github.com/user-attachments/assets/2c44cab0-c803-4f50-8674-9f234e1f6040)
+
+### 03 — Authentication Security & Token Management
+
+This diagram describes how `AuthService` interacts with security utilities, token persistence, and authentication logging.
+
+The authentication security layer is composed of the following components:
+
+- **OtpUtil** — Generates and hashes OTP values used during signup and login verification.
+- **JwtUtil** — Signs and verifies access and refresh tokens.
+- **RefreshTokenUtil** — Manages the refresh token lifecycle, including hashing, storage, lookup, revocation, and expired-token cleanup.
+- **Prisma** — Provides persistence for authentication-related data and refresh tokens.
+- **AuthLogger** — Records authentication-related events for monitoring and debugging.
+
+The main security flow is coordinated by `AuthService`:
+
+`AuthService → Security Utilities → Prisma`
+
+`AuthService` uses the security utilities for OTP generation, token signing, token verification, and refresh token management.
+
+Refresh token operations are persisted through Prisma, while authentication events are recorded through `AuthLogger`.
+
+This diagram focuses on the security and token lifecycle used by the authentication service. Database entity relationships and persistence models are documented separately in **04 — Data Model & Persistence**.
+
+#### UML Diagram
+
+- [View 03 — Authentication Security & Token Management](https://github.com/user-attachments/assets/82c633f6-67ed-467c-92b5-07375428d665)
