@@ -83,3 +83,26 @@ More detailed request routing and authentication flows are documented in the fol
 #### UML Diagram
 
 - [View 01 — Backend Entry & Routing](https://github.com/user-attachments/assets/4b456fb0-5a4b-4007-b479-4047bf1f2c90)
+
+### 02 — Authentication Routing & Service
+
+This diagram describes the authentication request flow from API routing to business logic.
+
+The authentication flow is organized into four main layers:
+
+- **RoutesIndex** — Provides the `/api` base path and delegates authentication requests to `/signup`, `/auth`, and `/login`.
+- **SignupRouter / AuthRouter / LoginRouter** — Separate authentication endpoints by responsibility and forward requests to the authentication controller.
+- **AuthController** — Handles incoming authentication requests, including signup, login, token refresh, logout, and authenticated-user requests.
+- **AuthService** — Contains the authentication business logic for OTP processing, signup, login, token management, logout, and authenticated-user retrieval.
+
+The main request flow follows:
+
+`RoutesIndex → Authentication Routers → AuthController → AuthService`
+
+The controller acts as the boundary between HTTP request handling and authentication business logic, while `AuthService` performs the application-level authentication operations.
+
+Request-security middleware such as rate limiting and authentication guards may be applied to authentication routes. The middleware structure is documented separately in **05 — Request Pipeline & Middleware**.
+
+#### UML Diagram
+
+- [View 02 — Authentication Routing & Service](https://github.com/user-attachments/assets/2c44cab0-c803-4f50-8674-9f234e1f6040)
