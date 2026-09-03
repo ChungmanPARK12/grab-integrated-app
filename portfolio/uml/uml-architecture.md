@@ -51,3 +51,35 @@ This level focuses on the separation of backend responsibilities and the depende
 ### UML Diagram
 
 - [View Level 2 — Backend Application Architecture](https://github.com/user-attachments/assets/66c9d9ea-0489-406e-bef1-6f590f7d44b0)
+
+---
+
+## Level 3 — Backend Implementation Design
+
+Level 3 expands the backend application architecture into implementation-level diagrams.
+
+Each diagram focuses on a specific backend responsibility and shows the modules and dependencies used in the actual application structure.
+
+---
+
+### 01 — Backend Entry & Routing
+
+This diagram describes how the backend application is initialized and connected to the API routing layer.
+
+The entry flow consists of three main components:
+
+- **Server** — Acts as the backend bootstrap and starts the application.
+- **App** — Creates and configures the Express application through `createApp()`.
+- **RoutesIndex** — Provides the root API router mounted by the application.
+
+The initialization flow follows:
+
+`Server → App → RoutesIndex`
+
+The `App` mounts `RoutesIndex` under `/api`, establishing the root routing path for backend API requests.
+
+More detailed request routing and authentication flows are documented in the following Level 3 diagrams.
+
+#### UML Diagram
+
+- [View 01 — Backend Entry & Routing](https://github.com/user-attachments/assets/4b456fb0-5a4b-4007-b479-4047bf1f2c90)
