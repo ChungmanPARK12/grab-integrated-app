@@ -29,3 +29,25 @@ Internal backend structures are intentionally excluded at this level and are exp
 ### UML Diagram
 
 - [View Level 1 — System Architecture](https://github.com/user-attachments/assets/e7dac884-0eb3-476c-ae12-f6bb8f76d038)
+
+---
+
+## Level 2 — Backend Application Architecture
+
+Level 2 expands the Backend API from Level 1 and shows its major application components and dependency relationships.
+
+The backend is organized into the following areas:
+
+- **Routing** — Directs incoming requests to middleware and authentication flows.
+- **Request Middleware** — Handles request-level processing and uses security utilities for token verification.
+- **Authentication** — Handles authentication requests before passing application operations to the service layer.
+- **Application Service** — Contains the main business logic and coordinates security, persistence, and logging operations.
+- **Security Utilities** — Provides shared security-related functions used by middleware and application services.
+- **Persistence** — Handles data access required by the application service.
+- **Logging** — Records application events generated during service operations.
+
+This level focuses on the separation of backend responsibilities and the dependency flow between major application components. Individual modules and implementation details are expanded in Level 3.
+
+### UML Diagram
+
+- [View Level 2 — Backend Application Architecture](https://github.com/user-attachments/assets/66c9d9ea-0489-406e-bef1-6f590f7d44b0)
