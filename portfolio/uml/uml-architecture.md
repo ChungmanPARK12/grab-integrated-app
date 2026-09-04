@@ -132,3 +132,25 @@ This diagram focuses on the security and token lifecycle used by the authenticat
 #### UML Diagram
 
 - [View 03 — Authentication Security & Token Management](https://github.com/user-attachments/assets/82c633f6-67ed-467c-92b5-07375428d665)
+
+### 04 — Data Model & Persistence
+
+This diagram describes the core authentication data model persisted through Prisma and PostgreSQL.
+
+The model consists of three main entities and two supporting enumerations:
+
+- **User** — Stores user identity, account role, verification status, and signup completion state.
+- **RefreshToken** — Stores hashed refresh tokens and their lifecycle information, including expiration and revocation.
+- **OtpRequest** — Stores OTP verification requests, including the hashed OTP, expiration, attempt limits, and request metadata.
+- **Role** — Defines the supported user roles: `user` and `admin`.
+- **OtpPurpose** — Distinguishes OTP requests between `SIGNUP` and `LOGIN`.
+
+A `User` can have multiple `RefreshToken` records, allowing refresh token sessions to be managed independently.
+
+`OtpRequest` uses `OtpPurpose` to distinguish whether an OTP was issued for signup or login verification.
+
+These models provide the persistence structure used by the authentication and security components described in the previous Level 3 diagrams.
+
+#### UML Diagram
+
+- [View 04 — Data Model & Persistence](https://github.com/user-attachments/assets/42f0a9f0-5465-400e-ba3e-81986fd86017)
