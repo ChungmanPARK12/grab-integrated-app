@@ -154,3 +154,31 @@ These models provide the persistence structure used by the authentication and se
 #### UML Diagram
 
 - [View 04 — Data Model & Persistence](https://github.com/user-attachments/assets/42f0a9f0-5465-400e-ba3e-81986fd86017)
+
+### 05 — Request Pipeline & Middleware
+
+This diagram describes the request-processing middleware applied around backend routes, including rate limiting, authentication, authorization, and centralized error handling.
+
+The request pipeline includes the following components:
+
+- **RateLimit** — Applies authentication-related rate limiting to selected routes.
+- **RequireAuth** — Verifies the access token and populates the authenticated user context in `req.user`.
+- **RequireRole** — Performs role-based authorization after authentication has established the user context.
+- **JwtUtil** — Provides access-token verification used by the authentication middleware.
+- **AsyncHandler** — Wraps asynchronous request handlers and forwards rejected promises to the Express error-handling pipeline.
+- **ErrorHandler** — Provides centralized error handling and returns standardized HTTP error responses.
+- **App** — Registers the error-handling middleware as part of the Express application configuration.
+
+Authentication and authorization follow the sequence:
+
+`Request → RequireAuth → RequireRole → Route Handler`
+
+`RequireAuth` establishes the authenticated user context before `RequireRole` evaluates role-based access.
+
+For asynchronous failures, `AsyncHandler` forwards errors through the Express error pipeline to `ErrorHandler`, preventing individual request handlers from duplicating error-handling logic.
+
+This middleware structure provides shared request security and error handling across the backend while keeping these concerns separate from authentication business logic.
+
+#### UML Diagram
+
+- [View 05 — Request Pipeline & Middleware](https://github.com/user-attachments/assets/ee257512-a3a7-4f52-8f61-8f1af0e23111)
