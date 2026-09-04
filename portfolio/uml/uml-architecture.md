@@ -182,3 +182,26 @@ This middleware structure provides shared request security and error handling ac
 #### UML Diagram
 
 - [View 05 — Request Pipeline & Middleware](https://github.com/user-attachments/assets/ee257512-a3a7-4f52-8f61-8f1af0e23111)
+
+---
+
+## Future Architecture Plans
+
+The current UML documentation focuses on the implemented backend architecture and authentication flow.
+
+To keep the architecture documentation concise and practical, future documentation will focus on two additional areas:
+
+- **Database ERD**
+  - Database tables and relationships
+  - Primary and foreign keys
+  - Entity cardinality
+  - PostgreSQL schema structure
+
+- **Client Architecture**
+  - React Native / Expo application structure
+  - Navigation hierarchy
+  - Screens and feature organization
+  - Authentication state and context
+  - Backend API integration
+
+These additions will complete the core architectural documentation across the client, backend, and database layers without introducing unnecessary diagram complexity.
